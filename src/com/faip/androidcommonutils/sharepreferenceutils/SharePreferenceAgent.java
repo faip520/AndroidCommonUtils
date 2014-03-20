@@ -68,28 +68,28 @@ class SharePreferenceAgent {
 	 * Put int value into sharePreference.
 	 */
 	public static void putValueToSP(Context paramContext, String paramString, int paramInt) {
-		getSPEditorInstance(paramContext).putInt(paramString, paramInt).commit();
+		getSPEditorInstance(paramContext).putInt(paramString, paramInt).apply();
 	}
 
 	/**
 	 * Put long value into sharePreference.
 	 */
 	public static void putValueToSP(Context paramContext, String paramString, long paramLong) {
-		getSPEditorInstance(paramContext).putLong(paramString, paramLong).commit();
+		getSPEditorInstance(paramContext).putLong(paramString, paramLong).apply();
 	}
 
 	/**
 	 * Put boolean value into sharePreference.
 	 */
 	public static void putValueToSP(Context paramContext, String paramString, Boolean paramBoolean) {
-		getSPEditorInstance(paramContext).putBoolean(paramString, paramBoolean).commit();
+		getSPEditorInstance(paramContext).putBoolean(paramString, paramBoolean).apply();
 	}
 
 	/**
 	 * Put string value into sharePreference.
 	 */
 	public static void putValueToSP(Context paramContext, String paramString1, String paramString2) {
-		getSPEditorInstance(paramContext).putString(paramString1, paramString2).commit();
+		getSPEditorInstance(paramContext).putString(paramString1, paramString2).apply();
 	}
 	// ===============================================================
 }
