@@ -1,4 +1,4 @@
-package com.faip.androidcommonutils.logger;
+package com.faip.androidcommonutils.logutils;
 
 
 /**
