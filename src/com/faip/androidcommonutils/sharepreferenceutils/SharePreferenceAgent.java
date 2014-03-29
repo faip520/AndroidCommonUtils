@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 
 /**
  * For writing and getting SharePreference.
+ * U can use to this encapsulate your own SP function class, like: getting and setting user info.
  */
 class SharePreferenceAgent {
 
