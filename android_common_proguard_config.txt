@@ -1,0 +1,141 @@
+# To enable ProGuard in your project, edit project.properties
+# to define the proguard.config property as described in that file.
+#
+# Add project specific ProGuard rules here.
+# By default, the flags in this file are appended to flags specified
+# in ${sdk.dir}/tools/proguard/proguard-android.txt
+# You can edit the include path and order by changing the ProGuard
+# include property in project.properties.
+#
+# For more details, see
+#   http://developer.android.com/guide/developing/tools/proguard.html
+
+# Add any project specific keep options here:
+
+# If your project uses WebView with JS, uncomment the following
+# and specify the fully qualified class name to the JavaScript interface
+# class:
+#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+#   public *;
+#}
+
+###################Tell me what unused code Proguard has removed##############################
+-printusage unused.txt
+-ignorewarnings
+
+###################For Android application components##############################
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends android.preference.Preference
+
+###################For custom views##############################
+-keep public class * extends android.view.View {
+    public <init>(android.content.Context);
+    public <init>(android.content.Context, android.util.AttributeSet);
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+    public void set*(...);
+}
+
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet);
+}
+
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+}
+
+-keepclassmembers class * implements android.os.Parcelable {
+    static android.os.Parcelable$Creator CREATOR;
+}
+
+###########################For project's R.java file##############################
+-keepclassmembers class **.R$* {
+    public static <fields>;
+}
+
+
+######Specify jar files not to be processed by ProGuard!##################################
+######However, it's not enough! You also have to keep all classes and interfaces in these jars.###########
+######The line below just exclude all jar files in project's "libs" directory#########################
+-libraryjars libs
+######now fully excluded the android support library jar file###################################
+# android-support-v4.jar
+-keep class android.support.v4.app.** { *; }
+-keep interface android.support.v4.app.** { *; }
+# Async https
+-keep class com.loopj.android.http.** { *; }
+-keep interface com.loopj.android.http.** { *; }
+# Crashlytics
+-keep class com.crashlytics.android.** { *; }
+-keep interface com.crashlytics.android.** { *; }
+# Gson
+-keep class com.google.gson.** { *; }
+-keep interface com.google.gson.** { *; }
+# Httpmime
+-keep class org.apache.http.entity.mime.** { *; }
+-keep interface org.apache.http.entity.mime.** { *; }
+# Iflytek MSC
+-keep class com.iflytek.** { *; }
+-keep interface com.iflytek.** { *; }
+# SocialSDK_QQZone_1.jar
+-keep class com.tencent.stat.** { *; }
+-keep interface com.tencent.stat.** { *; }
+# SocialSDK_QQZone_2.jar
+-keep class com.tencent.** { *; }
+-keep interface com.tencent.** { *; }
+# SocialSDK_tencentWB_1.jar & SocialSDK_tencentWB_2.jar
+-keep class com.tencent.weibo.sdk.android.** { *; }
+-keep interface com.tencent.weibo.sdk.android.** { *; }
+# SocialSDK_WeiXin.jar
+-keep class com.tencent.mm.** { *; }
+-keep interface com.tencent.mm.** { *; }
+# umeng_sdk.jar & umeng_social_sdk.jar
+-keep class com.umeng.** { *; }
+-keep interface com.umeng.** { *; }
+
+#############DON FORGET to exclude you LIBRARY PROJECT here, too!!!############################
+#############actionbarsherlock for example###########################################
+#-keep class com.actionbarsherlock.** { *; }
+#-keep interface com.actionbarsherlock.** { *; }
+# Sliding menu
+-keep class com.slidingmenu.lib.app.** { *; }
+-keep interface com.slidingmenu.lib.app.** { *; }
+# Download manager
+-keep class com.hydroid.downlaodmanager.** { *; }
+-keep interface com.hydroid.downlaodmanager.** { *; }
+# ormlite-android-4.41.jar & ormlite-core-4.41.jar
+-keep class com.j256.ormlite.** { *; }
+-keep interface com.j256.ormlite.** { *; }
+
+#############Add custom rules by your JAR FILE's provider here################################
+# Crashlytics
+-keepattributes SourceFile,LineNumberTable
+
+# Umeng
+-keepclassmembers class * {
+   public <init>(org.json.JSONObject);
+}
+-keep public class com.dvgroup.storysearcher.R$*{
+public static final int *;
+}
+-keep public class com.umeng.fb.ui.ThreadView {
+}
+
+# WeChat SDK
+-keep class com.tencent.mm.sdk.openapi.WXMediaMessage { *;}
+-keep class com.tencent.mm.sdk.openapi.** implements com.tencent.mm.sdk.openapi.WXMediaMessage$IMediaObject {*;}
+
+# ormlite
+-keepattributes *Annotation*
+-keepattributes Signature
+
+# Async http
+-keep class org.apache.** { *; }
+-keep interface org.apache.** { *; }
+
+####################If you use json, dont forget to keep your BEAN CLASS here!!!######################
+-keep class com.dvgroup.storysearcher.Bean.**{*;}
+-keep class com.dvgroup.storysearcher.base.**{*;}
