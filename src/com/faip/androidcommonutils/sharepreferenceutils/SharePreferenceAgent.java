@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 /**
- * For writing and getting SharePreference.
- * U can use to this encapsulate your own SP function class, like: getting and setting user info.
+ * For writing and getting SharePreference. U can use to this encapsulate your own SP function
+ * class, like: getting and setting user info.
  */
 class SharePreferenceAgent {
 
@@ -62,7 +62,6 @@ class SharePreferenceAgent {
 	}
 
 	// ========================================================================
-	
 
 	// ===========================Write==========================================
 	/**
@@ -91,6 +90,13 @@ class SharePreferenceAgent {
 	 */
 	public static void putValueToSP(Context paramContext, String paramString1, String paramString2) {
 		getSPEditorInstance(paramContext).putString(paramString1, paramString2).apply();
+	}
+
+	// ===============================================================
+
+	// =============================Clear===============================
+	public static void clearValueFromSP(Context paramContext, String key) {
+		getSPEditorInstance(paramContext).remove(key).apply();
 	}
 	// ===============================================================
 }
