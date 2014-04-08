@@ -154,7 +154,7 @@ public class FaipLogger {
 		StackTraceElement caller = new Throwable().fillInStackTrace()
 				.getStackTrace()[2];
 
-		return new StringBuilder().append("===Dv===")
+		return new StringBuilder().append("===Faip===")
 				.append(caller.getClassName()).append(".")
 				.append(caller.getMethodName()).append("(): ").append(msg)
 				.toString();

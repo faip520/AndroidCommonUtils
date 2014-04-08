@@ -1,11 +1,13 @@
 package com.faip.androidcommonutils.activityutils;
 
 import android.app.Activity;
+import android.content.Context;
+import android.util.TypedValue;
 import android.view.inputmethod.InputMethodManager;
 
 /**
- * Common utils for activity stuff, much of this utils must pass in a activity instance as a
- * parameter.
+ * Common utils for activity stuff, much of this utils must pass in a activity instance(or context
+ * instance) as a parameter.
  * 
  * @author Faip
  */
@@ -20,6 +22,19 @@ public class ActivityUtils {
 	public static void hideSoftKeyboard(Activity activity) {
 		InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
 		inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-		activity = null;
+	}
+
+	public static int dip2px(Context context, int dipValue) {
+		float reSize = context.getResources().getDisplayMetrics().density;
+		return (int) ((dipValue * reSize) + 0.5);
+	}
+
+	public static int px2dip(Context context, int pxValue) {
+		float reSize = context.getResources().getDisplayMetrics().density;
+		return (int) ((pxValue / reSize) + 0.5);
+	}
+
+	public static float sp2px(Context context, int spValue) {
+		return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, spValue, context.getResources().getDisplayMetrics());
 	}
 }
