@@ -1,5 +1,7 @@
 <resources>
 
     <string name="app_name">AndroidCommonUtil</string>
+    <string name="hu_time_out">Connection time out!</string>
+    <string name="hu_unknown_network_error">Unknown network error!</string>
 
 </resources>

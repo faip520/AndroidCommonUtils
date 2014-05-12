@@ -8,7 +8,7 @@ public class FileUtils {
 	}
 
 	/**
-	 * If externalStorage writable.
+	 * If externalStorage mounted.
 	 */
 	public static boolean isExternalStorageMounted() {
 		boolean canRead = Environment.getExternalStorageDirectory().canRead();

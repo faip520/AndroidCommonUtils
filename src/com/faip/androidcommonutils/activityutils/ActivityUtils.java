@@ -1,7 +1,9 @@
 package com.faip.androidcommonutils.activityutils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Rect;
 import android.util.TypedValue;
 import android.view.inputmethod.InputMethodManager;
 
@@ -36,5 +38,15 @@ public class ActivityUtils {
 
 	public static float sp2px(Context context, int spValue) {
 		return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, spValue, context.getResources().getDisplayMetrics());
+	}
+	
+	/**
+	 * Get screen size in pixel
+	 */
+	@SuppressLint("NewApi")
+	public static int[] getScreenSize(Activity context) {
+		Rect rect = new Rect();
+		context.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+		return new int[]{rect.width(), rect.height()};
 	}
 }

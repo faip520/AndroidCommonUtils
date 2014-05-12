@@ -1,16 +1,13 @@
-package com.faip.androidcommonutils.logutils;
-
+package com.faip.androidcommonutils.debugutils;
 
 /**
  * Wrapper API for sending log output.
- * By using this, u can see exactly which function logged the message.
- * By default, android's log function doesn't log function's name.
  */
-public class FaipLogger {
-	private static final String TAG = "Faip";
-	private static final boolean DEBUG = false;
+public class Logger {
+	protected static final String TAG = "===A1W0n===";
+	public static final boolean DEBUG = true;
 
-	private FaipLogger() {
+	private Logger() {
 	}
 
 	/**
@@ -151,12 +148,9 @@ public class FaipLogger {
 	 * @return Message String
 	 */
 	protected static String buildMessage(String msg) {
-		StackTraceElement caller = new Throwable().fillInStackTrace()
-				.getStackTrace()[2];
+		StackTraceElement caller = new Throwable().fillInStackTrace().getStackTrace()[2];
 
-		return new StringBuilder().append("===Faip===")
-				.append(caller.getClassName()).append(".")
-				.append(caller.getMethodName()).append("(): ").append(msg)
+		return new StringBuilder().append("===A1W0n===").append(caller.getClassName()).append(".").append(caller.getMethodName()).append("(): ").append(msg)
 				.toString();
 	}
 }

@@ -57,4 +57,14 @@ public class IOUtils {
 			}
 		}
 	}
+	
+	public static int string2Int(String num) {
+		int result;
+		try {
+			result = Integer.parseInt(num);
+		} catch(NumberFormatException nfe) {
+			return -1;
+		}
+		return result;
+	}
 }
