@@ -1,6 +1,13 @@
 package com.faip.androidcommonutils.bitmaputils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 
 public class BitmapUtils {
 
@@ -237,5 +244,21 @@ public class BitmapUtils {
 
 		bitmap.setPixels(pix, 0, w, 0, 0, w, h);
 		return (bitmap);
+	}
+	
+	public static int[] getBitmapFileDimension(File f) {
+		BitmapFactory.Options o = new BitmapFactory.Options();
+		o.inJustDecodeBounds = true;
+		FileInputStream stream1 = null;
+		try {
+			stream1 = new FileInputStream(f);
+			BitmapFactory.decodeStream(stream1, null, o);
+			stream1.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		return new int[] {o.outWidth, o.outHeight};
 	}
 }

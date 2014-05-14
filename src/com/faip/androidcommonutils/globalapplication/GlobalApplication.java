@@ -1,8 +1,13 @@
 package com.faip.androidcommonutils.globalapplication;
 
+import com.crashlytics.android.Crashlytics;
+import com.faip.androidcommonutils.BuildConfig;
+
 import android.app.Activity;
 import android.app.Application;
+import android.os.Build;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.util.DisplayMetrics;
 import android.view.Display;
 
@@ -27,6 +32,12 @@ public final class GlobalApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		mGlobalApplication = this;
+		Crashlytics.start(this);
+
+		if (BuildConfig.DEBUG) {
+			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build());
+			StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
+		}
 	}
 
 	public static GlobalApplication getInstance() {
@@ -49,7 +60,7 @@ public final class GlobalApplication extends Application {
 				this.displayMetrics = metrics;
 				return metrics;
 			} else {
-				// default screen is 800x480
+				// Default screen is 800x480
 				DisplayMetrics metrics = new DisplayMetrics();
 				metrics.widthPixels = 480;
 				metrics.heightPixels = 800;

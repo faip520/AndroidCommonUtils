@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 /**
- * User: qii
- * Date: 12-8-24
+ * 
  */
 public class FileSizeUtils {
 
@@ -96,7 +95,6 @@ public class FileSizeUtils {
 
     public long getLongSize() throws RuntimeException {
         try {
-
             getFileSize();
             return longSize;
         } catch (IOException ex) {

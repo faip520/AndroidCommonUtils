@@ -3,7 +3,9 @@ package com.faip.androidcommonutils.viewutils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.View;
@@ -22,6 +24,12 @@ public class ViewUtils {
 		} else {
 		    view.setBackground(drawable);
 		}
+	}
+	
+	public static void setBackground(View view, Bitmap bm, Context context) {
+		if (view == null || bm == null) return;
+		
+		setBackground(view, new BitmapDrawable(context.getResources(),bm));
 	}
 	
 	/**
