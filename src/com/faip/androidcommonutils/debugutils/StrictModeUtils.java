@@ -27,6 +27,7 @@ public class StrictModeUtils {
  
             if (StrictModeUtils.hasHoneycomb()) {
                 threadPolicyBuilder.penaltyFlashScreen();
+                // Will give a log when instance count bigger than given number.
 //				vmPolicyBuilder.setClassInstanceLimit(ImageGridActivity.class, 1)
 //									   .setClassInstanceLimit(ImageDetailActivity.class, 1);
             }

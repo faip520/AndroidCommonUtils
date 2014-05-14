@@ -5,6 +5,11 @@ import java.io.IOException;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 
+/**
+ * @author Aiwan
+ * Probally will a print a log in logcat which says :"Should have subtitle controller already set".
+ * You can ignore this safely.
+ */
 public class MediaPlayerManager {
 
 	private static MediaPlayerManager mInstance;
@@ -12,6 +17,10 @@ public class MediaPlayerManager {
 	private static MediaPlayer mMediaPlayer;
 	
 	private static MediaPlayer mBGMediaPlayer;
+	
+	private int mMediaPlayerPlayLocation;
+	
+	private int mBGmMediaPlayerPlayLocation;
 
 	private MediaPlayerManager() {
 		mMediaPlayer = new MediaPlayer();
@@ -36,6 +45,7 @@ public class MediaPlayerManager {
 	/**
 	 * Call this when you don't want to play anything. Don't do this if you have any single chance
 	 * that you will play something.
+	 * Note : MediaPlayer is no longer usable after released.
 	 */
 	public void releaseMediaPlayer() {
 		if (mMediaPlayer != null) {
@@ -47,6 +57,7 @@ public class MediaPlayerManager {
 	/**
 	 * Call this when you don't want to play anything. Don't do this if you have any single chance
 	 * that you will play something.
+	 * Note : MediaPlayer is no longer usable after released.
 	 */
 	public void releaseBGMediaPlayer() {
 		if (mBGMediaPlayer != null) {
@@ -68,10 +79,58 @@ public class MediaPlayerManager {
 		return mInstance;
 	}
 
-	public void pause() {
-		if (mMediaPlayer.isPlaying()) {
-			mMediaPlayer.pause();
+	private void pause() {
+		try {
+			if (mMediaPlayer.isPlaying()) {
+				mMediaPlayer.pause();
+				mMediaPlayerPlayLocation = mMediaPlayer.getCurrentPosition();
+			}
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
 		}
+	}
+	
+	private void pauseBG() {
+		try {
+			if (mBGMediaPlayer.isPlaying()) {
+				mBGMediaPlayer.pause();
+				mBGmMediaPlayerPlayLocation = mBGMediaPlayer.getCurrentPosition();
+			}
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void resume() {
+		if (mMediaPlayerPlayLocation == 0) return;
+		
+		try {
+			mMediaPlayer.seekTo(mMediaPlayerPlayLocation);
+			mMediaPlayer.start();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void resumeBG() {
+		if (mBGmMediaPlayerPlayLocation == 0) return;
+		
+		try {
+			mBGMediaPlayer.seekTo(mBGmMediaPlayerPlayLocation);
+			mBGMediaPlayer.start();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void pauseBoth() {
+		pause();
+		pauseBG();
+	}
+	
+	public void resumeBoth() {
+		resume();
+		resumeBG();
 	}
 	
 	/**

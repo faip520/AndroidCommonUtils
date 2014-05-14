@@ -35,6 +35,7 @@ public final class GlobalApplication extends Application {
 		Crashlytics.start(this);
 
 		if (BuildConfig.DEBUG) {
+			// Remeber to set class instance limit inside this api.
 			StrictModeUtils.enableStrictMode();
 		}
 	}
