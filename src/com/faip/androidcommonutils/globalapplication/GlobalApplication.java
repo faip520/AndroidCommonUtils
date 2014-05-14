@@ -9,6 +9,7 @@ import android.view.Display;
 
 import com.crashlytics.android.Crashlytics;
 import com.faip.androidcommonutils.BuildConfig;
+import com.faip.androidcommonutils.debugutils.StrictModeUtils;
 
 /**
  * Global singleton applicatioin subclass.
@@ -34,8 +35,7 @@ public final class GlobalApplication extends Application {
 		Crashlytics.start(this);
 
 		if (BuildConfig.DEBUG) {
-			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build());
-			StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
+			StrictModeUtils.enableStrictMode();
 		}
 	}
 

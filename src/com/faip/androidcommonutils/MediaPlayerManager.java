@@ -5,15 +5,15 @@ import java.io.IOException;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 
-public class WYSMediaPlayerManager {
+public class MediaPlayerManager {
 
-	private static WYSMediaPlayerManager mInstance;
+	private static MediaPlayerManager mInstance;
 
 	private static MediaPlayer mMediaPlayer;
 	
 	private static MediaPlayer mBGMediaPlayer;
 
-	private WYSMediaPlayerManager() {
+	private MediaPlayerManager() {
 		mMediaPlayer = new MediaPlayer();
 		mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -55,9 +55,9 @@ public class WYSMediaPlayerManager {
 		}
 	}
 
-	public static WYSMediaPlayerManager getInstance() {
+	public static MediaPlayerManager getInstance() {
 		if (mInstance == null) {
-			mInstance = new WYSMediaPlayerManager();
+			mInstance = new MediaPlayerManager();
 			if (mMediaPlayer == null) {
 				mMediaPlayer = new MediaPlayer();
 			}
@@ -110,10 +110,6 @@ public class WYSMediaPlayerManager {
 		mBGMediaPlayer.reset();
 	}
 	
-	public void playWYSMP3(String relativePath) {
-		//playMP3(WYSConstants.WYSResourcesPath + File.separator + relativePath);
-	}
-	
 	private void playBGMP3(String absolutePath) {
 		mBGMediaPlayer.reset();
 
@@ -131,7 +127,15 @@ public class WYSMediaPlayerManager {
 		}
 	}
 	
-	public void playWYSBGMP3(String relativePath) {
-		//playBGMP3(WYSConstants.WYSResourcesPath + File.separator + relativePath);
+	// =====================API for outer use=====================
+	public void playByAbsolutePathOrUrl(String pathOrUrl) {
+		playMP3(pathOrUrl);
 	}
+	
+	public void playBGMByAbsoluteOrUrl(String pathOrUrl) {
+		playBGMP3(pathOrUrl);
+	}
+	
+	// ======================================================
+	
 }
