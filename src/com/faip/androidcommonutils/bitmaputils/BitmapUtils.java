@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
 
 public class BitmapUtils {
 
@@ -260,5 +259,48 @@ public class BitmapUtils {
 		}
 
 		return new int[] {o.outWidth, o.outHeight};
+	}
+	
+	/**
+	 * Decrease image quality. Required size here means the smaller one among the image's width and height.
+	 * Return null if any exception happens.
+	 */
+	public static Bitmap decreaseImageQualityByRequiredSize(File f, int requiredSize) {
+		try {
+			// decode image size
+			BitmapFactory.Options o = new BitmapFactory.Options();
+			o.inJustDecodeBounds = true;
+			FileInputStream stream1 = new FileInputStream(f);
+			BitmapFactory.decodeStream(stream1, null, o);
+			stream1.close();
+
+			// Find the correct scale value. It should be the power of 2.
+			final int REQUIRED_SIZE = requiredSize;
+			int width_tmp = o.outWidth, height_tmp = o.outHeight;
+			int scale = 1;
+			// Caculate the scale factor.
+			while (true) {
+				if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE)
+					break;
+				width_tmp /= 2;
+				height_tmp /= 2;
+				scale *= 2;
+			}
+
+			// decode with inSampleSize
+			BitmapFactory.Options o2 = new BitmapFactory.Options();
+			o2.inSampleSize = scale;
+			o2.inInputShareable = true;
+			o2.inPurgeable = true;
+			FileInputStream stream2 = new FileInputStream(f);
+			Bitmap bitmap = BitmapFactory.decodeStream(stream2, null, o2);
+			stream2.close();
+			return bitmap;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

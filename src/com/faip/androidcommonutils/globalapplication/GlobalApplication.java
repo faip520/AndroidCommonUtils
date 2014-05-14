@@ -1,15 +1,14 @@
 package com.faip.androidcommonutils.globalapplication;
 
-import com.crashlytics.android.Crashlytics;
-import com.faip.androidcommonutils.BuildConfig;
-
 import android.app.Activity;
 import android.app.Application;
-import android.os.Build;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.util.DisplayMetrics;
 import android.view.Display;
+
+import com.crashlytics.android.Crashlytics;
+import com.faip.androidcommonutils.BuildConfig;
 
 /**
  * Global singleton applicatioin subclass.
