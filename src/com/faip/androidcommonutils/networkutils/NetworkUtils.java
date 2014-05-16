@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 
 public class NetworkUtils {
 
@@ -37,6 +39,19 @@ public class NetworkUtils {
 	public static void registerNetworkStateChangeReceiver(Context context, BroadcastReceiver receiver) {
 		IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 		context.registerReceiver(receiver, filter);
+	}
+	
+	/**
+	 * May return null for some carriers.
+	 * Note: <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" /> required！
+	 */
+	public static String getPhoneNumber(Context context) {
+		TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+		String mPhoneNumber = tMgr.getLine1Number();
+		if (!TextUtils.isEmpty(mPhoneNumber)) {
+			return mPhoneNumber;
+		}
+		return null;
 	}
 
 }

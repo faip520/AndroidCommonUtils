@@ -7,6 +7,10 @@ import android.media.MediaPlayer;
 
 /**
  * @author Aiwan
+ * 
+ *  Just use this class's api to play music, passing in a absolute path or a url.
+ *  It will dealing all things about MediaPlayer, u just need to call a simple function.
+ * 
  * Probally will a print a log in logcat which says :"Should have subtitle controller already set".
  * You can ignore this safely.
  */
