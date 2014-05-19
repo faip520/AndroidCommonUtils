@@ -27,6 +27,11 @@ public class MediaPlayerManager {
 	private int mBGmMediaPlayerPlayLocation;
 
 	private MediaPlayerManager() {
+		initMediaPlayer();
+		initBGMediaPlayer();
+	}
+	
+	private static void initMediaPlayer() {
 		mMediaPlayer = new MediaPlayer();
 		mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -35,7 +40,9 @@ public class MediaPlayerManager {
 				mp.start();
 			}
 		});
-		
+	}
+	
+	private static void initBGMediaPlayer() {
 		mBGMediaPlayer = new MediaPlayer();
 		mBGMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		mBGMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -73,12 +80,12 @@ public class MediaPlayerManager {
 	public static MediaPlayerManager getInstance() {
 		if (mInstance == null) {
 			mInstance = new MediaPlayerManager();
-			if (mMediaPlayer == null) {
-				mMediaPlayer = new MediaPlayer();
-			}
-			if (mBGMediaPlayer == null) {
-				mBGMediaPlayer = new MediaPlayer();
-			}
+		}
+		if (mMediaPlayer == null) {
+			initMediaPlayer();
+		}
+		if (mBGMediaPlayer == null) {
+			initBGMediaPlayer();
 		}
 		return mInstance;
 	}
@@ -152,6 +159,8 @@ public class MediaPlayerManager {
 	}
 
 	private void playMP3(String absolutePath) {
+		if (mMediaPlayer == null) return;
+		
 		mMediaPlayer.reset();
 
 		try {
@@ -169,11 +178,17 @@ public class MediaPlayerManager {
 	}
 	
 	public void resetBoth() {
-		mMediaPlayer.reset();
-		mBGMediaPlayer.reset();
+		if (mMediaPlayer != null) {
+			mMediaPlayer.reset();
+		}
+		if (mBGMediaPlayer != null) {
+			mBGMediaPlayer.reset();
+		}
 	}
 	
 	private void playBGMP3(String absolutePath) {
+		if (mBGMediaPlayer == null) return;
+		
 		mBGMediaPlayer.reset();
 
 		try {
