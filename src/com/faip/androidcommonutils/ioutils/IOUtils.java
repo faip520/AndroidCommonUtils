@@ -1,18 +1,18 @@
 package com.faip.androidcommonutils.ioutils;
 
 import java.io.Closeable;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 import android.content.Context;
 import android.net.Uri;
@@ -159,4 +159,391 @@ public class IOUtils {
 		
 		return null;
 	}
+	
+    // write byte[]
+    //-----------------------------------------------------------------------
+    /**
+     * Writes bytes from a <code>byte[]</code> to an <code>OutputStream</code>.
+     * 
+     * @param data  the byte array to write, do not modify during output,
+     * null ignored
+     * @param output  the <code>OutputStream</code> to write to
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since 1.1
+     */
+    public static void write(byte[] data, OutputStream output)
+            throws IOException {
+        if (data != null) {
+            output.write(data);
+        }
+    }
+
+    /**
+     * Writes bytes from a <code>byte[]</code> to chars on a <code>Writer</code>
+     * using the default character encoding of the platform.
+     * <p>
+     * This method uses {@link String#String(byte[])}.
+     * 
+     * @param data  the byte array to write, do not modify during output,
+     * null ignored
+     * @param output  the <code>Writer</code> to write to
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since 1.1
+     */
+    public static void write(byte[] data, Writer output) throws IOException {
+        write(data, output, Charset.defaultCharset());
+    }
+
+    /**
+     * Writes bytes from a <code>byte[]</code> to chars on a <code>Writer</code>
+     * using the specified character encoding.
+     * <p>
+     * This method uses {@link String#String(byte[], String)}.
+     * 
+     * @param data  the byte array to write, do not modify during output,
+     * null ignored
+     * @param output  the <code>Writer</code> to write to
+     * @param encoding  the encoding to use, null means platform default
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since 2.3
+     */
+    public static void write(byte[] data, Writer output, Charset encoding) throws IOException {
+        if (data != null) {
+            output.write(new String(data, Charsets.toCharset(encoding)));
+        }
+    }
+
+    /**
+     * Writes bytes from a <code>byte[]</code> to chars on a <code>Writer</code>
+     * using the specified character encoding.
+     * <p>
+     * Character encoding names can be found at
+     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <p>
+     * This method uses {@link String#String(byte[], String)}.
+     * 
+     * @param data  the byte array to write, do not modify during output,
+     * null ignored
+     * @param output  the <code>Writer</code> to write to
+     * @param encoding  the encoding to use, null means platform default
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @throws UnsupportedCharsetException
+     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+     *             supported.
+     * @since 1.1
+     */
+    public static void write(byte[] data, Writer output, String encoding) throws IOException {
+        write(data, output, Charsets.toCharset(encoding));
+    }
+
+    // write char[]
+    //-----------------------------------------------------------------------
+    /**
+     * Writes chars from a <code>char[]</code> to a <code>Writer</code>
+     * using the default character encoding of the platform.
+     * 
+     * @param data  the char array to write, do not modify during output,
+     * null ignored
+     * @param output  the <code>Writer</code> to write to
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since 1.1
+     */
+    public static void write(char[] data, Writer output) throws IOException {
+        if (data != null) {
+            output.write(data);
+        }
+    }
+
+    /**
+     * Writes chars from a <code>char[]</code> to bytes on an
+     * <code>OutputStream</code>.
+     * <p>
+     * This method uses {@link String#String(char[])} and
+     * {@link String#getBytes()}.
+     * 
+     * @param data  the char array to write, do not modify during output,
+     * null ignored
+     * @param output  the <code>OutputStream</code> to write to
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since 1.1
+     */
+    public static void write(char[] data, OutputStream output)
+            throws IOException {
+        write(data, output, Charset.defaultCharset());
+    }
+
+    /**
+     * Writes chars from a <code>char[]</code> to bytes on an
+     * <code>OutputStream</code> using the specified character encoding.
+     * <p>
+     * This method uses {@link String#String(char[])} and
+     * {@link String#getBytes(String)}.
+     * 
+     * @param data  the char array to write, do not modify during output,
+     * null ignored
+     * @param output  the <code>OutputStream</code> to write to
+     * @param encoding  the encoding to use, null means platform default
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since 2.3
+     */
+    public static void write(char[] data, OutputStream output, Charset encoding) throws IOException {
+        if (data != null) {
+            output.write(new String(data).getBytes(Charsets.toCharset(encoding)));
+        }
+    }
+
+    /**
+     * Writes chars from a <code>char[]</code> to bytes on an
+     * <code>OutputStream</code> using the specified character encoding.
+     * <p>
+     * Character encoding names can be found at
+     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <p>
+     * This method uses {@link String#String(char[])} and
+     * {@link String#getBytes(String)}.
+     * 
+     * @param data  the char array to write, do not modify during output,
+     * null ignored
+     * @param output  the <code>OutputStream</code> to write to
+     * @param encoding  the encoding to use, null means platform default
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @throws UnsupportedCharsetException
+     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+     *             supported.
+     * @since 1.1
+     */
+    public static void write(char[] data, OutputStream output, String encoding)
+            throws IOException {
+        write(data, output, Charsets.toCharset(encoding));
+    }
+
+    // write CharSequence
+    //-----------------------------------------------------------------------
+    /**
+     * Writes chars from a <code>CharSequence</code> to a <code>Writer</code>.
+     * 
+     * @param data  the <code>CharSequence</code> to write, null ignored
+     * @param output  the <code>Writer</code> to write to
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since 2.0
+     */
+    public static void write(CharSequence data, Writer output) throws IOException {
+        if (data != null) {
+            write(data.toString(), output);
+        }
+    }
+
+    /**
+     * Writes chars from a <code>CharSequence</code> to bytes on an
+     * <code>OutputStream</code> using the default character encoding of the
+     * platform.
+     * <p>
+     * This method uses {@link String#getBytes()}.
+     * 
+     * @param data  the <code>CharSequence</code> to write, null ignored
+     * @param output  the <code>OutputStream</code> to write to
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since 2.0
+     */
+    public static void write(CharSequence data, OutputStream output)
+            throws IOException {
+        write(data, output, Charset.defaultCharset());
+    }
+
+    /**
+     * Writes chars from a <code>CharSequence</code> to bytes on an
+     * <code>OutputStream</code> using the specified character encoding.
+     * <p>
+     * This method uses {@link String#getBytes(String)}.
+     * 
+     * @param data  the <code>CharSequence</code> to write, null ignored
+     * @param output  the <code>OutputStream</code> to write to
+     * @param encoding  the encoding to use, null means platform default
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since 2.3
+     */
+    public static void write(CharSequence data, OutputStream output, Charset encoding) throws IOException {
+        if (data != null) {
+            write(data.toString(), output, encoding);
+        }
+    }
+
+    /**
+     * Writes chars from a <code>CharSequence</code> to bytes on an
+     * <code>OutputStream</code> using the specified character encoding.
+     * <p>
+     * Character encoding names can be found at
+     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <p>
+     * This method uses {@link String#getBytes(String)}.
+     * 
+     * @param data  the <code>CharSequence</code> to write, null ignored
+     * @param output  the <code>OutputStream</code> to write to
+     * @param encoding  the encoding to use, null means platform default
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @throws UnsupportedCharsetException
+     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+     *             supported.
+     * @since 2.0
+     */
+    public static void write(CharSequence data, OutputStream output, String encoding) throws IOException {
+        write(data, output, Charsets.toCharset(encoding));
+    }
+
+    // write String
+    //-----------------------------------------------------------------------
+    /**
+     * Writes chars from a <code>String</code> to a <code>Writer</code>.
+     * 
+     * @param data  the <code>String</code> to write, null ignored
+     * @param output  the <code>Writer</code> to write to
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since 1.1
+     */
+    public static void write(String data, Writer output) throws IOException {
+        if (data != null) {
+            output.write(data);
+        }
+    }
+
+    /**
+     * Writes chars from a <code>String</code> to bytes on an
+     * <code>OutputStream</code> using the default character encoding of the
+     * platform.
+     * <p>
+     * This method uses {@link String#getBytes()}.
+     * 
+     * @param data  the <code>String</code> to write, null ignored
+     * @param output  the <code>OutputStream</code> to write to
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since 1.1
+     */
+    public static void write(String data, OutputStream output)
+            throws IOException {
+        write(data, output, Charset.defaultCharset());
+    }
+
+    /**
+     * Writes chars from a <code>String</code> to bytes on an
+     * <code>OutputStream</code> using the specified character encoding.
+     * <p>
+     * This method uses {@link String#getBytes(String)}.
+     * 
+     * @param data  the <code>String</code> to write, null ignored
+     * @param output  the <code>OutputStream</code> to write to
+     * @param encoding  the encoding to use, null means platform default
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since 2.3
+     */
+    public static void write(String data, OutputStream output, Charset encoding) throws IOException {
+        if (data != null) {
+            output.write(data.getBytes(Charsets.toCharset(encoding)));
+        }
+    }
+
+    /**
+     * Writes chars from a <code>String</code> to bytes on an
+     * <code>OutputStream</code> using the specified character encoding.
+     * <p>
+     * Character encoding names can be found at
+     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <p>
+     * This method uses {@link String#getBytes(String)}.
+     * 
+     * @param data  the <code>String</code> to write, null ignored
+     * @param output  the <code>OutputStream</code> to write to
+     * @param encoding  the encoding to use, null means platform default
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @throws UnsupportedCharsetException
+     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+     *             supported.
+     * @since 1.1
+     */
+    public static void write(String data, OutputStream output, String encoding)
+            throws IOException {
+        write(data, output, Charsets.toCharset(encoding));
+    }
+
+    // write StringBuffer
+    //-----------------------------------------------------------------------
+    /**
+     * Writes chars from a <code>StringBuffer</code> to a <code>Writer</code>.
+     * 
+     * @param data  the <code>StringBuffer</code> to write, null ignored
+     * @param output  the <code>Writer</code> to write to
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since 1.1
+     * @deprecated replaced by write(CharSequence, Writer)
+     */
+    @Deprecated
+    public static void write(StringBuffer data, Writer output)
+            throws IOException {
+        if (data != null) {
+            output.write(data.toString());
+        }
+    }
+
+    /**
+     * Writes chars from a <code>StringBuffer</code> to bytes on an
+     * <code>OutputStream</code> using the default character encoding of the
+     * platform.
+     * <p>
+     * This method uses {@link String#getBytes()}.
+     * 
+     * @param data  the <code>StringBuffer</code> to write, null ignored
+     * @param output  the <code>OutputStream</code> to write to
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @since 1.1
+     * @deprecated replaced by write(CharSequence, OutputStream)
+     */
+    @Deprecated
+    public static void write(StringBuffer data, OutputStream output)
+            throws IOException {
+        write(data, output, (String) null);
+    }
+
+    /**
+     * Writes chars from a <code>StringBuffer</code> to bytes on an
+     * <code>OutputStream</code> using the specified character encoding.
+     * <p>
+     * Character encoding names can be found at
+     * <a href="http://www.iana.org/assignments/character-sets">IANA</a>.
+     * <p>
+     * This method uses {@link String#getBytes(String)}.
+     * 
+     * @param data  the <code>StringBuffer</code> to write, null ignored
+     * @param output  the <code>OutputStream</code> to write to
+     * @param encoding  the encoding to use, null means platform default
+     * @throws NullPointerException if output is null
+     * @throws IOException if an I/O error occurs
+     * @throws UnsupportedCharsetException
+     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+     *             supported.
+     * @since 1.1
+     * @deprecated replaced by write(CharSequence, OutputStream, String)
+     */
+    @Deprecated
+    public static void write(StringBuffer data, OutputStream output, String encoding) throws IOException {
+        if (data != null) {
+            output.write(data.toString().getBytes(Charsets.toCharset(encoding)));
+        }
+    }
 }

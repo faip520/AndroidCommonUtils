@@ -4,26 +4,19 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
 
-public class CommonAsyncTask extends AsyncTask<Uri, Void, Bitmap> implements OnCancelListener {
+public class CommonAsyncTask extends AsyncTask<Integer, Void, Void> implements OnCancelListener {
 	
-	private ProgressDialog mProgress;
-	
-	private Uri mUri;
+	// So that users can access and show this progress dialog.
+	protected ProgressDialog mProgress;
 	
 	private Context mContext;
 	
-	public CommonAsyncTask(Context context) {
-		mContext = context;
+	public CommonAsyncTask() {
 	}
 
+	// Let the user implements this function, so it doesn't need a context here.
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
@@ -39,12 +32,18 @@ public class CommonAsyncTask extends AsyncTask<Uri, Void, Bitmap> implements OnC
 	}
 
 	@Override
-	protected Bitmap doInBackground(Uri... params) {
+	protected Void doInBackground(Integer... params) {
 		return null;
+	}
+	
+	protected void updateProgressDialogHint(String hint) {
+		if (mProgress != null && mProgress.isShowing()) {
+			mProgress.setMessage(hint);
+		}
 	}
 
 	@Override
-	protected void onPostExecute(Bitmap result) {
+	protected void onPostExecute(Void result) {
 		super.onPostExecute(result);
 		if (mProgress.getWindow() != null) {
 			mProgress.dismiss();

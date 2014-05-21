@@ -7,7 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -321,6 +323,39 @@ public class FileUtils {
         }
         if (preserveFileDate) {
             destFile.setLastModified(srcFile.lastModified());
+        }
+    }
+    
+    /**
+     * Writes a String to a file creating the file if it does not exist using the default encoding for the VM.
+     * 
+     * @param file  the file to write
+     * @param data  the content to write to the file
+     * @throws IOException in case of an I/O error
+     */
+    public static void writeStringToFile(File file, String data) throws IOException {
+        writeStringToFile(file, data, Charset.defaultCharset(), false);
+    }
+    
+    /**
+     * Writes a String to a file creating the file if it does not exist.
+     *
+     * @param file  the file to write
+     * @param data  the content to write to the file
+     * @param encoding  the encoding to use, {@code null} means platform default
+     * @param append if {@code true}, then the String will be added to the
+     * end of the file rather than overwriting
+     * @throws IOException in case of an I/O error
+     * @since 2.3
+     */
+    public static void writeStringToFile(File file, String data, Charset encoding, boolean append) throws IOException {
+        OutputStream out = null;
+        try {
+            out = openOutputStream(file, append);
+            IOUtils.write(data, out, encoding);
+            out.close(); // don't swallow close Exception if copy completes normally
+        } finally {
+            IOUtils.closeSilently(out);
         }
     }
 
