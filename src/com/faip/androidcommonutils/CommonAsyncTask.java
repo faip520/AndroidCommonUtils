@@ -5,28 +5,37 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 
 public class CommonAsyncTask extends AsyncTask<Integer, Void, Void> implements OnCancelListener {
 	
 	// So that users can access and show this progress dialog.
-	protected ProgressDialog mProgress;
+	private ProgressDialog mProgress;
 	
 	private Context mContext;
+	private Handler uiHandler = new Handler(Looper.getMainLooper());
 	
-	public CommonAsyncTask() {
+	public CommonAsyncTask(Context context) {
+		mContext = context;
 	}
 
-	// Let the user implements this function, so it doesn't need a context here.
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-
-		mProgress = new ProgressDialog(mContext);
-		mProgress.setIndeterminate(true);
-		mProgress.setCancelable(true);
-		mProgress.setMessage("Loading...");
-		mProgress.setOnCancelListener(this);
-		mProgress.show();
+		
+		uiHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				// Must pass in a activity instance.
+				mProgress = new ProgressDialog(mContext);
+				mProgress.setIndeterminate(true);
+				mProgress.setCancelable(true);
+				mProgress.setMessage("Loading...");
+				mProgress.setOnCancelListener(CommonAsyncTask.this);
+				mProgress.show();
+			}
+		});
 		
 		mContext = null;
 	}
@@ -36,18 +45,33 @@ public class CommonAsyncTask extends AsyncTask<Integer, Void, Void> implements O
 		return null;
 	}
 	
-	protected void updateProgressDialogHint(String hint) {
-		if (mProgress != null && mProgress.isShowing()) {
-			mProgress.setMessage(hint);
-		}
+	/**
+	 * Make it abstract, let the subclass to implements it. Or u will get a exception saying you touch the view in a 
+	 * wrong thread.
+	 */
+	protected void updateProgressDialogHint(final String hint) {
+		uiHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				if (mProgress != null && mProgress.isShowing()) {
+					mProgress.setMessage(hint);
+				}
+			}
+		});
 	}
 
 	@Override
 	protected void onPostExecute(Void result) {
 		super.onPostExecute(result);
-		if (mProgress.getWindow() != null) {
-			mProgress.dismiss();
-		}
+		
+		uiHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				if (mProgress.getWindow() != null) {
+					mProgress.dismiss();
+				}
+			}
+		});
 	}
 
 	@Override

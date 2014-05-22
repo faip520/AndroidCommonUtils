@@ -19,6 +19,15 @@ public class BitmapUtils {
 	private BitmapUtils() {
 	}
 
+    public static Bitmap getBitmap(Drawable drawable) {
+        Bitmap bitmap = Bitmap.createBitmap(mTileSize, mTileSize, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        tile.setBounds(0, 0, mTileSize, mTileSize);
+        tile.draw(canvas);
+
+        mTileArray[key] = bitmap;
+    }
+
 	/**
 	 * Somehow like a blur effect in iOS devices. Check the website below for a demo. Have been test
 	 * by myself on a Samsumg I9000: not very fast, but have a good effect.
