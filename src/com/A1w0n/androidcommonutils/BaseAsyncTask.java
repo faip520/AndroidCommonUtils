@@ -10,9 +10,9 @@ import android.os.Looper;
  * 在这些回调里操作UI控件出现各种错误。
  */
 public abstract class BaseAsyncTask<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
-    private static final Handler sHandler = new Handler(Looper.getMainLooper());
+    protected static final Handler sHandler = new Handler(Looper.getMainLooper());
 
-    private boolean isUiThread() {
+    protected boolean isUiThread() {
         return Thread.currentThread().getId() == Looper.getMainLooper().getThread().getId();
     }
 

@@ -13,10 +13,9 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.A1w0n.androidcommonutils.ioutils.IOUtils;
-
-import android.content.Context;
 import android.os.Environment;
+
+import com.A1w0n.androidcommonutils.ioutils.IOUtils;
 
 public class FileUtils {
 	
@@ -42,7 +41,7 @@ public class FileUtils {
 	public static String getExternalStorageFolder() {
 		String result = null;
 		if (isExternalStorageMounted()) {
-			result = Environment.getExternalStorageDirectory().getPath();
+			result = Environment.getExternalStorageDirectory().getAbsolutePath();
 		}
 		
 		return result;
