@@ -1,4 +1,4 @@
-package com.A1w0n.androidcommonutils;
+package com.A1w0n.androidcommonutils.FragmentUtils;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

@@ -1,4 +1,4 @@
-package com.A1w0n.androidcommonutils.fileutils;
+package com.A1w0n.androidcommonutils.FileUtils;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -13,7 +13,9 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.os.Environment;
+import android.text.TextUtils;
 
 import com.A1w0n.androidcommonutils.ioutils.IOUtils;
 
@@ -357,5 +359,187 @@ public class FileUtils {
             IOUtils.closeSilently(out);
         }
     }
+    
+    /**
+     * Deletes a directory recursively. 
+     * 
+     * 暂时忽略传入的是Symbolic Link这个可能性
+     *
+     * @param directory  directory to delete
+     * @throws IOException in case deletion is unsuccessful
+     */
+    public static void deleteDirectory(File directory) throws IOException {
+        if (!directory.exists()) {
+            return;
+        }
+
+        cleanDirectory(directory);
+
+        if (!directory.delete()) {
+            String message =
+                "Unable to delete directory " + directory + ".";
+            throw new IOException(message);
+        }
+    }
+    
+    /**
+     * Cleans a directory without deleting it.
+     *
+     * @param directory directory to clean
+     * @throws IOException in case cleaning is unsuccessful
+     */
+    public static void cleanDirectory(File directory) throws IOException {
+        if (!directory.exists()) {
+            String message = directory + " does not exist";
+            throw new IllegalArgumentException(message);
+        }
+
+        if (!directory.isDirectory()) {
+            String message = directory + " is not a directory";
+            throw new IllegalArgumentException(message);
+        }
+
+        File[] files = directory.listFiles();
+        if (files == null) {  // null if security restricted
+            throw new IOException("Failed to list contents of " + directory);
+        }
+
+        IOException exception = null;
+        for (File file : files) {
+            try {
+                forceDelete(file);
+            } catch (IOException ioe) {
+                exception = ioe;
+            }
+        }
+
+        if (null != exception) {
+            throw exception;
+        }
+    }
+    
+    /**
+     * Deletes a file. If file is a directory, delete it and all sub-directories.
+     * <p>
+     * The difference between File.delete() and this method are:
+     * <ul>
+     * <li>A directory to be deleted does not have to be empty.</li>
+     * <li>You get exceptions when a file or directory cannot be deleted.
+     *      (java.io.File methods returns a boolean)</li>
+     * </ul>
+     *
+     * @param file  file or directory to delete, must not be {@code null}
+     * @throws NullPointerException if the directory is {@code null}
+     * @throws FileNotFoundException if the file was not found
+     * @throws IOException in case deletion is unsuccessful
+     */
+    public static void forceDelete(File file) throws IOException {
+        if (file.isDirectory()) {
+            deleteDirectory(file);
+        } else {
+            boolean filePresent = file.exists();
+            if (!file.delete()) {
+                if (!filePresent){
+                    throw new FileNotFoundException("File does not exist: " + file);
+                }
+                String message =
+                    "Unable to delete file: " + file;
+                throw new IOException(message);
+            }
+        }
+    }
+    
+    // =====================================================================
+    // ===============================Android相关==============================
+    // =====================================================================
+    /**
+     * 在手机内部存储的/data/data/包名/目录下新建一个文件夹
+     */
+    public static File createOrGetDirectoryInInternalStorage(Context context, String directoryName) {
+    	if (TextUtils.isEmpty(directoryName) || context == null) return null;
+    	return context.getDir(directoryName, Context.MODE_PRIVATE);
+    }
+    
+    /**
+     * 在手机内部存储的/data/data/包名/目录下删除一个文件夹
+     */
+    public static void deleteDirectoryInInternalStorage(Context context, String directoryName) {
+    	if (TextUtils.isEmpty(directoryName) || context == null) return;
+    	File temp = createOrGetDirectoryInInternalStorage(context, directoryName);
+    	if (temp != null && temp.exists()) {
+			try {
+				deleteDirectory(temp);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+    }
+    
+    /**
+     * ExternalStorage是否可写
+     */
+    public static boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * ExternalStorage是否可读
+     */
+    public static boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+            Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * 获取外部存储的根目录的绝对路径，如果外部存储不可读，就会返回null.
+     * @return
+     */
+    public static String getExternalStorageRootAbsolutePath() {
+		if (!isExternalStorageReadable()) return null;
+		else {
+			return Environment.getExternalStorageDirectory().getAbsolutePath();
+		}
+	}
+    
+    /**
+     * 在外部存储根目录创建或者获取一个文件夹，如果失败了会返回null
+     */
+    public static File createOrGetDirectoryInSDCradRoot(String directoryName) {
+    	File target = null;
+    	if (TextUtils.isEmpty(directoryName)) return target;
+    	
+    	if (!isExternalStorageWritable()) return target;
+    	
+    	target = new File(getExternalStorageRootAbsolutePath() + File.separator + directoryName);
+    	
+    	if (target.exists()) {
+			return target;
+		}
+    	
+    	// 如果创建文件夹失败了，就返回null
+    	if (!target.mkdir()) {
+			target = null;
+		}
+    	
+    	return target;
+    }
+    
+    public static void getInternalStorageFreeSpace() {
+		
+	}
+    
+    // =====================================================================
+    // =====================================================================
+    // =====================================================================
+    
+    
 
 }

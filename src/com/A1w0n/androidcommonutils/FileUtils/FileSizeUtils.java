@@ -1,4 +1,4 @@
-package com.A1w0n.androidcommonutils.fileutils;
+package com.A1w0n.androidcommonutils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
