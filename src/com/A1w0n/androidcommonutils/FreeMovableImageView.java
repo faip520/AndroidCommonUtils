@@ -16,17 +16,24 @@ import android.widget.ImageView;
  * 完全自由的ImageView，可以双指缩放旋转，单指移动
  */
 public class FreeMovableImageView extends ImageView {
+	
 	// 边框画笔
 	private static Paint mFramePaint;
 	
+	// 记录中间的网格的路线
 	private Path[] mGridPath = new Path[4];
 
 	private float mPaintHalfWidth = 1.5f;
 
 	private int mWidth, mHeight;
 	
+    // 记录被手指按下的时间
+    private long mOnDownTime;
+	
 	// 最小能缩小到这个值
 	private int mScaledSmallestSize = 200;
+	// 最短边最大能放大到这个大小
+	private int mScaledMaxSize = 500;
 	
 	// 是否要画边框和网格
 	private boolean mNeedToDrawFramAndGrid = false;
@@ -181,6 +188,7 @@ public class FreeMovableImageView extends ImageView {
             mStartAngle = calculateRotationAngle(event);
             return true;
         case MotionEvent.ACTION_UP:
+        	// 不加这句，同一个手势由双指变成单指会出错
             mMode = NONE;
             onUp();
             return true;
@@ -188,6 +196,7 @@ public class FreeMovableImageView extends ImageView {
             mMode = NONE;
             return true;
         case MotionEvent.ACTION_MOVE:
+        	// 在很多低端手机上，即使手指不动，触摸也会偏移
         	mMoved = true;
         	
             if (mMode == DRAG) {
@@ -260,13 +269,13 @@ public class FreeMovableImageView extends ImageView {
 		mNeedToDrawFramAndGrid = false;
 		invalidate();
 		
-		if (!mMoved) {
+		if (System.currentTimeMillis() - mOnDownTime < 100) {
 			doClick();
-			mMoved = false;
 		}
 	}
 	
 	private void onDown() {
+		mOnDownTime = System.currentTimeMillis();
 		mNeedToDrawFramAndGrid = true;
 		invalidate();
 	}
@@ -289,6 +298,13 @@ public class FreeMovableImageView extends ImageView {
 		// 如果少于最少值了，并且还想缩小，忽略这个操作
 		if (getWidth() * getScaleX() <= mScaledSmallestSize || getHeight() * getScaleX() <= mScaledSmallestSize) {
 			if (factor < 1.0f) {
+				return;
+			}
+		}
+		
+		// 最短边大于最大值后，不允许放大了
+		if (Math.min(getWidth() * getScaleX(), getHeight() * getScaleX()) >= mScaledMaxSize) {
+			if (factor > 1.0f) {
 				return;
 			}
 		}
