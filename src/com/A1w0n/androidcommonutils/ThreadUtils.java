@@ -7,8 +7,8 @@ public class ThreadUtils {
 	private ThreadUtils() {
 	}
 
-	private static boolean isUiThread() {
+	public static boolean isUiThread() {
 		return Thread.currentThread().getId() == Looper.getMainLooper().getThread().getId();
 	}
-
+	
 }

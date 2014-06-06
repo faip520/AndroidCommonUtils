@@ -1,4 +1,4 @@
-package com.A1w0n.androidcommonutils;
+package com.A1w0n.androidcommonutils.viewutils;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -93,6 +93,10 @@ public class FreeMovableTextView extends TextView {
 			// 设置为虚线模式 3 像素 实线 3 像素 虚线 不断重复
 			mFramePaint.setPathEffect(new DashPathEffect(new float[] { 3, 3 }, 0));
 		}
+		
+		// 最多一行，最长12个字
+		setMaxLines(1);
+		setMaxEms(12);
 	}
 
 	@Override

@@ -1,9 +1,13 @@
 package com.A1w0n.androidcommonutils.viewutils;
 
+import com.A1w0n.androidcommonutils.APILevelUtils;
+import com.crashlytics.android.internal.v;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -69,6 +73,25 @@ public class ViewUtils {
 		Rect rect = new Rect();
 		context.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
 		return new int[]{rect.width(), rect.height()};
+	}
+	
+	/**
+	 * 获取一个View的几何中心点在屏幕坐标系中的坐标
+	 * 这个API在Level18之前返回的是左上角的坐标
+	 * 在Level18及以后版本才正确的返回中点坐标
+	 * @param view
+	 * @param centerPoint
+	 */
+	public static void getCenterPoint(View view, Point centerPoint) {
+		if (view == null || centerPoint == null) return;
+		
+		Rect rect = new Rect();
+		view.getHitRect(rect);
+		
+		if (APILevelUtils.isLevel18AndAbove()) {
+			centerPoint.x = rect.centerX();
+			centerPoint.y = rect.centerY();
+		}
 	}
 
 }
