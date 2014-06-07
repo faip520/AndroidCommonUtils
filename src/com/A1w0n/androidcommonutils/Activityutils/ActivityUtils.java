@@ -1,4 +1,4 @@
-package com.A1w0n.androidcommonutils.activityutils;
+package com.A1w0n.androidcommonutils.Activityutils;
 
 import android.app.Activity;
 import android.content.Intent;

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    
+	<!-- 这里是一个自定义的Theme，可以赋值给manifest中的Application节点 -->    
+    
+    <style name="FunBoTheme_Light" parent="@style/FunBoTheme_Light_base">
+        
+    </style>
+    
+    <style name="FunBoTheme_Light_base" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/FunBoTheme_Light_Action_Style</item>
+    </style>
+    
+    <!-- 蓝色的ActionBar -->
+    <style name="FunBoTheme_Light_Action_Style" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">#0066FF</item>
+    </style>
+    
+</resources>
