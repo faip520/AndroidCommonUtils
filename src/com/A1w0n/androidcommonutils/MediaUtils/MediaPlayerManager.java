@@ -1,4 +1,4 @@
-package com.A1w0n.androidcommonutils;
+package com.A1w0n.androidcommonutils.MediaUtils;
 
 import java.io.IOException;
 

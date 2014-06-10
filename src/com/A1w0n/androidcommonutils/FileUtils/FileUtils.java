@@ -328,6 +328,84 @@ public class FileUtils {
     }
     
     /**
+     * Copies a file to a new location preserving the file date.
+     * <p>
+     * This method copies the contents of the specified source file to the
+     * specified destination file. The directory holding the destination file is
+     * created if it does not exist. If the destination file exists, then this
+     * method will overwrite it.
+     * <p>
+     * <strong>Note:</strong> This method tries to preserve the file's last
+     * modified date/times using {@link File#setLastModified(long)}, however
+     * it is not guaranteed that the operation will succeed.
+     * If the modification operation fails, no indication is provided.
+     * 
+     * @param srcFile  an existing file to copy, must not be {@code null}
+     * @param destFile  the new file, must not be {@code null}
+     * 
+     * @throws NullPointerException if source or destination is {@code null}
+     * @throws IOException if source or destination is invalid
+     * @throws IOException if an IO error occurs during copying
+     * @see #copyFileToDirectory(File, File)
+     */
+    public static void copyFile(File srcFile, File destFile) throws IOException {
+        copyFile(srcFile, destFile, true);
+    }
+    
+    /**
+     * Copies a file to a new location.
+     * <p>
+     * This method copies the contents of the specified source file
+     * to the specified destination file.
+     * The directory holding the destination file is created if it does not exist.
+     * If the destination file exists, then this method will overwrite it.
+     * <p>
+     * <strong>Note:</strong> Setting <code>preserveFileDate</code> to
+     * {@code true} tries to preserve the file's last modified
+     * date/times using {@link File#setLastModified(long)}, however it is
+     * not guaranteed that the operation will succeed.
+     * If the modification operation fails, no indication is provided.
+     *
+     * @param srcFile  an existing file to copy, must not be {@code null}
+     * @param destFile  the new file, must not be {@code null}
+     * @param preserveFileDate  true if the file date of the copy
+     *  should be the same as the original
+     *
+     * @throws NullPointerException if source or destination is {@code null}
+     * @throws IOException if source or destination is invalid
+     * @throws IOException if an IO error occurs during copying
+     * @see #copyFileToDirectory(File, File, boolean)
+     */
+    public static void copyFile(File srcFile, File destFile,
+            boolean preserveFileDate) throws IOException {
+        if (srcFile == null) {
+            throw new NullPointerException("Source must not be null");
+        }
+        if (destFile == null) {
+            throw new NullPointerException("Destination must not be null");
+        }
+        if (srcFile.exists() == false) {
+            throw new FileNotFoundException("Source '" + srcFile + "' does not exist");
+        }
+        if (srcFile.isDirectory()) {
+            throw new IOException("Source '" + srcFile + "' exists but is a directory");
+        }
+        if (srcFile.getCanonicalPath().equals(destFile.getCanonicalPath())) {
+            throw new IOException("Source '" + srcFile + "' and destination '" + destFile + "' are the same");
+        }
+        File parentFile = destFile.getParentFile();
+        if (parentFile != null) {
+            if (!parentFile.mkdirs() && !parentFile.isDirectory()) {
+                throw new IOException("Destination '" + parentFile + "' directory cannot be created");
+            }
+        }
+        if (destFile.exists() && destFile.canWrite() == false) {
+            throw new IOException("Destination '" + destFile + "' exists but is read-only");
+        }
+        doCopyFile(srcFile, destFile, preserveFileDate);
+    }
+    
+    /**
      * Writes a String to a file creating the file if it does not exist using the default encoding for the VM.
      * 
      * @param file  the file to write
@@ -449,9 +527,44 @@ public class FileUtils {
         }
     }
     
+    /**
+     * Deletes a file, never throwing an exception. If file is a directory, delete it and all sub-directories.
+     * <p>
+     * The difference between File.delete() and this method are:
+     * <ul>
+     * <li>A directory to be deleted does not have to be empty.</li>
+     * <li>No exceptions are thrown when a file or directory cannot be deleted.</li>
+     * </ul>
+     *
+     * @param file  file or directory to delete, can be {@code null}
+     * @return {@code true} if the file or directory was deleted, otherwise
+     * {@code false}
+     *
+     * @since 1.4
+     */
+    public static boolean deleteQuietly(File file) {
+        if (file == null) {
+            return false;
+        }
+        try {
+            if (file.isDirectory()) {
+                cleanDirectory(file);
+            }
+        } catch (Exception ignored) {
+        }
+
+        try {
+            return file.delete();
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
+    
     // =====================================================================
     // ===============================Android相关==============================
     // =====================================================================
+    
+    // ************************************************Internal Storage****************************************
     /**
      * 在手机内部存储的/data/data/包名/目录下新建一个文件夹
      */
@@ -475,6 +588,45 @@ public class FileUtils {
 		}
     }
     
+    /**
+     * Create a file on internal storage. May return null if exception happens.
+     */
+    public static FileOutputStream createFileOnInternalStorage(Context context, String name) {
+    	FileOutputStream result = null;
+    	try {
+    		result = context.openFileOutput(name, Context.MODE_PRIVATE);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+    	
+    	return result;
+    }
+    
+    /**
+     * Read a file on internal storage. May return null if exception happens.
+     */
+    public static FileInputStream getFileOnInternalStorage(Context context, String name) {
+    	FileInputStream result = null;
+    	
+    	try {
+    		result = context.openFileInput(name);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+    	
+    	return result;
+    }
+    
+    public static boolean deleteFileOnInternalStorage(Context context, String name) {
+    	return context.deleteFile(name);
+    }
+    
+    
+    public static void getInternalStorageFreeSpace() {
+		
+	}
+    
+    // ************************************************External Storage****************************************
     /**
      * ExternalStorage是否可写
      */
@@ -510,15 +662,25 @@ public class FileUtils {
 	}
     
     /**
+     * Provide a relative path on external storage, return a full path.
+     */
+    public static String getFullPathOnExternalStorage(String relativePath) {
+    	String path = getExternalStorageRootAbsolutePath();
+    	path = path + File.separator + relativePath;
+    	return path;
+    }
+    
+    /**
      * 在外部存储根目录创建或者获取一个文件夹，如果失败了会返回null
      */
-    public static File createOrGetDirectoryInSDCradRoot(String directoryName) {
+    public static File createOrGetDirectoryInSDCradRoot(String relativeDirectoryName) {
     	File target = null;
-    	if (TextUtils.isEmpty(directoryName)) return target;
+    	
+    	if (TextUtils.isEmpty(relativeDirectoryName)) return target;
     	
     	if (!isExternalStorageWritable()) return target;
     	
-    	target = new File(getExternalStorageRootAbsolutePath() + File.separator + directoryName);
+    	target = new File(getFullPathOnExternalStorage(relativeDirectoryName));
     	
     	if (target.exists()) {
 			return target;
@@ -532,9 +694,62 @@ public class FileUtils {
     	return target;
     }
     
-    public static void getInternalStorageFreeSpace() {
-		
-	}
+    /**
+     * Try to delete a directory on external storage, return the result.
+     */
+    public static boolean deleteDirectoryOnExternalStorage(String relativePath) {
+    	if (TextUtils.isEmpty(relativePath)) return false;
+    	
+    	if (!isExternalStorageWritable()) return false;
+    	
+    	File tarFile = new File(getFullPathOnExternalStorage(relativePath));
+    	try {
+			deleteDirectory(tarFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+    	
+    	return true;
+    }
+    
+    /**
+     * Try to create a file on external strorage, return null if any failure happens.
+     */
+    public static File getOrCreateFileOnExternalStorage(String relativePath) {
+    	File result = null;
+    	
+    	if (TextUtils.isEmpty(relativePath)) return result;
+    	
+    	if (!isExternalStorageWritable()) return result;
+    	
+    	result = new File(getFullPathOnExternalStorage(relativePath));
+    	
+    	if (result.exists()) {
+			return result;
+		}
+    	
+    	// In case the pass-in path is illegal.
+    	try {
+			result.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+			result = null;
+		}
+    	
+    	return result;
+    }
+    
+    public static boolean deleteFileOnExternalStorage(String relativePath) {
+    	if (TextUtils.isEmpty(relativePath)) return false;
+    	
+    	if (!isExternalStorageWritable()) return false;
+    	
+    	File target = new File(getFullPathOnExternalStorage(relativePath));
+    	
+    	return target.delete();
+    }
+
     
     // =====================================================================
     // =====================================================================

@@ -21,6 +21,7 @@ public abstract class PreDialogAsyncTask<Params, Progress, Result> extends BaseA
 	 */
 	protected PreDialogAsyncTask(Context context, String preMessage) {
 		this.mContext = context;
+		mPreMessage = preMessage;
 	}
 
 	@Override
