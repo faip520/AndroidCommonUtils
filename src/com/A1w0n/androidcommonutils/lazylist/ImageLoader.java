@@ -22,10 +22,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Handler;
+import android.os.Looper;
 import android.widget.ImageView;
 
+import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
 import com.A1w0n.androidcommonutils.globalapplication.GlobalApplication;
-import com.A1w0n.androidcommonutils.ioutils.IOUtils;
 import com.faip.androidcommonutils.R;
 
 public class ImageLoader {
@@ -34,7 +35,7 @@ public class ImageLoader {
 
 	MemoryCache memoryCache = new MemoryCache();
 	
-	FileCache fileCache;
+	FileCache mFileCache;
 	
 	private Drawable mStubDrawable;
 	
@@ -42,12 +43,13 @@ public class ImageLoader {
 	
 	ExecutorService executorService;
 	
-	Handler handler = new Handler();// handler to display images in UI thread
+	// 获取UI线程的Handler
+	Handler handler = new Handler(Looper.getMainLooper());
 
 	private ImageLoader(Context context) {
-		fileCache = new FileCache(context);
+		mFileCache = new FileCache(context);
 		executorService = Executors.newFixedThreadPool(5);
-		mStubDrawable = context.getResources().getDrawable(R.drawable.stub);
+		mStubDrawable = context.getResources().getDrawable(R.drawable.ic_launcher);
 	}
 
 	public static ImageLoader getInstance(Context context) {
@@ -58,7 +60,7 @@ public class ImageLoader {
 		return mInstance;
 	}
 
-	final int stub_id = R.drawable.stub;
+	final int stub_id = R.drawable.ic_launcher;
 
 	public void DisplayImage(String url, ImageView imageView) {
 		imageViews.put(imageView, url);
@@ -77,7 +79,7 @@ public class ImageLoader {
 	}
 
 	private Bitmap getBitmap(String url) {
-		File f = fileCache.getFile(url);
+		File f = mFileCache.getFile(url);
 
 		// from SD cache
 		Bitmap b = decodeFile(f);
@@ -218,7 +220,7 @@ public class ImageLoader {
 
 	public void clearCache() {
 		memoryCache.clear();
-		fileCache.clear();
+		mFileCache.clear();
 	}
 
 }

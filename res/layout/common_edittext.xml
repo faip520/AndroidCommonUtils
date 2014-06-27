@@ -5,9 +5,11 @@
     android:id="@+id/common_edittext"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:gravity="center"
     android:background="@drawable/common_selector"
+    android:gravity="center"
+    android:hint="请输入"
+    android:imeOptions="flagNoExtractUi|actionSearch"
     android:maxEms="20"
-    android:textColor="#ffffff"
-    android:lines="2"
-    android:maxLines="2"/>
+    android:selectAllOnFocus="true"
+    android:singleLine="true"
+    android:textColor="#ffffff" />

@@ -158,13 +158,13 @@ public class MediaPlayerManager {
 		mBGMediaPlayer.reset();
 	}
 
-	private void playMP3(String absolutePath) {
+	private void playMP3(String absolutePathOrUrl) {
 		if (mMediaPlayer == null) return;
 		
 		mMediaPlayer.reset();
 
 		try {
-			mMediaPlayer.setDataSource(absolutePath);
+			mMediaPlayer.setDataSource(absolutePathOrUrl);
 		} catch (IllegalArgumentException | SecurityException | IllegalStateException | IOException e) {
 			e.printStackTrace();
 			return;
@@ -186,13 +186,13 @@ public class MediaPlayerManager {
 		}
 	}
 	
-	private void playBGMP3(String absolutePath) {
+	private void playBGMP3(String absolutePathOrUrl) {
 		if (mBGMediaPlayer == null) return;
 		
 		mBGMediaPlayer.reset();
 
 		try {
-			mBGMediaPlayer.setDataSource(absolutePath);
+			mBGMediaPlayer.setDataSource(absolutePathOrUrl);
 		} catch (IllegalArgumentException | SecurityException | IllegalStateException | IOException e) {
 			e.printStackTrace();
 			return;

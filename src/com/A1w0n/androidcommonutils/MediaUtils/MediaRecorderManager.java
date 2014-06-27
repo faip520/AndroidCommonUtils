@@ -10,6 +10,16 @@ import android.media.MediaRecorder.OutputFormat;
 import android.util.Log;
 
 public class MediaRecorderManager {
+	
+	// ===========State==============
+	public static final int STATE_RECORDING = 1;
+	
+	public static final int STATE_IDLE = 0;
+	
+	public static int CurrentState = -1;
+	
+	// ============================
+	
 
 	private static MediaRecorderManager mInstance;
 
@@ -42,8 +52,13 @@ public class MediaRecorderManager {
 		try {
 			mMediaRecorder.prepare();
 			mMediaRecorder.start();
+			CurrentState = STATE_RECORDING;
 		} catch (IOException e) {
 			Log.e("MediaRecorderManager", "io problems while preparing [" + file.getAbsolutePath() + "]: " + e.getMessage());
+			mMediaRecorder.reset();
+			mMediaRecorder.release();
+			mMediaRecorder = null;
+			CurrentState = STATE_IDLE;
 		}
 	}
 	
@@ -52,6 +67,7 @@ public class MediaRecorderManager {
 			mMediaRecorder.stop();
 			mMediaRecorder.release();
 			mMediaRecorder = null;
+			CurrentState = STATE_IDLE;
 		}
 	}
 	
@@ -63,6 +79,15 @@ public class MediaRecorderManager {
 			mMediaRecorder.release();
 			mMediaRecorder = null;
 		}
+	}
+	
+	public int getMaxAmplitude() {
+		int result = 0;
+		if (mMediaRecorder != null && CurrentState == STATE_RECORDING) {
+			result = mMediaRecorder.getMaxAmplitude();
+		}
+		
+		return result;
 	}
 
 }

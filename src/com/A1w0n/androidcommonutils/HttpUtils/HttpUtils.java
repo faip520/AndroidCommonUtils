@@ -1,4 +1,4 @@
-package com.A1w0n.androidcommonutils.httputils;
+package com.A1w0n.androidcommonutils.HttpUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

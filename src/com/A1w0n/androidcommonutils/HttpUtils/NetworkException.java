@@ -1,4 +1,4 @@
-package com.A1w0n.androidcommonutils.httputils;
+package com.A1w0n.androidcommonutils.HttpUtils;
 
 /**
  * Exception thrown by this app's network components.

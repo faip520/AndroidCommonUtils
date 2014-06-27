@@ -17,7 +17,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.text.TextUtils;
 
-import com.A1w0n.androidcommonutils.ioutils.IOUtils;
+import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
 
 public class FileUtils {
 	
@@ -560,201 +560,91 @@ public class FileUtils {
         }
     }
     
-    // =====================================================================
-    // ===============================Android相关==============================
-    // =====================================================================
-    
-    // ************************************************Internal Storage****************************************
     /**
-     * 在手机内部存储的/data/data/包名/目录下新建一个文件夹
+     * Writes a byte array to a file creating the file if it does not exist.
+     * <p>
+     * NOTE: As from v1.3, the parent directories of the file will be created
+     * if they do not exist.
+     *
+     * @param file  the file to write to
+     * @param data  the content to write to the file
+     * @throws IOException in case of an I/O error
+     * @since 1.1
      */
-    public static File createOrGetDirectoryInInternalStorage(Context context, String directoryName) {
-    	if (TextUtils.isEmpty(directoryName) || context == null) return null;
-    	return context.getDir(directoryName, Context.MODE_PRIVATE);
+    public static void writeByteArrayToFile(File file, byte[] data) throws IOException {
+        writeByteArrayToFile(file, data, false);
     }
     
     /**
-     * 在手机内部存储的/data/data/包名/目录下删除一个文件夹
+     * Writes a byte array to a file creating the file if it does not exist.
+     *
+     * @param file  the file to write to
+     * @param data  the content to write to the file
+     * @param append if {@code true}, then bytes will be added to the
+     * end of the file rather than overwriting
+     * @throws IOException in case of an I/O error
+     * @since IO 2.1
      */
-    public static void deleteDirectoryInInternalStorage(Context context, String directoryName) {
-    	if (TextUtils.isEmpty(directoryName) || context == null) return;
-    	File temp = createOrGetDirectoryInInternalStorage(context, directoryName);
-    	if (temp != null && temp.exists()) {
-			try {
-				deleteDirectory(temp);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-    }
-    
-    /**
-     * Create a file on internal storage. May return null if exception happens.
-     */
-    public static FileOutputStream createFileOnInternalStorage(Context context, String name) {
-    	FileOutputStream result = null;
-    	try {
-    		result = context.openFileOutput(name, Context.MODE_PRIVATE);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-    	
-    	return result;
-    }
-    
-    /**
-     * Read a file on internal storage. May return null if exception happens.
-     */
-    public static FileInputStream getFileOnInternalStorage(Context context, String name) {
-    	FileInputStream result = null;
-    	
-    	try {
-    		result = context.openFileInput(name);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-    	
-    	return result;
-    }
-    
-    public static boolean deleteFileOnInternalStorage(Context context, String name) {
-    	return context.deleteFile(name);
-    }
-    
-    
-    public static void getInternalStorageFreeSpace() {
-		
-	}
-    
-    // ************************************************External Storage****************************************
-    /**
-     * ExternalStorage是否可写
-     */
-    public static boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
+    public static void writeByteArrayToFile(File file, byte[] data, boolean append) throws IOException {
+        OutputStream out = null;
+        try {
+            out = openOutputStream(file, append);
+            out.write(data);
+            out.close(); // don't swallow close Exception if copy completes normally
+        } finally {
+            IOUtils.closeSilently(out);
         }
-        return false;
     }
-
+    
     /**
-     * ExternalStorage是否可读
+     * Reads the contents of a file into a byte array.
+     * The file is always closed.
+     *
+     * @param file  the file to read, must not be {@code null}
+     * @return the file contents, never {@code null}
+     * @throws IOException in case of an I/O error
+     * @since 1.1
      */
-    public static boolean isExternalStorageReadable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state) ||
-            Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            return true;
+    public static byte[] readFileToByteArray(File file) throws IOException {
+        InputStream in = null;
+        try {
+            in = openInputStream(file);
+            return IOUtils.toByteArray(in, file.length());
+        } finally {
+            IOUtils.closeSilently(in);
         }
-        return false;
     }
     
+  //-----------------------------------------------------------------------
     /**
-     * 获取外部存储的根目录的绝对路径，如果外部存储不可读，就会返回null.
-     * @return
+     * Opens a {@link FileInputStream} for the specified file, providing better
+     * error messages than simply calling <code>new FileInputStream(file)</code>.
+     * <p>
+     * At the end of the method either the stream will be successfully opened,
+     * or an exception will have been thrown.
+     * <p>
+     * An exception is thrown if the file does not exist.
+     * An exception is thrown if the file object exists but is a directory.
+     * An exception is thrown if the file exists but cannot be read.
+     * 
+     * @param file  the file to open for input, must not be {@code null}
+     * @return a new {@link FileInputStream} for the specified file
+     * @throws FileNotFoundException if the file does not exist
+     * @throws IOException if the file object is a directory
+     * @throws IOException if the file cannot be read
+     * @since 1.3
      */
-    public static String getExternalStorageRootAbsolutePath() {
-		if (!isExternalStorageReadable()) return null;
-		else {
-			return Environment.getExternalStorageDirectory().getAbsolutePath();
-		}
-	}
-    
-    /**
-     * Provide a relative path on external storage, return a full path.
-     */
-    public static String getFullPathOnExternalStorage(String relativePath) {
-    	String path = getExternalStorageRootAbsolutePath();
-    	path = path + File.separator + relativePath;
-    	return path;
+    public static FileInputStream openInputStream(File file) throws IOException {
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                throw new IOException("File '" + file + "' exists but is a directory");
+            }
+            if (file.canRead() == false) {
+                throw new IOException("File '" + file + "' cannot be read");
+            }
+        } else {
+            throw new FileNotFoundException("File '" + file + "' does not exist");
+        }
+        return new FileInputStream(file);
     }
-    
-    /**
-     * 在外部存储根目录创建或者获取一个文件夹，如果失败了会返回null
-     */
-    public static File createOrGetDirectoryInSDCradRoot(String relativeDirectoryName) {
-    	File target = null;
-    	
-    	if (TextUtils.isEmpty(relativeDirectoryName)) return target;
-    	
-    	if (!isExternalStorageWritable()) return target;
-    	
-    	target = new File(getFullPathOnExternalStorage(relativeDirectoryName));
-    	
-    	if (target.exists()) {
-			return target;
-		}
-    	
-    	// 如果创建文件夹失败了，就返回null
-    	if (!target.mkdir()) {
-			target = null;
-		}
-    	
-    	return target;
-    }
-    
-    /**
-     * Try to delete a directory on external storage, return the result.
-     */
-    public static boolean deleteDirectoryOnExternalStorage(String relativePath) {
-    	if (TextUtils.isEmpty(relativePath)) return false;
-    	
-    	if (!isExternalStorageWritable()) return false;
-    	
-    	File tarFile = new File(getFullPathOnExternalStorage(relativePath));
-    	try {
-			deleteDirectory(tarFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-    	
-    	return true;
-    }
-    
-    /**
-     * Try to create a file on external strorage, return null if any failure happens.
-     */
-    public static File getOrCreateFileOnExternalStorage(String relativePath) {
-    	File result = null;
-    	
-    	if (TextUtils.isEmpty(relativePath)) return result;
-    	
-    	if (!isExternalStorageWritable()) return result;
-    	
-    	result = new File(getFullPathOnExternalStorage(relativePath));
-    	
-    	if (result.exists()) {
-			return result;
-		}
-    	
-    	// In case the pass-in path is illegal.
-    	try {
-			result.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-			result = null;
-		}
-    	
-    	return result;
-    }
-    
-    public static boolean deleteFileOnExternalStorage(String relativePath) {
-    	if (TextUtils.isEmpty(relativePath)) return false;
-    	
-    	if (!isExternalStorageWritable()) return false;
-    	
-    	File target = new File(getFullPathOnExternalStorage(relativePath));
-    	
-    	return target.delete();
-    }
-
-    
-    // =====================================================================
-    // =====================================================================
-    // =====================================================================
-    
-    
-
 }

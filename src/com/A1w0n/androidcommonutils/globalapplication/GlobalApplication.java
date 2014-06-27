@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.view.Display;
 
@@ -37,6 +38,8 @@ public final class GlobalApplication extends Application {
 		if (BuildConfig.DEBUG) {
 			// Remeber to set class instance limit inside this api.
 			StrictModeUtils.enableStrictMode();
+			// 显示系统的一切的Fragment相关的操作信息
+			FragmentManager.enableDebugLogging(true);
 		}
 	}
 

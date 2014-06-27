@@ -3,15 +3,20 @@ package com.A1w0n.androidcommonutils.bitmaputils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.A1w0n.androidcommonutils.ioutils.IOUtils;
+import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
+import com.A1w0n.androidcommonutils.debugutils.Logger;
 
 import android.R.integer;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 
@@ -327,5 +332,35 @@ public class BitmapUtils {
 		options.inInputShareable = true;
 		options.inTempStorage = new byte[16384];
 		return options;
+	}
+	
+	public static Bitmap getBitmap(Drawable drawable) {
+	    if (drawable instanceof BitmapDrawable) {
+	        return ((BitmapDrawable)drawable).getBitmap();
+	    }
+
+	    Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Config.ARGB_8888);
+	    Canvas canvas = new Canvas(bitmap); 
+	    drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+	    drawable.draw(canvas);
+
+	    return bitmap;
+	}
+	
+	public static void saveToFile(File file, Bitmap bm) {
+		if (file == null || bm == null) {
+			Logger.e("Error Arguments");
+			return;
+		}
+		
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream(file);
+			bm.compress(Bitmap.CompressFormat.PNG, 90, out);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			IOUtils.closeSilently(out);
+		}
 	}
 }

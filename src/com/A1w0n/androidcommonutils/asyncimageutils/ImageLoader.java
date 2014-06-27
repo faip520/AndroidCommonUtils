@@ -12,8 +12,8 @@ import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
 import com.A1w0n.androidcommonutils.globalapplication.GlobalApplication;
-import com.A1w0n.androidcommonutils.ioutils.IOUtils;
 import com.A1w0n.androidcommonutils.viewutils.ViewUtils;
 import com.faip.androidcommonutils.R;
 

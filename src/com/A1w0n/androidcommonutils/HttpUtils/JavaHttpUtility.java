@@ -1,19 +1,17 @@
-package com.A1w0n.androidcommonutils.httputils;
+package com.A1w0n.androidcommonutils.HttpUtils;
 
-import android.text.TextUtils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.A1w0n.androidcommonutils.debugutils.Logger;
-import com.A1w0n.androidcommonutils.globalapplication.GlobalApplication;
-import com.A1w0n.androidcommonutils.ioutils.IOUtils;
-import com.faip.androidcommonutils.BuildConfig;
-import com.faip.androidcommonutils.R;
-
-import javax.net.ssl.*;
-
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.InterruptedIOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -21,6 +19,25 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.text.TextUtils;
+
+import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
+import com.A1w0n.androidcommonutils.NetworkUtils.NetworkUtils;
+import com.A1w0n.androidcommonutils.debugutils.Logger;
+import com.A1w0n.androidcommonutils.globalapplication.GlobalApplication;
+import com.faip.androidcommonutils.BuildConfig;
+import com.faip.androidcommonutils.R;
 
 /**
  * Android HttpUrlConnection.
@@ -103,6 +120,12 @@ public class JavaHttpUtility {
 	 * @throws NetworkException
 	 */
 	public String doPost(String urlAddress, Map<String, String> param) throws NetworkException {
+		
+		if (!NetworkUtils.isNetworkConnected(GlobalApplication.getInstance())) {
+			Logger.e("Cannot do a http post  without network connection!");
+			return null;
+		}
+		
 		GlobalApplication globalContext = GlobalApplication.getInstance();
 		String errorStr = globalContext.getString(R.string.hu_time_out);
 		globalContext = null;
@@ -290,6 +313,12 @@ public class JavaHttpUtility {
 	 * @throws NetworkException
 	 */
 	public String doGet(String urlStr, Map<String, String> param) throws NetworkException {
+		
+		if (!NetworkUtils.isNetworkConnected(GlobalApplication.getInstance())) {
+			Logger.e("Cannot do a http get  without network connection!");
+			return null;
+		}
+		
 		GlobalApplication globalContext = GlobalApplication.getInstance();
 		String errorStr = globalContext.getString(R.string.hu_time_out);
 		globalContext = null;
@@ -330,9 +359,28 @@ public class JavaHttpUtility {
 	 * @param downloadListener
 	 * @return
 	 */
-	public boolean doGetSaveFile(String urlStr, String path, FileDownloaderHttpHelper.DownloadListener downloadListener) {
-		File file = FileManager.createNewFileInSDCard(path);
-		if (file == null) {
+	public boolean doGetSaveFile(String urlStr, File targetFile, IDownloadListener downloadListener) {
+		if (TextUtils.isEmpty(urlStr)) {
+			Logger.e("Empty url!");
+			if (downloadListener != null) {
+				downloadListener.error();
+			}
+			return false;
+		}
+		
+		if (targetFile == null || !targetFile.canWrite()) {
+			Logger.e("Target file not writable!");
+			if (downloadListener != null) {
+				downloadListener.error();
+			}
+			return false;
+		}
+		
+		if (!NetworkUtils.isNetworkConnected(GlobalApplication.getInstance())) {
+			Logger.e("Cannot download file without network connection!");
+			if (downloadListener != null) {
+				downloadListener.error();
+			}
 			return false;
 		}
 
@@ -340,9 +388,8 @@ public class JavaHttpUtility {
 		InputStream in = null;
 		HttpURLConnection urlConnection = null;
 		try {
-
 			URL url = new URL(urlStr);
-			DVLogger.d("download request=" + urlStr);
+			Logger.d("download request=" + urlStr);
 			Proxy proxy = getProxy();
 			if (proxy != null)
 				urlConnection = (HttpURLConnection) url.openConnection(proxy);
@@ -362,21 +409,33 @@ public class JavaHttpUtility {
 			int status = urlConnection.getResponseCode();
 
 			if (status != HttpURLConnection.HTTP_OK) {
+				if (downloadListener != null) {
+					downloadListener.error();
+				}
 				return false;
 			}
 
 			int bytetotal = (int) urlConnection.getContentLength();
+			Logger.d("想要下载的文件大小是：" + bytetotal);
+			if (bytetotal > 0 && targetFile.exists() && targetFile.length() == bytetotal) {
+				Logger.d("文件已经存在，并且大小一致，下载已取消！");
+				if (downloadListener != null) {
+					downloadListener.cancel();
+				}
+				return true;
+			}
+			
 			int bytesum = 0;
 			int byteread = 0;
-			out = new BufferedOutputStream(new FileOutputStream(file));
+			out = new BufferedOutputStream(new FileOutputStream(targetFile));
 			in = new BufferedInputStream(urlConnection.getInputStream());
 
 			final Thread thread = Thread.currentThread();
 			byte[] buffer = new byte[1444];
 			while ((byteread = in.read(buffer)) != -1) {
 				if (thread.isInterrupted()) {
-					file.delete();
-					Utility.closeSilently(out);
+					targetFile.delete();
+					IOUtils.closeSilently(out);
 					throw new InterruptedIOException();
 				}
 
@@ -392,9 +451,12 @@ public class JavaHttpUtility {
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
+			if (downloadListener != null) {
+				downloadListener.error();
+			}
 		} finally {
-			Utility.closeSilently(in);
-			Utility.closeSilently(out);
+			IOUtils.closeSilently(in);
+			IOUtils.closeSilently(out);
 			if (urlConnection != null)
 				urlConnection.disconnect();
 		}
@@ -435,7 +497,7 @@ public class JavaHttpUtility {
 	}
 
 	public boolean doUploadFile(String urlStr, Map<String, String> param, String path, String imageParamName,
-			final FileUploaderHttpHelper.ProgressListener listener) throws NetworkException {
+			final IUploadListener listener) throws NetworkException {
 		String BOUNDARYSTR = getBoundry();
 
 		File targetFile = new File(path);
@@ -457,8 +519,7 @@ public class JavaHttpUtility {
 		HttpURLConnection urlConnection = null;
 		BufferedOutputStream out = null;
 		FileInputStream fis = null;
-		GlobalDolphinApp globalContext = GlobalDolphinApp.getInstance();
-		String errorStr = globalContext.getString(R.string.timeout);
+		GlobalApplication globalContext = GlobalApplication.getInstance();
 		globalContext = null;
 		try {
 			URL url = null;
@@ -538,10 +599,10 @@ public class JavaHttpUtility {
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new NetworkException(errorStr, e);
+			throw new NetworkException("", e);
 		} finally {
-			Utility.closeSilently(fis);
-			Utility.closeSilently(out);
+			IOUtils.closeSilently(fis);
+			IOUtils.closeSilently(out);
 			if (urlConnection != null)
 				urlConnection.disconnect();
 		}

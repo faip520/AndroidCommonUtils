@@ -2,7 +2,6 @@ package com.A1w0n.androidcommonutils;
 
 import java.io.File;
 
-import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
@@ -13,7 +12,6 @@ public class DownloadManagerUtils {
 	private DownloadManagerUtils() {
 	}
 
-	@SuppressLint("NewApi")
 	public static long downloadFileWithNotification(final Context context, String url, File tarFile, String title, String description) {
 		if (context == null || TextUtils.isEmpty(url) || tarFile == null) {
 			return 0;
@@ -26,7 +24,7 @@ public class DownloadManagerUtils {
 		// If the parent directory doesn't exist, download will fail.
 		File parent = tarFile.getParentFile();
 		if (parent != null && parent.isDirectory() && !parent.exists()) {
-			parent.mkdir();
+			parent.mkdirs();
 		}
 	
 		long enqueue = mDownloadManager.enqueue(new DownloadManager.Request(uri)

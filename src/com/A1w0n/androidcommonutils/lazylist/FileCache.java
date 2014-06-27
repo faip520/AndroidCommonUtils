@@ -1,6 +1,9 @@
 package com.A1w0n.androidcommonutils.lazylist;
 
 import java.io.File;
+
+import com.A1w0n.androidcommonutils.FileUtils.AndroidFileUtils;
+
 import android.content.Context;
 
 public class FileCache {
@@ -9,8 +12,8 @@ public class FileCache {
 
 	public FileCache(Context context) {
 		// Find the dir to save cached images
-		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
-			cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "LazyList");
+		if (AndroidFileUtils.isExternalStorageWritable())
+			cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), "A1w0nFileCache");
 		else
 			cacheDir = context.getCacheDir();
 		if (!cacheDir.exists())
@@ -24,15 +27,16 @@ public class FileCache {
 		// String filename = URLEncoder.encode(url);
 		File f = new File(cacheDir, filename);
 		return f;
-
 	}
 
 	public void clear() {
-		File[] files = cacheDir.listFiles();
-		if (files == null)
-			return;
-		for (File f : files)
-			f.delete();
+		if (cacheDir != null && cacheDir.exists()) {
+			File[] files = cacheDir.listFiles();
+			if (files == null || files.length == 0)
+				return;
+			for (File f : files)
+				f.delete();
+		}
 	}
 
 }

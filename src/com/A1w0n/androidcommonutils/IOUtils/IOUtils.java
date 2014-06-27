@@ -1,5 +1,6 @@
-package com.A1w0n.androidcommonutils.ioutils;
+package com.A1w0n.androidcommonutils.IOUtils;
 
+import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,6 +27,8 @@ public class IOUtils {
 	 * The default size of the buffer.
 	 */
 	private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
+	
+	private static final int EOF = -1;
 
 	private IOUtils() {
 	}
@@ -546,4 +549,99 @@ public class IOUtils {
             output.write(data.toString().getBytes(Charsets.toCharset(encoding)));
         }
     }
+    
+	public static String toString(InputStream is) throws IOException {
+		BufferedReader br = null;
+		StringBuilder sb = new StringBuilder();
+
+		String line;
+		try {
+			br = new BufferedReader(new InputStreamReader(is));
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return sb.toString();
+	}
+	
+	/**
+	 * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>. Use this method
+	 * instead of <code>toByteArray(InputStream)</code> when <code>InputStream</code> size is known
+	 * 
+	 * @param input
+	 *            the <code>InputStream</code> to read from
+	 * @param size
+	 *            the size of <code>InputStream</code>
+	 * @return the requested byte array
+	 * @throws IOException
+	 *             if an I/O error occurs or <code>InputStream</code> size differ from parameter
+	 *             size
+	 * @throws IllegalArgumentException
+	 *             if size is less than zero
+	 * @since 2.1
+	 */
+	public static byte[] toByteArray(InputStream input, int size) throws IOException {
+
+		if (size < 0) {
+			throw new IllegalArgumentException("Size must be equal or greater than zero: " + size);
+		}
+
+		if (size == 0) {
+			return new byte[0];
+		}
+
+		byte[] data = new byte[size];
+		int offset = 0;
+		int readed;
+
+		while (offset < size && (readed = input.read(data, offset, size - offset)) != EOF) {
+			offset += readed;
+		}
+
+		if (offset != size) {
+			throw new IOException("Unexpected readed size. current: " + offset + ", excepted: " + size);
+		}
+
+		return data;
+	}
+	
+	/**
+	 * Get contents of an <code>InputStream</code> as a <code>byte[]</code>. Use this method instead
+	 * of <code>toByteArray(InputStream)</code> when <code>InputStream</code> size is known.
+	 * <b>NOTE:</b> the method checks that the length can safely be cast to an int without
+	 * truncation before using {@link IOUtils#toByteArray(java.io.InputStream, int)} to read into
+	 * the byte array. (Arrays can have no more than Integer.MAX_VALUE entries anyway)
+	 * 
+	 * @param input
+	 *            the <code>InputStream</code> to read from
+	 * @param size
+	 *            the size of <code>InputStream</code>
+	 * @return the requested byte array
+	 * @throws IOException
+	 *             if an I/O error occurs or <code>InputStream</code> size differ from parameter
+	 *             size
+	 * @throws IllegalArgumentException
+	 *             if size is less than zero or size is greater than Integer.MAX_VALUE
+	 * @see IOUtils#toByteArray(java.io.InputStream, int)
+	 * @since 2.1
+	 */
+	public static byte[] toByteArray(InputStream input, long size) throws IOException {
+
+		if (size > Integer.MAX_VALUE) {
+			throw new IllegalArgumentException("Size cannot be greater than Integer max value: " + size);
+		}
+
+		return toByteArray(input, (int) size);
+	}
 }

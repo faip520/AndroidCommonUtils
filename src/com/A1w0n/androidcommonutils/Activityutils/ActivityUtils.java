@@ -10,6 +10,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.view.Window;
+import android.view.WindowManager;
 
 public class ActivityUtils {
 
@@ -51,5 +53,12 @@ public class ActivityUtils {
 		final PackageManager mgr = ctx.getPackageManager();
 		List<ResolveInfo> list = mgr.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
 		return list.size() > 0;
+	}
+	
+	public static void requestFullScreen(Activity activity) {
+		activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		activity.getWindow().setFlags(
+				WindowManager.LayoutParams.FLAG_FULLSCREEN, 
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	}
 }
