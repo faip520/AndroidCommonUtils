@@ -10,7 +10,7 @@
 
 /**
  * 把这个文件通过ndk-build，可以变成一个可执行的二进制程序，放到/system/xbin下面
- * chown 0:0 a1w0n后更改成为root用户所有，然后chmod 6744 a1w0n设置s位
+ * chown 0:0 a1w0n后更改成为root用户所有，然后chmod 06755 a1w0n设置s位
  * 然后这个文件就可以当成su一样来用了
  *
  * 用法 a1w0n -c "ll -s" 或者 a1w0n -c "chmod 777 aa.b"
