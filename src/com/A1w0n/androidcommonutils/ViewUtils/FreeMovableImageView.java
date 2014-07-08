@@ -1,4 +1,4 @@
-package com.A1w0n.androidcommonutils.viewutils;
+package com.A1w0n.androidcommonutils.ViewUtils;
 
 import android.content.Context;
 import android.graphics.Canvas;

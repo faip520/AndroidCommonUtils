@@ -12,9 +12,9 @@ import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.A1w0n.androidcommonutils.GlobalApplicationUtils.GlobalApplication;
 import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
-import com.A1w0n.androidcommonutils.globalapplication.GlobalApplication;
-import com.A1w0n.androidcommonutils.viewutils.ViewUtils;
+import com.A1w0n.androidcommonutils.ViewUtils.ViewUtils;
 import com.faip.androidcommonutils.R;
 
 import android.content.Context;

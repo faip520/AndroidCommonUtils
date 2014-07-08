@@ -1,6 +1,6 @@
 package com.A1w0n.androidcommonutils.Activityutils;
 
-import com.A1w0n.androidcommonutils.globalapplication.GlobalApplication;
+import com.A1w0n.androidcommonutils.GlobalApplicationUtils.GlobalApplication;
 
 import android.content.Intent;
 import android.os.Bundle;

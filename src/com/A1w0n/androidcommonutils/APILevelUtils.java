@@ -34,7 +34,11 @@ public class APILevelUtils {
 	 * JELLY_BEAN_MR2 指的也是Android 4.3
 	 */
 	public static boolean isLevel18AndAbove() {
-		return Integer.valueOf(Build.VERSION.SDK_INT).intValue() >= Build.VERSION_CODES.JELLY_BEAN_MR2;
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2;
+	}
+	
+	public static int currentApiLevel() {
+		return Build.VERSION.SDK_INT;
 	}
 
 }

@@ -1,7 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">AndroidCommonUtil</string>
     <string name="hu_time_out">Connection time out!</string>
     <string name="hu_unknown_network_error">Unknown network error!</string>
+    <string name="title_activity_test_case_main">TestCaseMainActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

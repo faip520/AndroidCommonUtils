@@ -25,8 +25,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.ImageView;
 
+import com.A1w0n.androidcommonutils.GlobalApplicationUtils.GlobalApplication;
 import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
-import com.A1w0n.androidcommonutils.globalapplication.GlobalApplication;
 import com.faip.androidcommonutils.R;
 
 public class ImageLoader {

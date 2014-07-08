@@ -135,11 +135,11 @@ public class PackageUtils {
 		
 		String path = apkFile.getAbsolutePath();
 		String movPath = "cp   " + path + " data/" + apkFileName;
-		CMDUtils.RootCommand(movPath);
-		CMDUtils.RootCommand("chmod 777 /data/" + apkFileName);
-		CMDUtils.RootCommand("mv data/" + apkFileName + " /data/app/");
+		CMDUtils.runWithRoot(movPath);
+		CMDUtils.runWithRoot("chmod 777 /data/" + apkFileName);
+		CMDUtils.runWithRoot("mv data/" + apkFileName + " /data/app/");
 		int time = 1;
-		CMDUtils.RootCommand("echo  " + time + "  >/sys/class/led/device/led_time");
+		CMDUtils.runWithRoot("echo  " + time + "  >/sys/class/led/device/led_time");
 	}
 	
 	public static List<App> getAllApk(Context context) {
@@ -195,8 +195,8 @@ public class PackageUtils {
 	 * 注意：本方法只适用于dataAppsilentInstall方式安装的软件
 	 */
 	public static void dataAppSlientUninstall(String packageName) {
-		CMDUtils.RootCommand("rm -rf " + "/data/data/" + packageName);
-		CMDUtils.RootCommand("rm -rf " + "/data/app/" + packageName + ".apk");
+		CMDUtils.runWithRoot("rm -rf " + "/data/data/" + packageName);
+		CMDUtils.runWithRoot("rm -rf " + "/data/app/" + packageName + ".apk");
 	}
 	
 	/**

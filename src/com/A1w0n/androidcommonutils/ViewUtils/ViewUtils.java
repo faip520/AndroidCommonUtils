@@ -1,12 +1,11 @@
-package com.A1w0n.androidcommonutils.viewutils;
-
-import com.A1w0n.androidcommonutils.APILevelUtils;
-import com.crashlytics.android.internal.v;
+package com.A1w0n.androidcommonutils.ViewUtils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,6 +15,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+
+import com.A1w0n.androidcommonutils.APILevelUtils;
+import com.A1w0n.androidcommonutils.debugutils.Logger;
 
 public class ViewUtils {
 
@@ -92,6 +94,19 @@ public class ViewUtils {
 			centerPoint.x = rect.centerX();
 			centerPoint.y = rect.centerY();
 		}
+	}
+	
+	public static Bitmap view2Bitmap(View view) {
+		if (view == null) {
+			Logger.e("Try to get bitmap from a null view object!");
+			return null;
+		}
+		
+	    Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),
+	            view.getHeight(), Config.ARGB_8888);
+	    Canvas canvas = new Canvas(bitmap);
+	    view.draw(canvas);
+	    return bitmap;
 	}
 
 }

@@ -18,7 +18,7 @@ public class HttpUtility {
 	}
 
 	public String executeNormalTask(HttpMethod httpMethod, String url, Map<String, String> param) throws NetworkException {
-		return new JavaHttpUtility().executeNormalTask(httpMethod, url, param);
+		return JavaHttpUtility.getInstance().executeNormalTask(httpMethod, url, param);
 	}
 
 	/**
@@ -29,11 +29,11 @@ public class HttpUtility {
 	 * @return
 	 */
 	public boolean executeDownloadTask(String url, File targetFile, IDownloadListener downloadListener) {
-		return !Thread.currentThread().isInterrupted() && new JavaHttpUtility().doGetSaveFile(url, targetFile, downloadListener);
+		return !Thread.currentThread().isInterrupted() && JavaHttpUtility.getInstance().doGetSaveFile(url, targetFile, downloadListener);
 	}
 
 	public boolean executeUploadTask(String url, Map<String, String> param, String path, String imageParamName, IUploadListener listener)
 			throws NetworkException {
-		return !Thread.currentThread().isInterrupted() && new JavaHttpUtility().doUploadFile(url, param, path, imageParamName, listener);
+		return !Thread.currentThread().isInterrupted() && JavaHttpUtility.getInstance().doUploadFile(url, param, path, imageParamName, listener);
 	}
 }

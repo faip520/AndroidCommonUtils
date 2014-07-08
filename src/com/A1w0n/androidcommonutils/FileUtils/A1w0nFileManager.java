@@ -4,8 +4,8 @@ import java.io.File;
 
 import android.text.TextUtils;
 
+import com.A1w0n.androidcommonutils.GlobalApplicationUtils.GlobalApplication;
 import com.A1w0n.androidcommonutils.debugutils.Logger;
-import com.A1w0n.androidcommonutils.globalapplication.GlobalApplication;
 
 /**
  * @author Aiwan

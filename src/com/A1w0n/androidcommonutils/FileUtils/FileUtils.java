@@ -13,9 +13,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
 import android.os.Environment;
-import android.text.TextUtils;
 
 import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
 
@@ -62,6 +60,14 @@ public class FileUtils {
             IOUtils.closeSilently(source);
         }
     }
+    
+	public static boolean isExistAndWritable(File file) {
+		return (file != null) && (file.exists()) && (file.canWrite());
+	}
+	
+	public static boolean isExitNotEmptyAndReadable(File file) {
+		return (file != null) && (file.exists()) && (file.canRead()) && (file.length() != 0);
+	}
     
     public static FileOutputStream openOutputStream(File file) throws IOException {
         return openOutputStream(file, false);
@@ -646,5 +652,87 @@ public class FileUtils {
             throw new FileNotFoundException("File '" + file + "' does not exist");
         }
         return new FileInputStream(file);
+    }
+    
+    /**
+     * Counts the size of a directory recursively (sum of the length of all files).
+     * 暂时不考虑是Symbol link的情况
+     * 
+     * @param directory
+     *            directory to inspect, must not be {@code null}
+     * @return size of directory in bytes, 0 if directory is security restricted, a negative number when the real total
+     *         is greater than {@link Long#MAX_VALUE}.
+     * @throws NullPointerException
+     *             if the directory is {@code null}
+     */
+    public static long sizeOfDirectory(File directory) {
+        checkDirectory(directory);
+
+        final File[] files = directory.listFiles();
+        if (files == null) {  // null if security restricted
+            return 0L;
+        }
+        long size = 0;
+
+        for (final File file : files) {
+//            try {
+//                if (!isSymlink(file)) {
+                    size += sizeOf(file);
+                    if (size < 0) {
+                        break;
+                    }
+//                }
+//            } catch (IOException ioe) {
+//                // Ignore exceptions caught when asking if a File is a symlink.
+//            }
+        }
+
+        return size;
+    }
+    
+    /**
+     * Checks that the given {@code File} exists and is a directory.
+     * 
+     * @param directory The {@code File} to check.
+     * @throws IllegalArgumentException if the given {@code File} does not exist or is not a directory.
+     */
+    private static void checkDirectory(File directory) {
+        if (!directory.exists()) {
+            throw new IllegalArgumentException(directory + " does not exist");
+        }
+        if (!directory.isDirectory()) {
+            throw new IllegalArgumentException(directory + " is not a directory");
+        }
+    }
+    
+    /**
+     * Returns the size of the specified file or directory. If the provided 
+     * {@link File} is a regular file, then the file's length is returned.
+     * If the argument is a directory, then the size of the directory is
+     * calculated recursively. If a directory or subdirectory is security 
+     * restricted, its size will not be included.
+     * 
+     * @param file the regular file or directory to return the size 
+     *        of (must not be {@code null}).
+     * 
+     * @return the length of the file, or recursive size of the directory, 
+     *         provided (in bytes).
+     * 
+     * @throws NullPointerException if the file is {@code null}
+     * @throws IllegalArgumentException if the file does not exist.
+     *         
+     * @since 2.0
+     */
+    public static long sizeOf(File file) {
+        if (!file.exists()) {
+            String message = file + " does not exist";
+            throw new IllegalArgumentException(message);
+        }
+
+        if (file.isDirectory()) {
+            return sizeOfDirectory(file);
+        } else {
+            return file.length();
+        }
     }
 }

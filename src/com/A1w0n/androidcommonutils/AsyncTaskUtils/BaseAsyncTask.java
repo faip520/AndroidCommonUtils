@@ -13,7 +13,7 @@ public abstract class BaseAsyncTask<Params, Progress, Result> extends AsyncTask<
     // UI线程的Handler.
 	protected static final Handler sHandler = new Handler(Looper.getMainLooper());
 
-    protected boolean isUiThread() {
+    final protected boolean isUiThread() {
         return Thread.currentThread().getId() == Looper.getMainLooper().getThread().getId();
     }
 
@@ -39,7 +39,7 @@ public abstract class BaseAsyncTask<Params, Progress, Result> extends AsyncTask<
             });
     }
 
-    protected void onProgressUpdate(final Progress... values) {
+    protected final void onProgressUpdate(final Progress... values) {
         if (isUiThread())
             ProgressUpdate(values);
         else

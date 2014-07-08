@@ -17,6 +17,10 @@ public class AndroidFileUtils {
 	
 	private AndroidFileUtils() {
 	}
+	
+	
+	
+	
     
     // ************************************************Internal Storage****************************************
     /**
@@ -53,24 +57,7 @@ public class AndroidFileUtils {
 			return result;
 		}
     	
-    	String fullPath = getFullPathOnInternalStorage(context, relativePath);
-    	result = new File(fullPath);
-    	
-    	if (!result.exists()) {
-			File parentDir = result.getParentFile();
-			if (!parentDir.exists()) {
-				parentDir.mkdirs();
-			}
-			
-			try {
-				result.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-				result = null;
-			}
-		}
-    	
-    	return result;
+    	return getOrCreateFile(getFullPathOnInternalStorage(context, relativePath));
     }
     
     /**
@@ -111,18 +98,7 @@ public class AndroidFileUtils {
     		return target;
     	}
     	
-    	target = new File(getFullPathOnInternalStorage(context, relativePath));
-    	
-    	if (target.exists()) {
-			return target;
-		}
-    	
-    	// 如果创建文件夹失败了，就返回null
-    	if (!target.mkdirs()) {
-			target = null;
-		}
-    	
-    	return target;
+    	return getOrCreateDirectory(getFullPathOnInternalStorage(context, relativePath));
     }
     
     public static boolean deleteFileOnInternalStorage(Context context, String name) {
@@ -133,6 +109,24 @@ public class AndroidFileUtils {
     public static void getInternalStorageFreeSpace() {
 		
 	}
+    
+    public static File getOrCreateFileOnInternalCacheDir(Context context, String fileName) {
+    	File target = null;
+    	
+    	if (TextUtils.isEmpty(fileName) || context == null ) {
+    		Logger.e("Illegal arguments!");
+    		return target;
+    	}
+    	
+    	String fullPath = context.getCacheDir().getAbsolutePath() + File.separator + fileName;
+    	return getOrCreateFile(fullPath);
+    	
+    }
+    // ************************************************End Of Internal Storage****************************************
+    
+    
+    
+    
     
     // ************************************************External Storage****************************************
     /**
@@ -178,6 +172,8 @@ public class AndroidFileUtils {
 			return null;
 		}
     	
+    	if (!isExternalStorageWritable()) return null;
+    	
     	String path = getExternalStorageRootAbsolutePath();
     	path = path + File.separator + relativePath;
     	return path;
@@ -194,18 +190,7 @@ public class AndroidFileUtils {
     	
     	if (!isExternalStorageWritable()) return target;
     	
-    	target = new File(getFullPathOnExternalStorage(relativeDirectoryName));
-    	
-    	if (target.exists()) {
-			return target;
-		}
-    	
-    	// 如果创建文件夹失败了，就返回null
-    	if (!target.mkdirs()) {
-			target = null;
-		}
-    	
-    	return target;
+    	return getOrCreateDirectory(getFullPathOnExternalStorage(relativeDirectoryName));
     }
     
     /**
@@ -254,6 +239,34 @@ public class AndroidFileUtils {
     		return result;
     	}
     	
+    	return getOrCreateFile(fullPath);
+    }
+    
+    public static boolean deleteFileOnExternalStorage(String relativePath) {
+    	if (TextUtils.isEmpty(relativePath)) return false;
+    	
+    	if (!isExternalStorageWritable()) return false;
+    	
+    	File target = new File(getFullPathOnExternalStorage(relativePath));
+    	
+    	return target.delete();
+    }
+    
+    
+    
+    
+    
+    // ************************************************Base****************************************
+    /**
+     * 本类的底层方法，这里不会检测SD卡的挂载问题，SD的挂载问题放在本类的上层解决
+     * @param relativePath
+     * @return
+     */
+    private static File getOrCreateFile(String fullPath) {
+    	File result = null;
+    	
+    	if (TextUtils.isEmpty(fullPath)) return result;
+    	
     	result = new File(fullPath);
     	
     	if (!result.exists()) {
@@ -273,13 +286,27 @@ public class AndroidFileUtils {
     	return result;
     }
     
-    public static boolean deleteFileOnExternalStorage(String relativePath) {
-    	if (TextUtils.isEmpty(relativePath)) return false;
+    /**
+     * 本类的底层方法，这里不会检测SD卡的挂载问题，SD的挂载问题放在本类的上层解决
+     * @param fullPath
+     * @return
+     */
+    private static File getOrCreateDirectory(String fullPath) {
+    	File target = null;
     	
-    	if (!isExternalStorageWritable()) return false;
+    	if (TextUtils.isEmpty(fullPath)) return target;
     	
-    	File target = new File(getFullPathOnExternalStorage(relativePath));
+    	target = new File(fullPath);
     	
-    	return target.delete();
+    	if (target.exists()) {
+			return target;
+		}
+    	
+    	// 如果创建文件夹失败了，就返回null
+    	if (!target.mkdirs()) {
+			target = null;
+		}
+    	
+    	return target;
     }
 }

@@ -1,12 +1,14 @@
-package com.A1w0n.androidcommonutils.globalapplication;
+package com.A1w0n.androidcommonutils.GlobalApplicationUtils;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Handler;
-import android.os.StrictMode;
 import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.WindowManager;
 
 import com.A1w0n.androidcommonutils.debugutils.StrictModeUtils;
 import com.crashlytics.android.Crashlytics;
@@ -55,21 +57,40 @@ public final class GlobalApplication extends Application {
 		if (displayMetrics != null) {
 			return displayMetrics;
 		} else {
-			Activity a = getActivity();
-			if (a != null) {
-				Display display = getActivity().getWindowManager().getDefaultDisplay();
-				DisplayMetrics metrics = new DisplayMetrics();
-				display.getMetrics(metrics);
-				this.displayMetrics = metrics;
-				return metrics;
-			} else {
-				// Default screen is 800x480
-				DisplayMetrics metrics = new DisplayMetrics();
-				metrics.widthPixels = 480;
-				metrics.heightPixels = 800;
-				return metrics;
-			}
+			DisplayMetrics dm = new DisplayMetrics();
+			WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+			windowManager.getDefaultDisplay().getMetrics(dm);
+			this.displayMetrics = dm;
+			return dm;
 		}
+	}
+	
+	public String getApplicationVersionName() {
+		PackageInfo pInfo = null;
+		try {
+			pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		return pInfo.versionName;
+	}
+	
+	/**
+	 * @return
+	 * Return -1 if failed.
+	 */
+	public int getApplicationVersionCode() {
+		PackageInfo pInfo = null;
+		try {
+			pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			return -1;
+		}
+		
+		return pInfo.versionCode;
 	}
 
 	public Activity getActivity() {
@@ -87,5 +108,4 @@ public final class GlobalApplication extends Application {
 	public void setCurrentRunningActivity(Activity currentRunningActivity) {
 		this.currentRunningActivity = currentRunningActivity;
 	}
-
 }

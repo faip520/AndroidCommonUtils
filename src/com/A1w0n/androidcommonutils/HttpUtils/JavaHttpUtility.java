@@ -32,10 +32,10 @@ import org.json.JSONObject;
 
 import android.text.TextUtils;
 
+import com.A1w0n.androidcommonutils.GlobalApplicationUtils.GlobalApplication;
 import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
 import com.A1w0n.androidcommonutils.NetworkUtils.NetworkUtils;
 import com.A1w0n.androidcommonutils.debugutils.Logger;
-import com.A1w0n.androidcommonutils.globalapplication.GlobalApplication;
 import com.faip.androidcommonutils.BuildConfig;
 import com.faip.androidcommonutils.R;
 
@@ -52,6 +52,16 @@ public class JavaHttpUtility {
 
 	private static final int UPLOAD_CONNECT_TIMEOUT = 15 * 1000;
 	private static final int UPLOAD_READ_TIMEOUT = 5 * 60 * 1000;
+	
+	private static JavaHttpUtility mInstance;
+	
+	public static JavaHttpUtility getInstance() {
+		if (mInstance == null) {
+			mInstance = new JavaHttpUtility();
+		}
+		
+		return mInstance;
+	}
 
 	// ===================NullHostNameVerifier================
 	public class NullHostNameVerifier implements HostnameVerifier {
@@ -74,7 +84,7 @@ public class JavaHttpUtility {
 		}
 	} };
 
-	public JavaHttpUtility() {
+	private JavaHttpUtility() {
 		// allow Android to use an untrusted certificate for SSL/HTTPS connection
 		// so that when you debug app, you can use Fiddler http://fiddler2.com to logs all HTTPS
 		// traffic
@@ -463,6 +473,84 @@ public class JavaHttpUtility {
 
 		return false;
 	}
+	
+	public boolean doGetSaveFile(String urlStr, File targetFile) {
+		if (TextUtils.isEmpty(urlStr)) {
+			Logger.e("Empty url!");
+			return false;
+		}
+		
+		if (targetFile == null || !targetFile.canWrite()) {
+			Logger.e("Target file not writable!");
+			return false;
+		}
+		
+		if (!NetworkUtils.isNetworkConnected(GlobalApplication.getInstance())) {
+			Logger.e("Cannot download file without network connection!");
+			return false;
+		}
+
+		BufferedOutputStream out = null;
+		InputStream in = null;
+		HttpURLConnection urlConnection = null;
+		try {
+			URL url = new URL(urlStr);
+			Proxy proxy = getProxy();
+			if (proxy != null)
+				urlConnection = (HttpURLConnection) url.openConnection(proxy);
+			else
+				urlConnection = (HttpURLConnection) url.openConnection();
+
+			urlConnection.setRequestMethod("GET");
+			urlConnection.setDoOutput(false);
+			urlConnection.setConnectTimeout(DOWNLOAD_CONNECT_TIMEOUT);
+			urlConnection.setReadTimeout(DOWNLOAD_READ_TIMEOUT);
+			urlConnection.setRequestProperty("Connection", "Keep-Alive");
+			urlConnection.setRequestProperty("Charset", "UTF-8");
+			urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
+
+			urlConnection.connect();
+
+			int status = urlConnection.getResponseCode();
+
+			if (status != HttpURLConnection.HTTP_OK) {
+				return false;
+			}
+
+			int bytetotal = (int) urlConnection.getContentLength();
+			if (bytetotal > 0 && targetFile.exists() && targetFile.length() == bytetotal) {
+				Logger.d("Same file with the same size already exits, download canceled!");
+				return true;
+			}
+			
+			int bytesum = 0;
+			int byteread = 0;
+			out = new BufferedOutputStream(new FileOutputStream(targetFile));
+			in = new BufferedInputStream(urlConnection.getInputStream());
+
+			final Thread thread = Thread.currentThread();
+			byte[] buffer = new byte[1444];
+			while ((byteread = in.read(buffer)) != -1) {
+				if (thread.isInterrupted()) {
+					targetFile.delete();
+					IOUtils.closeSilently(out);
+					throw new InterruptedIOException();
+				}
+
+				bytesum += byteread;
+				out.write(buffer, 0, byteread);
+			}
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			IOUtils.closeSilently(in);
+			IOUtils.closeSilently(out);
+			if (urlConnection != null)
+				urlConnection.disconnect();
+		}
+	}
 
 	private static String getBoundry() {
 		StringBuffer _sb = new StringBuffer();
@@ -496,6 +584,16 @@ public class JavaHttpUtility {
 		return res.toString();
 	}
 
+	/**
+	 * 已经测试过可以正常使用的
+	 * @param urlStr
+	 * @param param
+	 * @param path
+	 * @param imageParamName
+	 * @param listener
+	 * @return
+	 * @throws NetworkException
+	 */
 	public boolean doUploadFile(String urlStr, Map<String, String> param, String path, String imageParamName,
 			final IUploadListener listener) throws NetworkException {
 		String BOUNDARYSTR = getBoundry();

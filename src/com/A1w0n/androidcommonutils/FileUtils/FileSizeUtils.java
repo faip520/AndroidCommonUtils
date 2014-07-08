@@ -34,7 +34,6 @@ public class FileSizeUtils {
     }
 
     private void getFileSize(File file) {
-
         if (file == null || !file.exists()) {
             return;
         }
