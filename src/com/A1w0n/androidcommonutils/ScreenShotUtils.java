@@ -139,7 +139,8 @@ public class ScreenShotUtils {
 			if (row >= h) break;
 			if ((i - row * line_length) >= widthBytes) continue;
 			// fb0里面存储的BGRA中的A都是FF
-			pixels[offset] =  (0xFF << 24) | ((Fb0Bytes[i + 2]& 0x0FF) << 16) | ((Fb0Bytes[i + 1]& 0x0FF) << 8) | (Fb0Bytes[i]& 0x0FF);
+			// byte类型左移后是不变的，必须和0xFF变成int类型后，左移才有效
+			pixels[offset] =  (0xFF << 24) | ((Fb0Bytes[i + 2]& 0xFF) << 16) | ((Fb0Bytes[i + 1]& 0xFF) << 8) | (Fb0Bytes[i]& 0xFF);
 			offset++;
 		}
 		Logger.d("Moce time =  " + (System.currentTimeMillis() - stat2));

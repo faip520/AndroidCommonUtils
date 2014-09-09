@@ -299,7 +299,12 @@ public class AndroidFileUtils {
     	target = new File(fullPath);
     	
     	if (target.exists()) {
-			return target;
+    		if (target.isDirectory()) {
+    			return target;
+			} else {
+				Logger.e("Target already exist, but is not a directory");
+				return null;
+			}
 		}
     	
     	// 如果创建文件夹失败了，就返回null

@@ -165,7 +165,7 @@ public class MediaPlayerManager {
 
 		try {
 			mMediaPlayer.setDataSource(absolutePathOrUrl);
-		} catch (IllegalArgumentException | SecurityException | IllegalStateException | IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return;
 		}
@@ -193,7 +193,7 @@ public class MediaPlayerManager {
 
 		try {
 			mBGMediaPlayer.setDataSource(absolutePathOrUrl);
-		} catch (IllegalArgumentException | SecurityException | IllegalStateException | IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return;
 		}

@@ -10,12 +10,16 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.ActivityManager;
+import android.app.Application;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
 import com.A1w0n.androidcommonutils.CMDUtils;
@@ -28,6 +32,16 @@ import com.A1w0n.androidcommonutils.debugutils.Logger;
 public class PackageUtils {
 
 	private PackageUtils() {
+	}
+	
+	
+	/**
+	 * 仅仅用于备忘，别调用这个！
+	 * @param context
+	 * @return
+	 */
+	public static String getMyPackageName(Application context) {
+		return context.getPackageName();
 	}
 
 	/**
@@ -161,33 +175,25 @@ public class PackageUtils {
 			App item = new App();
 //			item.userName = Settings.getUserName(mContext);
 //			item.macAddress = Settings.getMacAddress(mContext);
-			item.thumbnailPath = syncSavePackageIcon(context, itemInfo.packageName, BitmapUtils.getBitmap(itemInfo.loadIcon(pm)));
+			String packageName = itemInfo.packageName;
+			
+			File iconFile = A1w0nFileManager.getIconFileForWriting(packageName);
+			if (iconFile.exists() && iconFile.length() != 0) {
+				Logger.e("Icon file of package name: " + packageName + " already existed!");
+			} else {
+				BitmapUtils.saveToFile(iconFile, BitmapUtils.getBitmap(itemInfo.loadIcon(pm)));
+			}
+			
+			item.thumbnailPath = iconFile.getAbsolutePath();
 			item.apkPath = itemInfo.sourceDir;
 			item.title = itemInfo.loadLabel(pm).toString();
-			item.packName = itemInfo.packageName;
+			item.packName = packageName;
 			item.versionCode = p.versionCode;
 			item.versionName = p.versionName;
-			// 
-			File file = A1w0nFileManager.getIconFileForWriting(
-					String.valueOf(itemInfo.packageName.hashCode()));
-			item.fileSize = file.length();
+			item.fileSize = iconFile.length();
 			returnMap.add(item);
 		}
 		return returnMap;
-	}
-	
-	/**
-	 * 把icon 对应的bitmap文件保存起来
-	 * @param context
-	 * @param packageName
-	 * @param bitmap
-	 * @return
-	 */
-	public static String syncSavePackageIcon(Context context, final String packageName, final Bitmap bitmap) {
-		String iconFileName = String.valueOf(packageName.hashCode());
-		File file = A1w0nFileManager.getIconFileForWriting(iconFileName);
-		BitmapUtils.saveToFile(file, bitmap);
-		return file.getAbsolutePath();
 	}
 	
 	/**
@@ -260,5 +266,114 @@ public class PackageUtils {
 
 		Exec.close(fd);
 	}
-
+	
+	/**
+	 * 从文件系统中的apk文件中获取包名，其实这里已经可以获取到PackageInfo对象了
+	 * 理论上关于应用软件的一切信息都能获取到了
+	 * @param context
+	 * @param absPath
+	 * @return
+	 */
+	public static String getApkFilePackageName(Context context, String absPath) {
+		String result = null;
+		
+		if (context == null || TextUtils.isEmpty(absPath)) {
+			Logger.e("Illegal argument!");
+			return result;
+		}
+		
+	    PackageManager pm = context.getPackageManager();  
+	    PackageInfo pkgInfo = pm.getPackageArchiveInfo(absPath,PackageManager.GET_ACTIVITIES);  
+	    if (pkgInfo != null) {
+	    	result = pkgInfo.packageName;
+	    }  
+		
+		return result;
+	}
+	
+	/**
+	 * 获取apk文件对应的应用的icon
+	 * @param context
+	 * @param absPath
+	 * @return
+	 */
+	public static Drawable getApkFileIconDrawable(Context context, String absPath) {
+		Drawable result = null;
+		
+		if (context == null || TextUtils.isEmpty(absPath)) {
+			Logger.e("Illegal argument!");
+			return result;
+		}
+		
+	    PackageManager pm = context.getPackageManager();  
+	    PackageInfo pkgInfo = pm.getPackageArchiveInfo(absPath,PackageManager.GET_ACTIVITIES);  
+	    if (pkgInfo != null) {
+	        ApplicationInfo appInfo = pkgInfo.applicationInfo;
+	        // 必须加这两句，不然下面icon获取是default icon而不是应用包的icon
+	        appInfo.sourceDir = absPath;  
+	        appInfo.publicSourceDir = absPath;
+	        
+	        // 这两个获取到的应该是一样的
+	        result = pm.getApplicationIcon(appInfo);
+	        //result = appInfo.loadIcon(pm);
+	    }  
+		
+		return result;
+	}
+	
+	/**
+	 * 给定包名，返回这个包名对应的软件是否已经安装了
+	 * @param context
+	 * @param packageName
+	 * @return
+	 */
+	public static boolean isInstalled(Context context, String packageName) {
+		if (context == null || TextUtils.isEmpty(packageName)) {
+			Logger.e("Illegal argument!");
+			return false;
+		}
+		
+		PackageManager pm = context.getPackageManager();
+		boolean app_installed = false;
+		try {
+			pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+			app_installed = true;
+		} catch (PackageManager.NameNotFoundException e) {
+			app_installed = false;
+		}
+		
+		return app_installed ;
+	}
+	
+	/**
+	 * 获取正在运行的软件包名
+	 * @param context
+	 * @return
+	 */
+	public static String currentRunningPackageName(Context context) {
+		if (context == null) {
+			Logger.e("Illegal argument!");
+			return null;
+		}
+		
+		ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		List<ActivityManager.RunningTaskInfo> mTaskInfo = mActivityManager.getRunningTasks(1);
+		ComponentName componentInfo = mTaskInfo.get(0).topActivity;
+		return componentInfo.getPackageName();
+	}
+	
+	/**
+	 * 给出包名，启动包名对应的应用软件的主Activity
+	 * @param context
+	 * @param packageName
+	 */
+	public static void startMainActivity(Context context, String packageName) {
+		if (context == null || TextUtils.isEmpty(packageName) || packageName.length() > 200) {
+			Logger.e("Illegal arguments!");
+			return;
+		}
+		
+		context.startActivity(context.getPackageManager().getLaunchIntentForPackage(packageName));
+	}
+	
 }

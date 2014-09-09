@@ -10,12 +10,23 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
+
+import com.A1w0n.androidcommonutils.GlobalApplicationUtils.GlobalApplication;
 
 public class ActivityUtils {
 
 	private ActivityUtils() {
+	}
+	
+	/**
+	 * 让目标activity的保持屏幕常亮
+	 * @param activity
+	 */
+	public static void keepScreenOn(Activity activity) {
+		activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
 
 	/**
@@ -28,6 +39,18 @@ public class ActivityUtils {
 		Intent chooser = Intent.createChooser(intent, "Choose a Picture");
 		int requestCode = 10086;
 		activity.startActivityForResult(chooser, requestCode);
+	}
+	
+	/**
+	 * 获取屏幕当前的方向
+	 * @param context
+	 * @return
+	 */
+	public static int getRotation(Context context) {
+		WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		
+		return  display.getRotation();
 	}
 
 	/**
@@ -60,5 +83,29 @@ public class ActivityUtils {
 		activity.getWindow().setFlags(
 				WindowManager.LayoutParams.FLAG_FULLSCREEN, 
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+	}
+	
+	/**
+	 * 双击 back 键返回，单击执行其他动作
+	 */
+	private long mLastBackPress = 0;
+	private boolean mSecondPress = false;
+	public void onBackPressed() {
+		long current = System.currentTimeMillis();
+		
+		if (current - mLastBackPress < 1000) {
+			mSecondPress = true;
+			// handle double click
+		} else {
+			GlobalApplication.mUiHandler.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					if (!mSecondPress) {
+						// handle single click
+					}
+				}
+			}, 1000);
+		}
+		mLastBackPress = current;
 	}
 }

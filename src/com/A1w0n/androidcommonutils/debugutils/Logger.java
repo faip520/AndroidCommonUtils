@@ -4,7 +4,8 @@ package com.A1w0n.androidcommonutils.debugutils;
  * Wrapper API for sending log output.
  */
 public class Logger {
-	protected static final String TAG = "===A1W0n===";
+	protected static final String TAG = "===A1w0n===";
+	
 	public static final boolean DEBUG = true;
 
 	private Logger() {

@@ -49,6 +49,12 @@ public class A1w0nFileManager {
 		return result;
 	}
 	
+	/**
+	 * 整个项目，只知道相对路径，而不用关系内部存储还是外部存储，要想得到文件夹的话，
+	 * 调用这个方法，通过相对路径获取文件夹
+	 * @param relativePath
+	 * @return
+	 */
 	private static File getDirectory(String relativePath) {
 		File result = null;
 		

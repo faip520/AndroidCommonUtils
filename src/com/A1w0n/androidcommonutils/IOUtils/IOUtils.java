@@ -12,6 +12,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ServerSocket;
 import java.net.URL;
 import java.nio.charset.Charset;
 
@@ -67,6 +68,18 @@ public class IOUtils {
 				closeable.close();
 			} catch (IOException ignored) {
 
+			}
+		}
+	}
+	
+	/**
+	 * Usually used in try/catch block's finally block.
+	 */
+	public static void closeSilently(ServerSocket ss) {
+		if (ss != null) {
+			try {
+				ss.close();
+			} catch (IOException ignored) {
 			}
 		}
 	}

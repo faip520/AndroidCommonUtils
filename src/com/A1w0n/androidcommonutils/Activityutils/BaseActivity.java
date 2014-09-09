@@ -53,4 +53,6 @@ public class BaseActivity extends  FragmentActivity {
         overridePendingTransition(0, 0);
         startActivity(intent);
     }
+    
+    
 }

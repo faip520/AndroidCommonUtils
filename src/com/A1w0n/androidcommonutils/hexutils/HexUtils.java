@@ -4,12 +4,46 @@ import java.nio.ByteBuffer;
 
 /**
  * @author A1w0n
- * 
- * All functions here are not tested.
  */
 public class HexUtils {
 	private static final char[] digits = { 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 65, 66, 67, 68, 69, 70 };
 	private static final byte[] emptybytes = new byte[0];
+	
+	private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+	
+	/**
+	 * byte数组转换成string
+	 * @param bytes 不能是null，函数内没有检测
+	 * @return
+	 */
+	public static String bytesToHex(byte[] bytes) {
+	    char[] hexChars = new char[bytes.length * 2];
+	    
+	    for ( int j = 0; j < bytes.length; j++ ) {
+	        int v = bytes[j] & 0xFF;
+	        hexChars[j * 2] = hexArray[v >>> 4];
+	        hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+	    }
+	    
+	    return new String(hexChars);
+	}
+	
+	/**
+	 * 十六进制字符串，转换成二进制byte数组
+	 * 参数例子："e04fd020ea3a6910a2d808002b30309d"
+	 * 大写还没测试过，先用小写
+	 * @param s
+	 * @return
+	 */
+	public static byte[] hexStringToByteArray(String s) {
+	    int len = s.length();
+	    byte[] data = new byte[len / 2];
+	    for (int i = 0; i < len; i += 2) {
+	        data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+	                             + Character.digit(s.charAt(i+1), 16));
+	    }
+	    return data;
+	}
 
 	public static String byte2HexStr(byte paramByte) {
 		char[] arrayOfChar = new char[2];

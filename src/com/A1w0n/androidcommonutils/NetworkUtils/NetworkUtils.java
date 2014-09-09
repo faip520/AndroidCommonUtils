@@ -4,18 +4,28 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.DhcpInfo;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.text.format.Formatter;
 
 public class NetworkUtils {
+	
+	private static final String PATTERN_IPV4_ADDRESS = 
+	        "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+	        "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+	        "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+	        "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 
 	private NetworkUtils() {
 
@@ -95,5 +105,31 @@ public class NetworkUtils {
 			return null;
 		return ((ipAddress & 0xff) + "." + (ipAddress >> 8 & 0xff) + "." + (ipAddress >> 16 & 0xff) + "." + (ipAddress >> 24 & 0xff));
 	}
-
+	
+	/**
+	 * 获取已连上的 Wifi 路由器 的 ip
+	 * @param context
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	public static String getWifiRouterIp(Context context) {
+		final WifiManager manager = (WifiManager) context.getSystemService(context.WIFI_SERVICE);
+		final DhcpInfo dhcp = manager.getDhcpInfo();
+		return Formatter.formatIpAddress(dhcp.gateway);
+	}
+	
+	/**
+	 * 通过正则表达式判断 ip 是不是合法的 IPv4 地址
+	 * @param ip
+	 * @return
+	 */
+	public static boolean isValidIPv4Address(String ip) {
+		if (!TextUtils.isEmpty(ip) && ip.length() < 16) {
+			Pattern pattern = Pattern.compile(PATTERN_IPV4_ADDRESS);
+			Matcher matcher = pattern.matcher(ip);
+			return matcher.matches();
+		}
+		
+		return false;
+	}
 }
