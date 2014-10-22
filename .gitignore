@@ -5,6 +5,9 @@
 # Mac file
 .DS_Store
 
+# SVN stuff
+.svn
+
 # files for the dex VM
 *.dex
 
