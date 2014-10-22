@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 /**
  * Created by Aiwan on 2014/5/24 0024.
  * 带有ProgressDialog的AsyncTask，可以调用updateProgressDialogMessage来更新显示的提示信息
+ * 执行完会自动dismissDialog
  */
 public abstract class PreDialogAsyncTask<Params, Progress, Result> extends BaseAsyncTask<Params, Progress, Result> implements DialogInterface.OnCancelListener {
 
@@ -28,7 +29,7 @@ public abstract class PreDialogAsyncTask<Params, Progress, Result> extends BaseA
 	protected void PreExecute() {
 		mProgress = new ProgressDialog(mContext);
 		mProgress.setIndeterminate(true);
-		mProgress.setCancelable(true);
+		mProgress.setCancelable(false);
 		mProgress.setMessage(mPreMessage);
 		mProgress.setOnCancelListener(PreDialogAsyncTask.this);
 		mProgress.show();

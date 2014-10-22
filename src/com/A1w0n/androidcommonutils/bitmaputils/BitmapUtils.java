@@ -2,15 +2,10 @@ package com.A1w0n.androidcommonutils.bitmaputils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
-import com.A1w0n.androidcommonutils.debugutils.Logger;
-
-import android.R.integer;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -19,6 +14,9 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+
+import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
+import com.A1w0n.androidcommonutils.debugutils.Logger;
 
 public class BitmapUtils {
 

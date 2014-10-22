@@ -7,6 +7,8 @@ import android.preference.PreferenceManager;
 /**
  * For writing and getting SharePreference. U can use to this encapsulate your own SP function
  * class, like: getting and setting user info.
+ * 
+ * Note : Editor.apply() 在 level 9（2.3）增加的
  */
 public class SharePreferenceAgent {
 

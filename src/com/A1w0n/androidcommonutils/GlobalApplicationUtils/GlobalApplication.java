@@ -7,6 +7,9 @@ import java.util.concurrent.Executors;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
+import android.content.Intent.ShortcutIconResource;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Handler;
@@ -18,6 +21,7 @@ import com.A1w0n.androidcommonutils.debugutils.Logger;
 import com.A1w0n.androidcommonutils.debugutils.StrictModeUtils;
 import com.crashlytics.android.Crashlytics;
 import com.faip.androidcommonutils.BuildConfig;
+import com.faip.androidcommonutils.R;
 
 /**
  * Global singleton applicatioin subclass.
@@ -142,5 +146,28 @@ public final class GlobalApplication extends Application {
 
 	public void setCurrentRunningActivity(Activity currentRunningActivity) {
 		this.currentRunningActivity = currentRunningActivity;
+	}
+	
+	/**
+	 * 添加快捷方式到launcher
+	 * @param mContext
+	 */
+	public static void addShortcut(Context mContext) {
+		Intent shortcut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+
+		shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME,mContext.getString(R.string.app_name));
+		shortcut.putExtra("duplicate", false);
+
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.setClassName(mContext, mContext.getPackageName() + ".ui.other.Splash");
+		intent.addCategory("android.intent.category.LAUNCHER");
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+		shortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
+
+		ShortcutIconResource iconRes = Intent.ShortcutIconResource.fromContext(mContext, R.drawable.ic_launcher);
+		shortcut.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconRes);
+
+		mContext.sendBroadcast(shortcut);
 	}
 }

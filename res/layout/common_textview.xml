@@ -6,4 +6,6 @@
     android:text="haha"
     android:textColor="#FFFFFF"
     android:textSize="18sp"
-    android:orientation="vertical" />
+    android:orientation="vertical" 
+    android:ellipsize="end"
+    android:maxLines="2"/>

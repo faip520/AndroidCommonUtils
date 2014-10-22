@@ -108,4 +108,13 @@ public class ActivityUtils {
 		}
 		mLastBackPress = current;
 	}
+	
+	/**
+	 * 关闭系统通知界面
+	 */
+	public static void closeSystemNotificationDrawer(Context context) {
+		if (context != null) {
+			context.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+		}
+	}
 }
