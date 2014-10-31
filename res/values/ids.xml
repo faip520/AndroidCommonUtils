@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+	把所有定义的id都放在这里，可以避免layout上的一些bug 
+-->
+<resources>
+    <item type="id" name="example"/>
+</resources>

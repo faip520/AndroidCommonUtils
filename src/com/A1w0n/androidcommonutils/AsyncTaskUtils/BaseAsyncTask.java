@@ -10,6 +10,7 @@ import android.os.Looper;
  * 在这些回调里操作UI控件出现各种错误。
  */
 public abstract class BaseAsyncTask<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
+	
     // UI线程的Handler.
 	protected static final Handler sHandler = new Handler(Looper.getMainLooper());
 
@@ -28,6 +29,10 @@ public abstract class BaseAsyncTask<Params, Progress, Result> extends AsyncTask<
             });
     }
 
+    /**
+     * onPostExecute 需要检测Activity是否被重建了？是否被Destroy了？
+     * 是否到后台去了？等等
+     */
     protected final void onPostExecute(final Result result) {
         if (isUiThread())
             PostExecute(result);
@@ -54,7 +59,6 @@ public abstract class BaseAsyncTask<Params, Progress, Result> extends AsyncTask<
 
     protected void PreExecute(){};
 
-    protected void ProgressUpdate(Progress... values) {
-    }
+    protected void ProgressUpdate(Progress... values) {}
 }
 

@@ -78,6 +78,10 @@ public class ActivityUtils {
 		return list.size() > 0;
 	}
 	
+	/**
+	 * 让Activity全屏
+	 * @param activity
+	 */
 	public static void requestFullScreen(Activity activity) {
 		activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		activity.getWindow().setFlags(

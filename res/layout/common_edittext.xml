@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- maxEms是最大字符数 -->
+<!--
+     设置一个padding是防止文字顶格了 
+		上下和左右设置不一样的padding会比较美观
+		用9.png的情况下就不用padding
+-->
 <EditText xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/common_edittext"
     android:layout_width="wrap_content"
@@ -10,6 +14,11 @@
     android:hint="请输入"
     android:imeOptions="flagNoExtractUi|actionSearch"
     android:maxEms="20"
+    android:textSize="16sp"
+    android:paddingBottom="4dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="4dp"
     android:selectAllOnFocus="true"
     android:singleLine="true"
     android:textColor="#ffffff" />

@@ -11,9 +11,16 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.util.Log;
+import android.widget.ImageView;
 
 import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
 import com.A1w0n.androidcommonutils.debugutils.Logger;
@@ -291,14 +298,15 @@ public class BitmapUtils {
 	public static Bitmap decreaseImageQualityByRequiredSize(Context context, Uri uri, int requiredSize) {
 		Bitmap result = null;
 
-		int[] sizes = new int[] {0, 0};
+		int[] sizes = new int[] { 0, 0 };
 		InputStream is = IOUtils.getInputStreamByUri(context, uri);
 		boolean ok = getBitmapDimension(is, sizes);
 		IOUtils.closeSilently(is);
-		if (!ok) return result;
-		
+		if (!ok)
+			return result;
+
 		InputStream is2 = IOUtils.getInputStreamByUri(context, uri);
-		
+
 		// Find the correct scale value. It should be the power of 2.
 		final int REQUIRED_SIZE = requiredSize;
 		int width_tmp = sizes[0], height_tmp = sizes[1];
@@ -331,26 +339,26 @@ public class BitmapUtils {
 		options.inTempStorage = new byte[16384];
 		return options;
 	}
-	
+
 	public static Bitmap getBitmap(Drawable drawable) {
-	    if (drawable instanceof BitmapDrawable) {
-	        return ((BitmapDrawable)drawable).getBitmap();
-	    }
+		if (drawable instanceof BitmapDrawable) {
+			return ((BitmapDrawable) drawable).getBitmap();
+		}
 
-	    Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Config.ARGB_8888);
-	    Canvas canvas = new Canvas(bitmap); 
-	    drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-	    drawable.draw(canvas);
+		Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Config.ARGB_8888);
+		Canvas canvas = new Canvas(bitmap);
+		drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+		drawable.draw(canvas);
 
-	    return bitmap;
+		return bitmap;
 	}
-	
+
 	public static void saveToFile(File file, Bitmap bm) {
 		if (file == null || bm == null) {
 			Logger.e("Error Arguments");
 			return;
 		}
-		
+
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(file);
@@ -361,4 +369,60 @@ public class BitmapUtils {
 			IOUtils.closeSilently(out);
 		}
 	}
+
+	/**
+	 * 传入一个bitmap，返回这个bitmap的正圆形截取版本
+	 * @param bitmap
+	 * @return
+	 */
+	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
+		Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
+		Canvas canvas = new Canvas(output);
+
+		final int color = 0xff424242;
+		final Paint paint = new Paint();
+		final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+		final RectF rectF = new RectF(rect);
+		final float roundPx = 12;
+
+		paint.setAntiAlias(true);
+		canvas.drawARGB(0, 0, 0, 0);
+		paint.setColor(color);
+		canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+		paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+		canvas.drawBitmap(bitmap, rect, rect, paint);
+
+		return output;
+	}
+	
+    /**
+     * 回收ImageView中得bitmap，如果有的话
+     * 考虑加入把背景也回收了
+     * @param imageView
+     */
+    public static void freeImageView(ImageView imageView) {
+        // This code behaves differently on various OS builds. That is why put into try catch.
+        try {
+            if (imageView != null) {
+                Drawable dr = imageView.getDrawable();
+
+                if (dr == null) {
+                    return;
+                }
+
+                if (!(dr instanceof BitmapDrawable)) {
+                    return;
+                }
+                
+                BitmapDrawable bd = (BitmapDrawable) dr;
+                if (bd.getBitmap() != null) {
+                    bd.getBitmap().recycle();
+                    imageView.setImageBitmap(null);
+                }
+            }
+        } catch (Exception e) {
+            Log.e("free image view", e.getMessage());
+        }
+    }
 }

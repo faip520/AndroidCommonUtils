@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+     设置一个padding是防止文字顶格了 
+		上下和左右设置不一样的padding会比较美观
+		用9.png的情况下就不用padding
+		
+		记得设置inputType和hint
+-->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/textView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="haha"
-    android:textColor="#FFFFFF"
-    android:textSize="18sp"
-    android:orientation="vertical" 
+    android:background="@drawable/ic_launcher"
     android:ellipsize="end"
-    android:maxLines="2"/>
+    android:gravity="center"
+    android:maxLines="2"
+    android:paddingBottom="4dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="4dp"
+    android:text="我是按钮"
+    android:textColor="#FFFFFF"
+    android:textSize="18sp" />
