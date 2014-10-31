@@ -12,6 +12,7 @@ import android.widget.Toast;
  * 所有Fragment的基类，configuration change的时候不重建。
  */
 public class BaseFragment extends Fragment {
+	
 	// 方便需要用到Context的情况
 	protected Context mContext;
 
