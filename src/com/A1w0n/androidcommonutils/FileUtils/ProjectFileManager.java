@@ -8,10 +8,12 @@ import com.A1w0n.androidcommonutils.GlobalApplicationUtils.GlobalApplication;
 import com.A1w0n.androidcommonutils.debugutils.Logger;
 
 /**
- * @author Aiwan
+ * @author A1w0n
  * 项目必须确保，项目用到的所有File对象，都是这里出来的！
+ * 
+ * 会自动为每个需要创建的文件夹创建.nomedia文件
  */
-public class A1w0nFileManager {
+public class ProjectFileManager {
 	
 	public static final String PATH_A1W0N = "A1w0n";
 	public static final String PATH_APK_ICON = PATH_A1W0N + File.separator + "apkIcons";
@@ -19,7 +21,7 @@ public class A1w0nFileManager {
 	public static final String PATH_ALL_APPS_INFO_FILE = PATH_A1W0N + File.separator + FILENAME_ALL_APPS_INFO;
 	
 
-	public A1w0nFileManager() {
+	public ProjectFileManager() {
 	}
 	
 	public static File getIconFileForWriting(String iconFileName) {

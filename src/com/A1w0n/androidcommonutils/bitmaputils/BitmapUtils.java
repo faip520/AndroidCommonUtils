@@ -14,6 +14,8 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.util.Log;
+import android.widget.ImageView;
 
 import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
 import com.A1w0n.androidcommonutils.debugutils.Logger;
@@ -361,4 +363,32 @@ public class BitmapUtils {
 			IOUtils.closeSilently(out);
 		}
 	}
+	
+    /**
+     * 回收ImageView里头的Bitmap
+     * @param imageView
+     */
+    public static void freeImageView(ImageView imageView) {
+        // This code behaves differently on various OS builds. That is why put into try catch.
+        try {
+            if (imageView != null) {
+                Drawable dr = imageView.getDrawable();
+
+                if (dr == null) {
+                    return;
+                }
+
+                if (!(dr instanceof BitmapDrawable)) {
+                    return;
+                }
+                BitmapDrawable bd = (BitmapDrawable) dr;
+                if (bd.getBitmap() != null) {
+                    bd.getBitmap().recycle();
+                    imageView.setImageBitmap(null);
+                }
+            }
+        } catch (Exception e) {
+        		Logger.e("FreeImageView exception : " + e.getMessage());
+        }
+    }
 }
