@@ -80,4 +80,8 @@ public abstract class PreDialogAsyncTask<Params, Progress, Result> extends BaseA
 	public void onCancel(DialogInterface dialog) {
 		this.cancel(true);
 	}
+	
+	public void setCancelable(boolean cancelable) {
+		mProgress.setCancelable(isCancelled());
+	}
 }

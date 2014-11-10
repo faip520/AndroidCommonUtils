@@ -5,6 +5,10 @@ import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.StrictMode;
 
+/**
+ * Level 11 之后才引入的StrictMode
+ * @author A1w0n
+ */
 public class StrictModeUtils {
 
 	private StrictModeUtils() {

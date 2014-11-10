@@ -1,4 +1,4 @@
-package com.A1w0n.androidcommonutils.asyncimageutils;
+package com.A1w0n.androidcommonutils.AsyncImageUtils;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;

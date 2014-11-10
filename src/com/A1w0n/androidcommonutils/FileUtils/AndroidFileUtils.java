@@ -39,7 +39,7 @@ public class AndroidFileUtils {
     	File temp = createOrGetDirectoryInInternalStorage(context, directoryName);
     	if (temp != null && temp.exists()) {
 			try {
-				FileUtils.deleteDirectory(temp);
+				JavaFileUtils.deleteDirectory(temp);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -203,7 +203,7 @@ public class AndroidFileUtils {
     	
     	File tarFile = new File(getFullPathOnExternalStorage(relativePath));
     	try {
-			FileUtils.deleteDirectory(tarFile);
+			JavaFileUtils.deleteDirectory(tarFile);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;

@@ -17,14 +17,14 @@ import android.os.Environment;
 
 import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
 
-public class FileUtils {
+public class JavaFileUtils {
 	
     /**
      * The file copy buffer size (30 MB)
      */
     private static final long FILE_COPY_BUFFER_SIZE = FileSizeUtils.SIZE_MB * 30;
 
-	private FileUtils() {
+	private JavaFileUtils() {
 	}
 
 	/**

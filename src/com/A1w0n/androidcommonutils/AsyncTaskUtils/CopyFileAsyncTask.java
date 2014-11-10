@@ -3,7 +3,7 @@ package com.A1w0n.androidcommonutils.AsyncTaskUtils;
 import java.io.File;
 import java.io.IOException;
 
-import com.A1w0n.androidcommonutils.FileUtils.FileUtils;
+import com.A1w0n.androidcommonutils.FileUtils.JavaFileUtils;
 
 import android.R.bool;
 import android.content.Context;
@@ -25,7 +25,7 @@ public class CopyFileAsyncTask extends PreDialogAsyncTask<Void, Void, Boolean> {
 	@Override
 	protected Boolean doInBackground(Void... params) {
 		try {
-			FileUtils.copyFile(mSrcFile, mDestFile);
+			JavaFileUtils.copyFile(mSrcFile, mDestFile);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

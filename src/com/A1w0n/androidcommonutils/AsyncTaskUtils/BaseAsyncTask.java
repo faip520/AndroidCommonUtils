@@ -8,6 +8,9 @@ import android.os.Looper;
  * Created by Aiwan on 2014/5/24 0024.
  * 所有AsynaTask的基类，确保三个主要的回调函数都在UI线程运行，防止
  * 在这些回调里操作UI控件出现各种错误。
+ * 
+ * 关于AsyncTask如何取消：通过EventBus发Event来取消，
+ * 									   onPostExecute和onCancel里头记得要凡注册EventBus
  */
 public abstract class BaseAsyncTask<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
 	
@@ -18,7 +21,7 @@ public abstract class BaseAsyncTask<Params, Progress, Result> extends AsyncTask<
         return Thread.currentThread().getId() == Looper.getMainLooper().getThread().getId();
     }
 
-    protected void onPreExecute() {
+    protected final void onPreExecute() {
         if (isUiThread())
             PreExecute();
         else
