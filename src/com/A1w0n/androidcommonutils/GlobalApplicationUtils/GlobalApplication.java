@@ -35,7 +35,7 @@ public final class GlobalApplication extends Application {
 	// 发生异常时，用来做默认处理
 	private static final UncaughtExceptionHandler mUEHandler = Thread.getDefaultUncaughtExceptionHandler();
 	// Singleton.
-	private static GlobalApplication mGlobalApplication = null;
+	private static GlobalApplication sGlobalApplication = null;
 
 	// Record the current running activity.
 	private Activity activity = null;
@@ -47,7 +47,7 @@ public final class GlobalApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		mGlobalApplication = this;
+		sGlobalApplication = this;
 		Crashlytics.start(this);
 
 		if (BuildConfig.DEBUG) {
@@ -89,7 +89,7 @@ public final class GlobalApplication extends Application {
 	}
 
 	public static GlobalApplication getInstance() {
-		return mGlobalApplication;
+		return sGlobalApplication;
 	}
 
 	public DisplayMetrics getDisplayMetrics() {

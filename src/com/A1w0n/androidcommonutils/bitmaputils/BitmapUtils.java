@@ -414,7 +414,6 @@ public class BitmapUtils {
                 if (!(dr instanceof BitmapDrawable)) {
                     return;
                 }
-                
                 BitmapDrawable bd = (BitmapDrawable) dr;
                 if (bd.getBitmap() != null) {
                     bd.getBitmap().recycle();
@@ -422,7 +421,6 @@ public class BitmapUtils {
                 }
             }
         } catch (Exception e) {
-            Log.e("free image view", e.getMessage());
         }
     }
 }

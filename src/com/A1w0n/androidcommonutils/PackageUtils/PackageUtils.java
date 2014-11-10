@@ -23,7 +23,7 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
 import com.A1w0n.androidcommonutils.CMDUtils;
-import com.A1w0n.androidcommonutils.FileUtils.A1w0nFileManager;
+import com.A1w0n.androidcommonutils.FileUtils.ProjectFileManager;
 import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
 import com.A1w0n.androidcommonutils.JniUtils.Exec;
 import com.A1w0n.androidcommonutils.bitmaputils.BitmapUtils;
@@ -177,7 +177,7 @@ public class PackageUtils {
 //			item.macAddress = Settings.getMacAddress(mContext);
 			String packageName = itemInfo.packageName;
 			
-			File iconFile = A1w0nFileManager.getIconFileForWriting(packageName);
+			File iconFile = ProjectFileManager.getIconFileForWriting(packageName);
 			if (iconFile.exists() && iconFile.length() != 0) {
 				Logger.e("Icon file of package name: " + packageName + " already existed!");
 			} else {
