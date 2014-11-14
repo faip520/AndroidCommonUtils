@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.A1w0n.androidcommonutils.bitmaputils;
+package com.A1w0n.androidcommonutils.BitmapUtils;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

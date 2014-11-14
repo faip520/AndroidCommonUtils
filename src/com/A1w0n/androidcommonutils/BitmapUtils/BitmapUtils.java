@@ -1,4 +1,4 @@
-package com.A1w0n.androidcommonutils.bitmaputils;
+package com.A1w0n.androidcommonutils.BitmapUtils;
 
 import java.io.File;
 import java.io.FileInputStream;

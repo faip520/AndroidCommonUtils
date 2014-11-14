@@ -1,4 +1,4 @@
-package com.A1w0n.androidcommonutils.bitmaputils;
+package com.A1w0n.androidcommonutils.BitmapUtils;
 
 import android.content.Context;
 import android.graphics.Bitmap;

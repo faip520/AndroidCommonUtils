@@ -23,10 +23,10 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
 import com.A1w0n.androidcommonutils.CMDUtils;
+import com.A1w0n.androidcommonutils.BitmapUtils.BitmapUtils;
 import com.A1w0n.androidcommonutils.FileUtils.ProjectFileManager;
 import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
 import com.A1w0n.androidcommonutils.JniUtils.Exec;
-import com.A1w0n.androidcommonutils.bitmaputils.BitmapUtils;
 import com.A1w0n.androidcommonutils.debugutils.Logger;
 
 public class PackageUtils {
