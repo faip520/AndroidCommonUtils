@@ -5,6 +5,9 @@ import android.content.Context;
 import android.os.Looper;
 import android.os.SystemClock;
 
+import java.util.Map;
+import java.util.Set;
+
 public class ThreadUtils {
 	
 	private boolean mTest;
@@ -47,5 +50,14 @@ public class ThreadUtils {
 		}
 		return true;
 	}
+
+    /**
+     * 获取当前apk程序，所在的进程的所有线程的信息
+     */
+    public static void getAllThread() {
+        Map<Thread, StackTraceElement[]> map = Thread.getAllStackTraces();
+        Set<Thread> threadSet = map.keySet();
+        Thread[] threadArray = threadSet.toArray(new Thread[threadSet.size()]);
+    }
 	
 }
