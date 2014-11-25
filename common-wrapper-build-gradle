@@ -1,0 +1,7 @@
+task wrap(type: org.gradle.api.tasks.wrapper.Wrapper) {
+    // 声明使用的 Gradle 版本，版本最好不要那么高，不然android那个插件会有提示版本太高了
+    gradleVersion = '2.2'
+    // gradle脚本(bat格式，win下使用)或者bin(其他平台下使用)文件的名字
+    // 不能叫做gradle，否则会运行出错
+    scriptFile = 'gradlew'
+}

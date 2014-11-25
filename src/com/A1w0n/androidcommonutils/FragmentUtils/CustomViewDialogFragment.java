@@ -3,8 +3,8 @@ package com.A1w0n.androidcommonutils.FragmentUtils;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import com.A1w0n.androidcommonutils.R;
 
-import com.faip.androidcommonutils.R;
 
 public class CustomViewDialogFragment extends DialogFragment {
 

@@ -32,7 +32,7 @@ public class BaseDialogFragment extends DialogFragment {
 		
 		return super.onCreateDialog(savedInstanceState);
 	}
-	
+
 	/**
 	 * 显示这个Dialog的接口
 	 */

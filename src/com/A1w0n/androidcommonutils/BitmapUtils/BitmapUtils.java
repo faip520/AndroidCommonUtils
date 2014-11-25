@@ -1,29 +1,17 @@
 package com.A1w0n.androidcommonutils.BitmapUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.graphics.*;
 import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.ImageView;
-
 import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
 import com.A1w0n.androidcommonutils.debugutils.Logger;
+
+import java.io.*;
 
 public class BitmapUtils {
 
@@ -371,7 +359,7 @@ public class BitmapUtils {
 	}
 
 	/**
-	 * 传入一个bitmap，返回这个bitmap的正圆形截取版本
+	 * 传入一个bitmap，返回这个bitmap的圆角正方形截取版本
 	 * @param bitmap
 	 * @return
 	 */

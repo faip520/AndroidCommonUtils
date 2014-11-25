@@ -1,46 +1,26 @@
 package com.A1w0n.androidcommonutils.HttpUtils;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.InterruptedIOException;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.URL;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.text.TextUtils;
+import com.A1w0n.androidcommonutils.BuildConfig;
+import com.A1w0n.androidcommonutils.GlobalApplicationUtils.GlobalApplication;
+import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
+import com.A1w0n.androidcommonutils.NetworkUtils.NetworkUtils;
+import com.A1w0n.androidcommonutils.R;
+import com.A1w0n.androidcommonutils.debugutils.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import javax.net.ssl.*;
+import java.io.*;
+import java.net.*;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.text.TextUtils;
-
-import com.A1w0n.androidcommonutils.GlobalApplicationUtils.GlobalApplication;
-import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
-import com.A1w0n.androidcommonutils.NetworkUtils.NetworkUtils;
-import com.A1w0n.androidcommonutils.debugutils.Logger;
-import com.faip.androidcommonutils.BuildConfig;
-import com.faip.androidcommonutils.R;
-
 /**
- * Android HttpUrlConnection.
+ *
  */
 public class JavaHttpUtility {
 
@@ -365,7 +345,7 @@ public class JavaHttpUtility {
 
 	/**
 	 * @param urlStr
-	 * @param path
+	 * @param targetFile
 	 * @param downloadListener
 	 * @return
 	 */
@@ -586,6 +566,7 @@ public class JavaHttpUtility {
 
 	/**
 	 * 已经测试过可以正常使用的
+     *
 	 * @param urlStr
 	 * @param param
 	 * @param path
@@ -707,5 +688,30 @@ public class JavaHttpUtility {
 
 		return true;
 	}
+
+    /**
+     * Get ip address by host, and cache it in SharePreferences.
+     * You can call this as soon as you enter a activity, by which,
+     * you can speed up your http request fired latter.
+     *
+     * @param context
+     * @param host
+     */
+    public static void lookupIP(Context context, String host) {
+        SharedPreferences preferences = context.getSharedPreferences("host", 0);
+
+        String ip;
+
+        try {
+            // 通过DNS查询对应的host的ip地址
+            InetAddress address = InetAddress.getByName(host);
+            ip = address.getHostAddress();
+
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(host, ip);
+            editor.commit();
+        } catch (UnknownHostException e) {
+        }
+    }
 
 }

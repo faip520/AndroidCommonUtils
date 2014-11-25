@@ -2,15 +2,12 @@ package com.A1w0n.androidcommonutils.ServiceUtils;
 
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.widget.RemoteViews;
 
-import com.faip.androidcommonutils.R;
 
 /**
  * Service虽然没有界面，但是默认运行在UI线程上

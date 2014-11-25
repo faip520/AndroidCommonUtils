@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- clipToPadding 
+	这个属性一定记得设置成false 不然上下的padding区域不会跟着滚动
+	然后一直有一块空白区域在那 很难看
+	
+	outsideOverlay
+	可以在padding区域里显示滚动条，就不会遮盖内容区域了-->
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cards_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipToPadding="false"
+    android:divider="@android:color/transparent"
+    android:dividerHeight="10dp"
+    android:padding="10dp"
+    android:scrollbarStyle="outsideOverlay"
+    tools:listitem="@layout/common_button" />
+<!-- From: file:/Users/A1w0n/Documents/AndroidCommonUtils/res/layout/common_listview.xml -->

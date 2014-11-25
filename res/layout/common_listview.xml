@@ -4,7 +4,10 @@
 	然后一直有一块空白区域在那 很难看
 	
 	outsideOverlay
-	可以在padding区域里显示滚动条，就不会遮盖内容区域了-->
+	可以在padding区域里显示滚动条，就不会遮盖内容区域了
+
+	clipChildren设置为false的话，item就可以绘制到padding区域里头去了
+-->
 <ListView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cards_list"
@@ -14,5 +17,6 @@
     android:divider="@android:color/transparent"
     android:dividerHeight="10dp"
     android:padding="10dp"
+    android:clipChildren="false"
     android:scrollbarStyle="outsideOverlay"
     tools:listitem="@layout/common_button" />

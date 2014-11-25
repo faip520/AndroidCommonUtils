@@ -1,22 +1,5 @@
 package com.A1w0n.androidcommonutils.AsyncImageUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import com.A1w0n.androidcommonutils.GlobalApplicationUtils.GlobalApplication;
-import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
-import com.A1w0n.androidcommonutils.ViewUtils.ViewUtils;
-import com.faip.androidcommonutils.R;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,6 +9,16 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
+import com.A1w0n.androidcommonutils.GlobalApplicationUtils.GlobalApplication;
+import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
+import com.A1w0n.androidcommonutils.R;
+import com.A1w0n.androidcommonutils.ViewUtils.ViewUtils;
+
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ImageLoader {
 

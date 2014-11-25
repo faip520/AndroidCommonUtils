@@ -1,9 +1,5 @@
 package com.A1w0n.androidcommonutils.GlobalApplicationUtils;
 
-import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
@@ -16,12 +12,15 @@ import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
-
+import com.A1w0n.androidcommonutils.BuildConfig;
+import com.A1w0n.androidcommonutils.R;
 import com.A1w0n.androidcommonutils.debugutils.Logger;
 import com.A1w0n.androidcommonutils.debugutils.StrictModeUtils;
 import com.crashlytics.android.Crashlytics;
-import com.faip.androidcommonutils.BuildConfig;
-import com.faip.androidcommonutils.R;
+
+import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Global singleton applicatioin subclass.
