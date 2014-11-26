@@ -38,3 +38,6 @@ proguard/
 # Crashlytics
 com_crashlytics_export_strings.xml
 crashlytics-build.properties
+
+# Gragle build files
+build

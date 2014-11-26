@@ -1,13 +1,15 @@
 package com.A1w0n.androidcommonutils.FragmentUtils;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.view.Window;
 
-public class BaseDialogFragment extends DialogFragment {
+public class BaseDialogFragment extends DialogFragment implements Dialog.OnKeyListener {
 	
 	public static final String TAG = "BaseDialogFragment";
 
@@ -40,4 +42,18 @@ public class BaseDialogFragment extends DialogFragment {
 		SimpleTwoChoiceDialogFragment df = new SimpleTwoChoiceDialogFragment();
 		df.show(fm, TAG);
 	}
+
+
+    /**
+     * 在这里处理返回键按下的事件
+     *
+     * @param dialog
+     * @param keyCode
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+        return false;
+    }
 }
