@@ -54,6 +54,11 @@ public class BaseDialogFragment extends DialogFragment implements Dialog.OnKeyLi
      */
     @Override
     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-        return false;
+        if (keyCode == KeyEvent.KEYCODE_BACK /*&& event.getRepeatCount() == 0*/) {
+            // the back key was pressed so do something?
+            return true;
+        }
+
+        return true;
     }
 }
