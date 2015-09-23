@@ -1,12 +1,11 @@
 // 有这一段，才会在maven中心下载需要的依赖库
 buildscript {
-
     repositories {
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.13.+'
+        classpath 'com.android.tools.build:gradle:1.2.3'
     }
 }
 
@@ -17,12 +16,17 @@ repositories {
 // 表明这个是一个Library项目
 apply plugin: 'com.android.library'
 
-android {
 
+dependencies {
+    // 依赖整个libs文件夹下的所有jar包
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+android {
     compileSdkVersion 19
     // 这个版本号，参考SDK目录中的对应文件夹
     // 这个并不是SDK的版本号
-    buildToolsVersion "20"
+    buildToolsVersion "22.0.1"
 
     sourceSets {
 
@@ -35,13 +39,5 @@ android {
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
         }
-
     }
-}
-
-dependencies {
-
-    //compile group: 'com.google.caliper', name: 'caliper', version: '1.0-beta-1'
-
-    compile fileTree(dir: 'libs', include: ['*.jar'])
 }
