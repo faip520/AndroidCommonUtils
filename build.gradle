@@ -29,9 +29,16 @@ android {
     // 这个并不是SDK的版本号
     buildToolsVersion "22.0.1"
 
+    // 设置SDK版本适配
     defaultConfig {
         minSdkVersion 7
+        targetSdkVersion 19
     }
+
+    // 指定包名
+//    defaultConfig {
+//        applicationId "com.tencent.cosdk.demo.am"
+//    }
 
     sourceSets {
         main {
