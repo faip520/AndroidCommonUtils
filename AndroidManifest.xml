@@ -31,6 +31,13 @@
         <meta-data
             android:name="com.crashlytics.ApiKey"
             android:value="2072236223d6aa533ac3781e807ae8bd7e91b2bd" />
+
+        <!--标准Activity声明
+        configChanges这些配置都要加上-->
+        <activity
+            android:name=".Activityutils.BaseActivity"
+            android:configChanges="fontScale|orientation|keyboardHidden|locale|navigation|screenSize|uiMode|layoutDirection"
+            />
     </application>
 
 </manifest>
