@@ -52,3 +52,18 @@ android {
         }
     }
 }
+
+//task deleteMySo(type: Delete) {
+//    description = 'Rename libs，so that it wont collapse with the example libs.'
+//    delete fileTree('build/intermediates/exploded-aar/MidasTVPayProject/MidasPayTVSDK/unspecified/jni') {
+//        include '**/*.so'
+//    }
+//}
+//
+//task copyMyFiles(type:Copy) {
+//    from project(':MidasPayTVSDK').file('res')
+//    into file('res')
+//}
+//
+//assembleDebug.dependsOn deleteMySo
+//assembleDebug.dependsOn copyMyFiles
