@@ -1,21 +1,62 @@
+<<<<<<< .mine
+
+=======
+// 从maven库中下载编译脚步
+>>>>>>> .theirs
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
+<<<<<<< .mine
         classpath 'com.android.tools.build:gradle:1.0.0'
+=======
+        classpath 'com.android.tools.build:gradle:1.3.0'
+>>>>>>> .theirs
     }
 }
 
+<<<<<<< .mine
 apply plugin: 'android-library'
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
+=======
+// 有这一段，才会在maven中心下载需要的依赖库
+repositories {
+    mavenCentral()
+
+>>>>>>> .theirs
+}
+
+
+dependencies {
+    // 依赖整个libs文件夹下的所有jar包
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 android {
     compileSdkVersion 19
+<<<<<<< .mine
     buildToolsVersion "21.1.1"
+
+
+=======
+    // 这个版本号，参考SDK目录中的对应文件夹
+    // 这个并不是SDK的版本号
+    buildToolsVersion "22.0.1"
+>>>>>>> .theirs
+
+    // 设置SDK版本适配
+    defaultConfig {
+        minSdkVersion 7
+        targetSdkVersion 19
+    }
+
+    // 指定包名
+//    defaultConfig {
+//        applicationId "com.tencent.cosdk.demo.am"
+//    }
 
     sourceSets {
         main {
@@ -28,7 +69,6 @@ android {
             assets.srcDirs = ['assets']
             jniLibs.srcDirs = ['libs']
         }
-
         // Move the tests to tests/java, tests/res, etc...
         instrumentTest.setRoot('tests')
 
@@ -56,3 +96,34 @@ android {
     }
 }
 
+<<<<<<< .mine
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======
+//task deleteMySo(type: Delete) {
+//    description = 'Rename libs，so that it wont collapse with the example libs.'
+//    delete fileTree('build/intermediates/exploded-aar/MidasTVPayProject/MidasPayTVSDK/unspecified/jni') {
+//        include '**/*.so'
+//    }
+//}
+//
+//task copyMyFiles(type:Copy) {
+//    from project(':MidasPayTVSDK').file('res')
+//    into file('res')
+//}
+//
+//assembleDebug.dependsOn deleteMySo
+//assembleDebug.dependsOn copyMyFiles
+>>>>>>> .theirs

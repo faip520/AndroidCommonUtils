@@ -2,4 +2,17 @@
 // 一般是这样的内容 include 'core', 'web', 'mobile'
 // 这表示，我们有个产品A，包括以下几个组件core，web，mobile 每个子项目都是独立的，分别管理自己的构建。
 // 一般core组件对应A/core目录，web组件对应A/web目录，mobile组件对应A/mobile目录。接下来，我们就可以在每个组件内部，定义build.gradle负责管理当前组件的构建。
-include ':'
+
+// 这里声明有什么项目，然后项目的相对路径是什么
+//project(':Demo').projectDir = new File('MidasOutwardSamples/WFBaidu/BDGameSDK_LibProject')
+
+// 这里是把这个module加入到gradle工程里头
+//include ':Demo'
+
+//// 添加自定义路径的Module这样添加
+//include ':WFOppoNoMSDK-MidasOppoSDK', ':WFOppoNoMSDK-Demo', ':WFOppoNoMSDK-OppoPaymentSDK'
+//project(':WFOppoNoMSDK-MidasOppoSDK').projectDir = new File('MidasOutwardSamples/WFOppoNoMSDK/WFOppoNoMSDK-MidasOppoSDK')
+//project(':WFOppoNoMSDK-Demo').projectDir = new File('MidasOutwardSamples/WFOppoNoMSDK/WFOppoNoMSDK-Demo')
+//project(':WFOppoNoMSDK-OppoPaymentSDK').projectDir = new File('MidasOutwardSamples/WFOppoNoMSDK/WFOppoNoMSDK-OppoPaymentSDK')
+// 这个自定义路径甚至是可以其他盘里的路径
+//project(':WFOppoNoMSDK-OppoPaymentSDK').projectDir = new File('C:\\A1w0n-Android-Projects\\MidasTVPayProject\\MidasPayTVSample')

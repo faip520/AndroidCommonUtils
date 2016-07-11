@@ -2,6 +2,7 @@ package com.A1w0n.androidcommonutils.DialogUtils;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.Gravity;
@@ -42,5 +43,20 @@ public class DialogUtils {
 			messageView.setGravity(Gravity.CENTER);
 		}
 	}
+
+    /**
+     * 想安全的关闭一个Dialog，即使它所依附的Activity已经关闭了，分两种情况：
+     * 如果Activity是你自己的Activity：那就在onDestroy里头把Dialog关闭掉，然后调用这个方法来dismiss，就可以了，并且不会有Exception
+     * 如果Activity不是你的自己的Activity，代码无法修改，也用这个方法，但是有可能出现Exception
+     */
+    public static void dismissDialogSafely(Dialog dialog) {
+        try {
+            if (dialog != null && dialog.isShowing() && dialog.getWindow() != null) {
+                dialog.dismiss();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

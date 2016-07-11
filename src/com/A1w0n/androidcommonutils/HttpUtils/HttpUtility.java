@@ -23,8 +23,8 @@ public class HttpUtility {
 
 	/**
 	 * Http download request.
+     *
 	 * @param url
-	 * @param path
 	 * @param downloadListener
 	 * @return
 	 */
