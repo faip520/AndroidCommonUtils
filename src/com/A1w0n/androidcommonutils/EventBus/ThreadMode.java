@@ -19,7 +19,7 @@ package com.A1w0n.androidcommonutils.EventBus;
  * Each event handler method has a thread mode, which determines in which thread the method is to be called by EventBus.
  * EventBus takes care of threading independently from the posting thread.
  *
- * ±íÃ÷ÊÂ¼ş¶©ÔÄÕßµÄonEventº¯Êı£¬¿ÉÒÔÓĞÄÄ¼¸ÖÖºó×º£¬±ÈÈçÕâÀïÓĞÒ»¸öPostThreadºó×º£¬¾Í±íÊ¾£¬ÊÂ¼ş¶©ÔÄÕß£¬¿ÉÒÔÉùÃ÷ÕâÑùÒ»¸öº¯ÊıÀ´½ÓÊÜ²¢´¦ÀíÊÂ¼ş
+ * è¡¨æ˜äº‹ä»¶è®¢é˜…è€…çš„onEventå‡½æ•°ï¼Œå¯ä»¥æœ‰å“ªå‡ ç§åç¼€ï¼Œæ¯”å¦‚è¿™é‡Œæœ‰ä¸€ä¸ªPostThreadåç¼€ï¼Œå°±è¡¨ç¤ºï¼Œäº‹ä»¶è®¢é˜…è€…ï¼Œå¯ä»¥å£°æ˜è¿™æ ·ä¸€ä¸ªå‡½æ•°æ¥æ¥å—å¹¶å¤„ç†äº‹ä»¶
  * onEventPostThread()
  * 
  * @see EventBus#register(Object)
@@ -47,8 +47,8 @@ public enum ThreadMode {
      * background thread, that will deliver all its events sequentially. Event handlers using this mode should try to
      * return quickly to avoid blocking the background thread.
      *
-     * Èç¹û·¢²¼ÕßÔÚUIÏß³Ì·¢²¼ÊÂ¼ş£¬¶©ÔÄÕß»áÔÚºóÌ¨Ïß³Ì½ÓÊÕÊÂ¼ş£¬ºÍAsyncÄ£Ê½ÓÃµÄÍ¬Ò»¸öÏß³Ì³Ø£¬µ«ÊÇrunnable¶ÔÏóÖ»ÓĞÒ»¸ö£¬Èç¹ûÄãµÄÊÂ¼ş´¦Àí
-     * º¯ÊıºÄÊ±ºÜ³¤ºÜ³¤£¬ÔòºóÀ´µÄÊÂ¼ş¾ÍÃ»°ì·¨Ö´ĞĞÕâ¸örunnableÁË£¬ËäÈ»ÕâÑù²»Ó°ÏìÊÂ¼şµÄ·Ö·¢
+     * å¦‚æœå‘å¸ƒè€…åœ¨UIçº¿ç¨‹å‘å¸ƒäº‹ä»¶ï¼Œè®¢é˜…è€…ä¼šåœ¨åå°çº¿ç¨‹æ¥æ”¶äº‹ä»¶ï¼Œå’ŒAsyncæ¨¡å¼ç”¨çš„åŒä¸€ä¸ªçº¿ç¨‹æ± ï¼Œä½†æ˜¯runnableå¯¹è±¡åªæœ‰ä¸€ä¸ªï¼Œå¦‚æœä½ çš„äº‹ä»¶å¤„ç†
+     * å‡½æ•°è€—æ—¶å¾ˆé•¿å¾ˆé•¿ï¼Œåˆ™åæ¥çš„äº‹ä»¶å°±æ²¡åŠæ³•æ‰§è¡Œè¿™ä¸ªrunnableäº†ï¼Œè™½ç„¶è¿™æ ·ä¸å½±å“äº‹ä»¶çš„åˆ†å‘
      */
     BackgroundThread,
 
@@ -59,7 +59,7 @@ public enum ThreadMode {
      * of long running asynchronous handler methods at the same time to limit the number of concurrent threads. EventBus
      * uses a thread pool to efficiently reuse threads from completed asynchronous event handler notifications.
      *
-     * ²»¹Ü·¢²¼ÕßÔÚÄÄ¸öÏß³Ì·¢²¼µÄÊÂ¼ş£¬¶¼»áÔÚºóÌ¨Ïß³Ìµ÷ÓÃ¶©ÔÄÕßµÄÊÂ¼ş½ÓÊÕº¯Êı
+     * ä¸ç®¡å‘å¸ƒè€…åœ¨å“ªä¸ªçº¿ç¨‹å‘å¸ƒçš„äº‹ä»¶ï¼Œéƒ½ä¼šåœ¨åå°çº¿ç¨‹è°ƒç”¨è®¢é˜…è€…çš„äº‹ä»¶æ¥æ”¶å‡½æ•°
      */
     Async
 }

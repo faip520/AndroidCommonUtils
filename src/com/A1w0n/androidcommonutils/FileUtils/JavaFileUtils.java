@@ -1,19 +1,27 @@
 package com.A1w0n.androidcommonutils.FileUtils;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import android.os.Environment;
+import android.text.TextUtils;
 
 import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
 
@@ -733,6 +741,47 @@ public class JavaFileUtils {
             return sizeOfDirectory(file);
         } else {
             return file.length();
+        }
+    }
+
+    /**
+     * 关于如何向文件中写字符串的样板代码
+     *
+     * @param thread
+     * @param exception
+     */
+    public static void writeStringToFile(Thread thread, Throwable exception) {
+        final Date now = new Date();
+        final Writer result = new StringWriter();
+        final PrintWriter printWriter = new PrintWriter(result);
+
+        exception.printStackTrace(printWriter);
+
+        try {
+
+            String logDir = "";
+            if (TextUtils.isEmpty(logDir)) {
+                return;
+            }
+
+            String filename = UUID.randomUUID().toString();
+            String path = logDir + File.separator + filename + ".stacktrace";
+
+            BufferedWriter write = new BufferedWriter(new FileWriter(path));
+            write.write("Package: " + "\n");
+            write.write("Version: " + "\n");
+            write.write("Android: " + "\n");
+            write.write("Manufacturer: " + "\n");
+            write.write("Model: " + "\n");
+            write.write("Date: " + now + "\n");
+            write.write("\n");
+            write.write(result.toString());
+            write.flush();
+            write.close();
+        } catch (Exception another) {
+
+        } finally {
+
         }
     }
 }

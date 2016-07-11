@@ -4,8 +4,11 @@
      设置一个padding是防止文字顶格了 
 		上下和左右设置不一样的padding会比较美观
 		用9.png的情况下就不用padding
-		
-		记得设置inputType和hint
+
+	 shadowColor可以让文字和背景同色的时候都能显示出来(背景不确定的情况下比较有用)
+	 shadowRadius是阴影的大小，默认为2就行了
+	 shadowDx和shadowDy都是1的时候会比较美观
+	 如果非必要的话，这三个属性可以同时去掉
 -->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/textView"
@@ -13,6 +16,10 @@
     android:layout_height="wrap_content"
     android:background="@drawable/ic_launcher"
     android:ellipsize="end"
+    android:shadowColor="#000000"
+    android:shadowRadius="2.0"
+    android:shadowDx="1.0"
+    android:shadowDy="1.0"
     android:gravity="center"
     android:maxLines="2"
     android:paddingBottom="4dp"

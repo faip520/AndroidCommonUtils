@@ -26,6 +26,17 @@ public class TimeUtils {
 		}
 	}
 
+    /**
+     * 获取当前的年月日
+     */
+    public static void getDate() {
+        // 年月日 的默认值 用来传给 日期设定弹出窗
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR); // 年
+        int month = calendar.get(Calendar.MONTH); // 月
+        int day = calendar.get(Calendar.DAY_OF_MONTH); // 日
+    }
+
 	/**
 	 * 输出样例：2012-06-06
 	 */

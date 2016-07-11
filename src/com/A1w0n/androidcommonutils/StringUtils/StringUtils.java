@@ -28,4 +28,19 @@ public class StringUtils {
 		return result;
 	}
 
+    /**
+     * 比较两个字符串是否内容相同
+     *
+     * @param one
+     * @param two
+     * @return
+     */
+    private static boolean isStringEquals(String one, String two) {
+        if (one == null) {
+            one = "";
+        }
+
+        return one.equals(two);
+    }
+
 }

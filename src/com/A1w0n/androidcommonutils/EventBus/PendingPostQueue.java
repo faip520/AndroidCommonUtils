@@ -1,7 +1,7 @@
 package com.A1w0n.androidcommonutils.EventBus;
 
 /**
- * EventBusµÄÊÂ¼ş¶ÓÁĞ£¬Òª×¢ÒâµÄÊÇ£¬Ã¿¸öEventBus¶ÔÏó²¢²»Ö»ÓĞÒ»¸öÊÂ¼ş¶ÓÁĞ
+ * EventBusçš„äº‹ä»¶é˜Ÿåˆ—ï¼Œè¦æ³¨æ„çš„æ˜¯ï¼Œæ¯ä¸ªEventBuså¯¹è±¡å¹¶ä¸åªæœ‰ä¸€ä¸ªäº‹ä»¶é˜Ÿåˆ—
  */
 final class PendingPostQueue {
 

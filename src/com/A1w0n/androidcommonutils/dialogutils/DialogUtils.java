@@ -1,4 +1,4 @@
-package com.A1w0n.androidcommonutils.dialogutils;
+package com.A1w0n.androidcommonutils.DialogUtils;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;

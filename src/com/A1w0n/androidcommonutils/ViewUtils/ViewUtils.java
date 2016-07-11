@@ -17,7 +17,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.A1w0n.androidcommonutils.APILevelUtils;
-import com.A1w0n.androidcommonutils.debugutils.Logger;
+import com.A1w0n.androidcommonutils.DebugUtils.Logger;
+import com.A1w0n.androidcommonutils.GlobalApplicationUtils.GlobalApplication;
 
 public class ViewUtils {
 
@@ -44,14 +45,18 @@ public class ViewUtils {
 		
 		setBackground(view, new BitmapDrawable(context.getResources(),bm));
 	}
-	
-	/**
-	 * Close soft keyboard for a activity.
-	 */
-	public static void hideSoftKeyboard(Activity activity) {
-		InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-		inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-	}
+
+    /**
+     * 隐藏软键盘
+     *
+     * @param paramEditText 把EditText传进来
+     */
+    public static void hideSoftInput(View paramEditText) {
+        if (paramEditText != null) {
+            ((InputMethodManager) GlobalApplication.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE))
+                    .hideSoftInputFromWindow(paramEditText.getWindowToken(), 0);
+        }
+    }
 
 	public static int dip2px(Context context, int dipValue) {
 		float reSize = context.getResources().getDisplayMetrics().density;

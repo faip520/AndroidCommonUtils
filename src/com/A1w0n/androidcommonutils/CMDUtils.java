@@ -2,11 +2,13 @@ package com.A1w0n.androidcommonutils;
 
 import java.io.DataOutputStream;
 import java.io.InputStream;
+import java.util.concurrent.BrokenBarrierException;
 
 import android.text.TextUtils;
+import android.util.EventLog;
 
 import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
-import com.A1w0n.androidcommonutils.debugutils.Logger;
+import com.A1w0n.androidcommonutils.DebugUtils.Logger;
 
 public class CMDUtils {
 
@@ -81,7 +83,7 @@ public class CMDUtils {
 	
 	/**
 	 * 非root权限下顺序执行多个命令
-	 * @param command
+	 * @param commands
 	 * @return
 	 */
 	public static boolean runWithoutRoot(String[] commands) {
@@ -117,15 +119,15 @@ public class CMDUtils {
 		} catch (Exception e) {
 			return false;
 		} finally {
-			IOUtils.closeSilently(os);
-			IOUtils.closeSilently(is);
-			IOUtils.closeSilently(es);
-			if (process != null) {
-				process.destroy();
-			}
-		}
-		
-		return result == 0;
+            IOUtils.closeSilently(os);
+            IOUtils.closeSilently(is);
+            IOUtils.closeSilently(es);
+            if (process != null) {
+                process.destroy();
+            }
+        }
+
+        return result == 0;
 	}
 	
 	/**

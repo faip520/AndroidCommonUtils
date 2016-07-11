@@ -8,7 +8,7 @@ import com.A1w0n.androidcommonutils.GlobalApplicationUtils.GlobalApplication;
 import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
 import com.A1w0n.androidcommonutils.NetworkUtils.NetworkUtils;
 import com.A1w0n.androidcommonutils.R;
-import com.A1w0n.androidcommonutils.debugutils.Logger;
+import com.A1w0n.androidcommonutils.DebugUtils.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 

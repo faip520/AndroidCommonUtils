@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.A1w0n.androidcommonutils.debugutils.Logger;
+import com.A1w0n.androidcommonutils.DebugUtils.Logger;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;

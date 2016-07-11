@@ -121,6 +121,7 @@ static const char *classPathName = "com/A1w0n/androidcommonutils/JniUtils/Exec";
  * 写法：
  *     括号 () 里头的是参数 紧跟着的是返回值 比如 ： (I)I 就是参数是一个int 返回值也是一个int
  *	   返回值void 用 V 表示
+ *     [开头的话就是数组
  *
  *	被注册的函数，前面都有两个固定的参数：JNIEnv *env, jobject clazz
  */

@@ -16,11 +16,11 @@
 package com.A1w0n.androidcommonutils.EventBus;
 
 /**
- * ÏûÏ¢¶©ÔÄÕßµÄ·â×°
+ * æ¶ˆæ¯è®¢é˜…è€…çš„å°è£…
  */
 final class Subscription {
 
-    // ÊÂ¼ş¶©ÔÄÕß£¬Õâ¸ö¶ÔÏó¾ÍÊÇ£¬ÊÂ¼ş¶©ÔÄÕßµ÷ÓÃEventBus.register()µÄÊ±ºò´«½øÀ´µÄ¶ÔÏó
+    // äº‹ä»¶è®¢é˜…è€…ï¼Œè¿™ä¸ªå¯¹è±¡å°±æ˜¯ï¼Œäº‹ä»¶è®¢é˜…è€…è°ƒç”¨EventBus.register()çš„æ—¶å€™ä¼ è¿›æ¥çš„å¯¹è±¡
     final Object subscriber;
     final SubscriberMethod subscriberMethod;
     final int priority;
@@ -28,7 +28,7 @@ final class Subscription {
      * Becomes false as soon as {@link EventBus#unregister(Object)} is called, which is checked by queued event delivery
      * {@link EventBus#invokeSubscriber(PendingPost)} to prevent race conditions.
      *
-     * ×¢ÒâÕâ¸ö±äÁ¿ÊÇ¼ÓÁËvolatile¹Ø¼ü×ÖµÄ£¬ÕâËµÃ÷£¬¶ÔÕâ¸ö±äÁ¿µÄĞŞ¸ÄÊÇÔ­×ÓĞÔµÄ£¬²»¿É´ò¶ÏµÄ
+     * æ³¨æ„è¿™ä¸ªå˜é‡æ˜¯åŠ äº†volatileå…³é”®å­—çš„ï¼Œè¿™è¯´æ˜ï¼Œå¯¹è¿™ä¸ªå˜é‡çš„ä¿®æ”¹æ˜¯åŸå­æ€§çš„ï¼Œä¸å¯æ‰“æ–­çš„
      */
     volatile boolean active;
 

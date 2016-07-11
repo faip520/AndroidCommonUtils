@@ -14,8 +14,8 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import com.A1w0n.androidcommonutils.BuildConfig;
 import com.A1w0n.androidcommonutils.R;
-import com.A1w0n.androidcommonutils.debugutils.Logger;
-import com.A1w0n.androidcommonutils.debugutils.StrictModeUtils;
+import com.A1w0n.androidcommonutils.DebugUtils.Logger;
+import com.A1w0n.androidcommonutils.DebugUtils.StrictModeUtils;
 import com.crashlytics.android.Crashlytics;
 
 import java.lang.Thread.UncaughtExceptionHandler;

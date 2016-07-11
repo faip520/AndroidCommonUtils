@@ -19,8 +19,6 @@ package com.A1w0n.androidcommonutils.EventBus;
 /**
  * Posts events in background.
  *
- * 在后台线程里头调用事件订阅者的事件接收函数
- * 
  * @author Markus
  */
 class AsyncPoster implements Runnable {

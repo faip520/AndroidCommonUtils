@@ -41,3 +41,7 @@ crashlytics-build.properties
 
 # Gragle build files
 build
+build
+/.settings
+/.gradle
+/.idea

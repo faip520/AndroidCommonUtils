@@ -20,10 +20,10 @@ import android.util.Log;
 /**
  * Posts events in background.
  *
- * Èç¹ûÊÂ¼þ·¢²¼ÕßÊÇ·ÇUIÏß³Ì£¬Ôò»áÖ±½ÓÔÚ·¢²¼ÕßµÄÏß³Ìµ÷ÓÃ¶©ÔÄÕßµÄÊÂ¼þ½ÓÊÕº¯Êý
- * Èç¹ûÊÂ¼þ·¢²¼ÕßÊÇUIÏß³Ì£¬Ôò»áÍ¨¹ýºóÌ¨Ïß³ÌÀ´µ÷ÓÃÊÂ¼þ¶©ÔÄÕßµÄÊÂ¼þ½ÓÊÕº¯Êý
+ * å¦‚æžœäº‹ä»¶å‘å¸ƒè€…æ˜¯éžUIçº¿ç¨‹ï¼Œåˆ™ä¼šç›´æŽ¥åœ¨å‘å¸ƒè€…çš„çº¿ç¨‹è°ƒç”¨è®¢é˜…è€…çš„äº‹ä»¶æŽ¥æ”¶å‡½æ•°
+ * å¦‚æžœäº‹ä»¶å‘å¸ƒè€…æ˜¯UIçº¿ç¨‹ï¼Œåˆ™ä¼šé€šè¿‡åŽå°çº¿ç¨‹æ¥è°ƒç”¨äº‹ä»¶è®¢é˜…è€…çš„äº‹ä»¶æŽ¥æ”¶å‡½æ•°
  *
- * Ã¿¸öEventBus¶¼»áÓÐÒ»¸öBackgroundPoster¶ÔÏó
+ * æ¯ä¸ªEventBuséƒ½ä¼šæœ‰ä¸€ä¸ªBackgroundPosterå¯¹è±¡
  * 
  * @author Markus
  */
@@ -40,15 +40,15 @@ final class BackgroundPoster implements Runnable {
     }
 
     /**
-     * ¿¼ÂÇÕâÑùÒ»ÖÖÇéÐÎ£¬Á½¸öÏß³ÌA¡¢B£¬ËûÃÇ¶¼µ÷ÓÃEventBus.getDefault().post()£¬¶ø¸ÕºÃËûÃÇÁ½µÄÊÂ¼þ¶¼·Ö±ðÓÐÒ»¸ö
-     * onEventBackGround¶©ÔÄÕß£¬ÔòÁ½Õß¶¼»á½øÀ´³¢ÊÔµ÷ÓÃÕâ¸ö·½·¨£¬¼ÙÉèAÏÈ½øÀ´Õâ¸ö·½·¨µÄsynchronizeº¯Êý¿é£¬
-     * ³ö·¢EventBus.executorService.execute(this)£¬²¢ÇÒÉèÖÃexecutorRunning = true
-     * ÔòÏß³ÌB¾Í»áÒòÎªexecutorRunning == true£¬¶øÎÞ·¨µ÷ÓÃEventBus.executorService.execute(this)
+     * è€ƒè™‘è¿™æ ·ä¸€ç§æƒ…å½¢ï¼Œä¸¤ä¸ªçº¿ç¨‹Aã€Bï¼Œä»–ä»¬éƒ½è°ƒç”¨EventBus.getDefault().post()ï¼Œè€Œåˆšå¥½ä»–ä»¬ä¸¤çš„äº‹ä»¶éƒ½åˆ†åˆ«æœ‰ä¸€ä¸ª
+     * onEventBackGroundè®¢é˜…è€…ï¼Œåˆ™ä¸¤è€…éƒ½ä¼šè¿›æ¥å°è¯•è°ƒç”¨è¿™ä¸ªæ–¹æ³•ï¼Œå‡è®¾Aå…ˆè¿›æ¥è¿™ä¸ªæ–¹æ³•çš„synchronizeå‡½æ•°å—ï¼Œ
+     * å‡ºå‘EventBus.executorService.execute(this)ï¼Œå¹¶ä¸”è®¾ç½®executorRunning = true
+     * åˆ™çº¿ç¨‹Bå°±ä¼šå› ä¸ºexecutorRunning == trueï¼Œè€Œæ— æ³•è°ƒç”¨EventBus.executorService.execute(this)
      *
-     * ÕâÖÖÇé¿öÖ×Ã´°ì£¿
+     * è¿™ç§æƒ…å†µè‚¿ä¹ˆåŠžï¼Ÿ
      *
-     * ÆäÊµÕâÖÖÇé¿öÃ»¹ØÏµ£¬ÒòÎªrun·½·¨ÌåÀïÍ·»á´ÓÊÂ¼þ¶ÓÁÐÀïÍ·È¡³öËùÓÐµÄÊÂ¼þ²¢ÇÒ·Ö·¢³öÈ¥£¬·´µ¹ÊÇÈç¹ûÁ½¸öÍ¬Ê±ÔËÐÐ£¬
-     * ÔòÓÐµã¶àÓàÁË
+     * å…¶å®žè¿™ç§æƒ…å†µæ²¡å…³ç³»ï¼Œå› ä¸ºrunæ–¹æ³•ä½“é‡Œå¤´ä¼šä»Žäº‹ä»¶é˜Ÿåˆ—é‡Œå¤´å–å‡ºæ‰€æœ‰çš„äº‹ä»¶å¹¶ä¸”åˆ†å‘å‡ºåŽ»ï¼Œåå€’æ˜¯å¦‚æžœä¸¤ä¸ªåŒæ—¶è¿è¡Œï¼Œ
+     * åˆ™æœ‰ç‚¹å¤šä½™äº†
      *
      * @param subscription
      * @param event
@@ -78,7 +78,7 @@ final class BackgroundPoster implements Runnable {
                             pendingPost = queue.poll();
                             if (pendingPost == null) {
                                 executorRunning = false;
-                                // Èç¹ûÃ»ÓÐÊÂ¼þÁË£¬ÔòÍË³öwhileÑ­»·£¬²¢ÇÒ½áÊøÔËÐÐ
+                                // å¦‚æžœæ²¡æœ‰äº‹ä»¶äº†ï¼Œåˆ™é€€å‡ºwhileå¾ªçŽ¯ï¼Œå¹¶ä¸”ç»“æŸè¿è¡Œ
                                 return;
                             }
                         }

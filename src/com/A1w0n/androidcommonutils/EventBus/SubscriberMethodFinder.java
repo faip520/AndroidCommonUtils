@@ -23,12 +23,12 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Ò»¸ö²éÕÒÀà£¬ÓÃÀ´²éÕÒÄ³¸öÀàµÄÊÂ¼ş½ÓÊÜº¯Êı£¬±ÈÈç²éÕÒÄ³¸öActivityµÄonEventMainThreadº¯Êı
+ * ä¸€ä¸ªæŸ¥æ‰¾ç±»ï¼Œç”¨æ¥æŸ¥æ‰¾æŸä¸ªç±»çš„äº‹ä»¶æ¥å—å‡½æ•°ï¼Œæ¯”å¦‚æŸ¥æ‰¾æŸä¸ªActivityçš„onEventMainThreadå‡½æ•°
  */
 class SubscriberMethodFinder {
 
     private static final int MODIFIERS_IGNORE = Modifier.ABSTRACT | Modifier.STATIC;
-    // Ò»¸ö¾²Ì¬µÄ»º´æ£¬ÓÃÀ´»º´æÄ³¸ö¶©ÔÄÕß(ÓÃÀàÃûÀ´Çø·Ö)µÄËùÓĞÊÂ¼ş½ÓÊÕº¯Êı
+    // ä¸€ä¸ªé™æ€çš„ç¼“å­˜ï¼Œç”¨æ¥ç¼“å­˜æŸä¸ªè®¢é˜…è€…(ç”¨ç±»åæ¥åŒºåˆ†)çš„æ‰€æœ‰äº‹ä»¶æ¥æ”¶å‡½æ•°
     private static final Map<String, List<SubscriberMethod>> methodCache = new HashMap<String, List<SubscriberMethod>>();
     private static final Map<Class<?>, Class<?>> skipMethodVerificationForClasses = new ConcurrentHashMap<Class<?>, Class<?>>();
 
@@ -47,48 +47,48 @@ class SubscriberMethodFinder {
             subscriberMethods = methodCache.get(key);
         }
 
-        // ÃüÖĞ»º´æ£¬ÔòÖ±½Ó·µ»Ø
+        // å‘½ä¸­ç¼“å­˜ï¼Œåˆ™ç›´æ¥è¿”å›
         if (subscriberMethods != null) {
             return subscriberMethods;
         }
 
         subscriberMethods = new ArrayList<SubscriberMethod>();
         Class<?> clazz = subscriberClass;
-        // ÒÑ¾­ÕÒµ½µÄÊÂ¼şµÄÀàĞÍ(Õâ¸öÀàĞÍÓÃÌØ¶¨¸ñÊ½µÄStringÀ´±êÊ¶)
+        // å·²ç»æ‰¾åˆ°çš„äº‹ä»¶çš„ç±»å‹(è¿™ä¸ªç±»å‹ç”¨ç‰¹å®šæ ¼å¼çš„Stringæ¥æ ‡è¯†)
         HashSet<String> eventTypesFound = new HashSet<String>();
         StringBuilder methodKeyBuilder = new StringBuilder();
 
         while (clazz != null) {
             String name = clazz.getName();
 
-            // Ìø¹ıÏµÍ³Àà
+            // è·³è¿‡ç³»ç»Ÿç±»
             if (name.startsWith("java.") || name.startsWith("javax.") || name.startsWith("android.")) {
                 // Skip system classes, this just degrades performance
                 break;
             }
 
             // Starting with EventBus 2.2 we enforced methods to be public (might change with annotations again)
-            // ·µ»ØclazzµÄËùÓĞ·½·¨
+            // è¿”å›clazzçš„æ‰€æœ‰æ–¹æ³•
             Method[] methods = clazz.getMethods();
-            // ±éÀúËùÓĞµÄ·½·¨
+            // éå†æ‰€æœ‰çš„æ–¹æ³•
             for (Method method : methods) {
-                // »ñÈ¡·½·¨µÄÃû×Ö
+                // è·å–æ–¹æ³•çš„åå­—
                 String methodName = method.getName();
-                // ÊÇ·ñÊÇÔ¼¶¨µÄ·½·¨ÃûÇ°×º£¬Ò»°ãÊÇonEvent
+                // æ˜¯å¦æ˜¯çº¦å®šçš„æ–¹æ³•åå‰ç¼€ï¼Œä¸€èˆ¬æ˜¯onEvent
                 if (methodName.startsWith(eventMethodName)) {
                     int modifiers = method.getModifiers();
                     if ((modifiers & Modifier.PUBLIC) != 0 && (modifiers & MODIFIERS_IGNORE) == 0) {
-                        // ËùÓĞ²ÎÊıµÄÀàĞÍ
+                        // æ‰€æœ‰å‚æ•°çš„ç±»å‹
                         Class<?>[] parameterTypes = method.getParameterTypes();
-                        // ²ÎÊıµÄ¸öÊıÖ»ÄÜÊÇÒ»¸ö
+                        // å‚æ•°çš„ä¸ªæ•°åªèƒ½æ˜¯ä¸€ä¸ª
                         if (parameterTypes.length == 1) {
-                            // »ñÈ¡·½·¨ÃûµÄºó×º
+                            // è·å–æ–¹æ³•åçš„åç¼€
                             String modifierString = methodName.substring(eventMethodName.length());
                             ThreadMode threadMode;
 
-                            if (modifierString.length() == 0) { // Ä¬ÈÏÔÚÊÂ¼ş·¢²¼ÕßµÄÏß³Ì½ÓÊÕºÍ´¦ÀíÊÂ¼ş
+                            if (modifierString.length() == 0) { // é»˜è®¤åœ¨äº‹ä»¶å‘å¸ƒè€…çš„çº¿ç¨‹æ¥æ”¶å’Œå¤„ç†äº‹ä»¶
                                 threadMode = ThreadMode.PostThread;
-                            } else if (modifierString.equals("MainThread")) { // ÔÚÖ÷Ïß³Ì½ÓÊÕºÍ´¦ÀíÊÂ¼ş
+                            } else if (modifierString.equals("MainThread")) { // åœ¨ä¸»çº¿ç¨‹æ¥æ”¶å’Œå¤„ç†äº‹ä»¶
                                 threadMode = ThreadMode.MainThread;
                             } else if (modifierString.equals("BackgroundThread")) {
                                 threadMode = ThreadMode.BackgroundThread;
@@ -102,7 +102,7 @@ class SubscriberMethodFinder {
                                 }
                             }
 
-                            // »ñÈ¡Ò»¸ö²ÎÊıµÄÀàĞÍ
+                            // è·å–ä¸€ä¸ªå‚æ•°çš„ç±»å‹
                             Class<?> eventType = parameterTypes[0];
                             methodKeyBuilder.setLength(0);
                             methodKeyBuilder.append(methodName);
@@ -114,7 +114,7 @@ class SubscriberMethodFinder {
                             }
                         }
                     } else if (!skipMethodVerificationForClasses.containsKey(clazz)) {
-                        // Èç¹ûÕâ¸öÁĞ±íÀïÍ·Ã»ÓĞ¶ÔÓ¦µÄÀà
+                        // å¦‚æœè¿™ä¸ªåˆ—è¡¨é‡Œå¤´æ²¡æœ‰å¯¹åº”çš„ç±»
 
                         Log.d(EventBus.TAG, "Skipping method (not public, static or abstract): " + clazz + "."
                                 + methodName);

@@ -1,15 +1,16 @@
 package com.A1w0n.androidcommonutils.FragmentUtils;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.view.KeyEvent;
+import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.view.Window;
 
-public class BaseDialogFragment extends DialogFragment implements Dialog.OnKeyListener {
+public class BaseDialogFragment extends DialogFragment {
 	
 	public static final String TAG = "BaseDialogFragment";
 
@@ -29,36 +30,39 @@ public class BaseDialogFragment extends DialogFragment implements Dialog.OnKeyLi
 		dialog.getWindow().setLayout(dialogWidth, dialogHeight);
 		// 设置背景
 		//dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_round_corner);
+
 		// 点击外部不能取消
-		setCancelable(false);
-		
+		// setCancelable(false);也可以实现同样的功能，但是这样你按返回键就不可以取消dialog了
+		dialog.setCanceledOnTouchOutside(false);
+
 		return super.onCreateDialog(savedInstanceState);
 	}
 
 	/**
 	 * 显示这个Dialog的接口
+	 *
+	 * @param targetUid 对方的uid
 	 */
-	public void showDialog(FragmentManager fm) {
-		SimpleTwoChoiceDialogFragment df = new SimpleTwoChoiceDialogFragment();
-		df.show(fm, TAG);
+	public static void showFragment(FragmentManager fm, String targetUid) {
+		if (fm == null || TextUtils.isEmpty(targetUid)) {
+			return;
+		}
+
+		BaseDialogFragment df = new BaseDialogFragment();
+		Bundle bundle = new Bundle();
+		bundle.putString("uid", targetUid);
+		df.setArguments(bundle);
+
+		FragmentTransaction ft = fm.beginTransaction();
+
+		// 删除之前已有的
+		Fragment pres = fm.findFragmentByTag(TAG);
+		if (pres != null) {
+			ft.remove(pres);
+		}
+
+		// 不加这个就不能返回键取消Fragment
+		ft.addToBackStack(TAG);
+		df.show(ft, TAG);
 	}
-
-
-    /**
-     * 在这里处理返回键按下的事件
-     *
-     * @param dialog
-     * @param keyCode
-     * @param event
-     * @return
-     */
-    @Override
-    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK /*&& event.getRepeatCount() == 0*/) {
-            // the back key was pressed so do something?
-            return true;
-        }
-
-        return true;
-    }
 }

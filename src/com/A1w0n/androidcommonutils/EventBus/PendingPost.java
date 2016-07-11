@@ -19,23 +19,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * EventBusµÄÊÂ¼ş¶ÓÁĞÖĞµÄÄ³¸öÊÂ¼ş·â×°£¬ÊÂ¼ş¶ÓÁĞ²¢Ã»ÓĞÓÃÈÎºÎÓÃÀ´×°ÔØÊÂ¼şµÄÈİÆ÷£¬
- * ¶øÊÇ¿¿ÊÂ¼ş¶ÓÁĞÖĞµÄÃ¿Ò»¸öÊÂ¼şµÄnextÖ¸Õë(Ö¸Ïò¶ÓÁĞÖĞµÄÏÂÒ»¸öÊÂ¼ş)À´ÔË×÷¶ÓÁĞµÄ
+ * EventBusçš„äº‹ä»¶é˜Ÿåˆ—ä¸­çš„æŸä¸ªäº‹ä»¶å°è£…ï¼Œäº‹ä»¶é˜Ÿåˆ—å¹¶æ²¡æœ‰ç”¨ä»»ä½•ç”¨æ¥è£…è½½äº‹ä»¶çš„å®¹å™¨ï¼Œ
+ * è€Œæ˜¯é äº‹ä»¶é˜Ÿåˆ—ä¸­çš„æ¯ä¸€ä¸ªäº‹ä»¶çš„nextæŒ‡é’ˆ(æŒ‡å‘é˜Ÿåˆ—ä¸­çš„ä¸‹ä¸€ä¸ªäº‹ä»¶)æ¥è¿ä½œé˜Ÿåˆ—çš„
  *
- * Õâ¸öÊÂ¼ş·â×°ÀïÍ·°üº¬Ò»¸öÊÂ¼şµÄ¶ÔÏó³Ø£¬ÓÃÓÚ¸´ÓÃ±¾ÀàµÄ¶ÔÏó
+ * è¿™ä¸ªäº‹ä»¶å°è£…é‡Œå¤´åŒ…å«ä¸€ä¸ªäº‹ä»¶çš„å¯¹è±¡æ± ï¼Œç”¨äºå¤ç”¨æœ¬ç±»çš„å¯¹è±¡
  */
 final class PendingPost {
 
-    // ±¾Àà¶ÔÏóµÄ¶ÔÏó³Ø£¬ÓÃÀ´¸´ÓÃ±¾ÀàµÄ¶ÔÏó
+    // æœ¬ç±»å¯¹è±¡çš„å¯¹è±¡æ± ï¼Œç”¨æ¥å¤ç”¨æœ¬ç±»çš„å¯¹è±¡
     private final static List<PendingPost> pendingPostPool = new ArrayList<PendingPost>();
 
-    // ÊÂ¼ş·¢²¼Õß·¢²¼³öÀ´µÄÊÂ¼ş
+    // äº‹ä»¶å‘å¸ƒè€…å‘å¸ƒå‡ºæ¥çš„äº‹ä»¶
     Object event;
     Subscription subscription;
     PendingPost next;
 
     /**
-     * Íâ²¿Ã»ÓĞ°ì·¨µ÷ÓÃÕâ¸ö¹¹Ôìº¯Êı
+     * å¤–éƒ¨æ²¡æœ‰åŠæ³•è°ƒç”¨è¿™ä¸ªæ„é€ å‡½æ•°
      *
      * @param event
      * @param subscription
@@ -46,8 +46,8 @@ final class PendingPost {
     }
 
     /**
-     * ´Ó¶ÔÏó³ØÀïÍ·»ñÈ¡Ò»¸ö±¾ÀàµÄ¶ÔÏó£¬Íâ²¿ÀàÊÇÃ»°ì·¨new±¾ÀàµÄ¶ÔÏóµÄ£¬Ö»ÄÜÍ¨¹ıÕâ¸ö·½·¨À´»ñÈ¡
-     * ±¾ÀàµÄ¶ÔÏó
+     * ä»å¯¹è±¡æ± é‡Œå¤´è·å–ä¸€ä¸ªæœ¬ç±»çš„å¯¹è±¡ï¼Œå¤–éƒ¨ç±»æ˜¯æ²¡åŠæ³•newæœ¬ç±»çš„å¯¹è±¡çš„ï¼Œåªèƒ½é€šè¿‡è¿™ä¸ªæ–¹æ³•æ¥è·å–
+     * æœ¬ç±»çš„å¯¹è±¡
      *
      * @param subscription
      * @param event
@@ -57,7 +57,7 @@ final class PendingPost {
         synchronized (pendingPostPool) {
             int size = pendingPostPool.size();
             if (size > 0) {
-                // ·µ»Ø¶ÔÏó³Ø×îºóÒ»¸ö¸øµ÷ÓÃÕß
+                // è¿”å›å¯¹è±¡æ± æœ€åä¸€ä¸ªç»™è°ƒç”¨è€…
                 PendingPost pendingPost = pendingPostPool.remove(size - 1);
                 pendingPost.event = event;
                 pendingPost.subscription = subscription;
@@ -70,7 +70,7 @@ final class PendingPost {
     }
 
     /**
-     * µ÷ÓÃÕßÓÃÍêÁË±¾ÀàµÄ¶ÔÏó£¬µ÷ÓÃÕâ¸ö½Ó¿ÚÀ´°Ñ±¾ÀàµÄ¶ÔÏó»º´æ½ø¶ÔÏó³ØÀïÍ·
+     * è°ƒç”¨è€…ç”¨å®Œäº†æœ¬ç±»çš„å¯¹è±¡ï¼Œè°ƒç”¨è¿™ä¸ªæ¥å£æ¥æŠŠæœ¬ç±»çš„å¯¹è±¡ç¼“å­˜è¿›å¯¹è±¡æ± é‡Œå¤´
      *
      * @param pendingPost
      */
@@ -81,7 +81,7 @@ final class PendingPost {
 
         synchronized (pendingPostPool) {
             // Don't let the pool grow indefinitely
-            // ·ÀÖ¹¶ÔÏó³ØÎŞÏŞÔö³¤
+            // é˜²æ­¢å¯¹è±¡æ± æ— é™å¢é•¿
             if (pendingPostPool.size() < 10000) {
                 pendingPostPool.add(pendingPost);
             }

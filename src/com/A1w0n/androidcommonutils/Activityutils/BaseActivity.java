@@ -98,8 +98,6 @@ public class BaseActivity extends FragmentActivity {
 
 	/**
 	 * 让子类方便的请求全屏
-	 * 
-	 * @param activity
 	 */
 	protected void requestFullScreen() {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -114,4 +112,22 @@ public class BaseActivity extends FragmentActivity {
 	protected void showToastLong(String message) {
 		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 	}
+
+    /**
+     * 让子类正确的调用finish
+     */
+    @Override
+    public void finish() {
+        if (!isFinishing()) {
+            super.finish();
+        }
+    }
+
+    /**
+     * 怎么样启动本Activity，必须封装在本Activity内部
+     * 可以减轻外部对本类的依赖
+     */
+    public static void startActivity() {
+
+    }
 }

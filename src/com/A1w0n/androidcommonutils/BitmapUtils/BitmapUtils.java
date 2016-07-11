@@ -9,7 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.widget.ImageView;
 import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
-import com.A1w0n.androidcommonutils.debugutils.Logger;
+import com.A1w0n.androidcommonutils.DebugUtils.Logger;
 
 import java.io.*;
 
@@ -329,6 +329,10 @@ public class BitmapUtils {
 	}
 
 	public static Bitmap getBitmap(Drawable drawable) {
+        if (drawable == null) {
+            return null;
+        }
+
 		if (drawable instanceof BitmapDrawable) {
 			return ((BitmapDrawable) drawable).getBitmap();
 		}

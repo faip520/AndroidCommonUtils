@@ -18,7 +18,7 @@ package com.A1w0n.androidcommonutils.EventBus;
 import java.lang.reflect.Method;
 
 /**
- * 定义事件订阅者的事件接受函数的封装，比如某个Activity的onEventMainThread函数
+ * 瀹氫箟浜嬩欢璁㈤槄鑰呯殑浜嬩欢鎺ュ彈鍑芥暟鐨勫皝瑁咃紝姣斿鏌愪釜Activity鐨刼nEventMainThread鍑芥暟
  */
 final class SubscriberMethod {
 

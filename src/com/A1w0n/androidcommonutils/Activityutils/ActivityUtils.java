@@ -1,20 +1,21 @@
 package com.A1w0n.androidcommonutils.Activityutils;
 
-import java.io.File;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
-
 import com.A1w0n.androidcommonutils.GlobalApplicationUtils.GlobalApplication;
+
+import java.io.File;
+import java.util.List;
 
 public class ActivityUtils {
 
@@ -28,6 +29,8 @@ public class ActivityUtils {
 	public static void keepScreenOn(Activity activity) {
 		activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
+
+    Object a = new Object();
 
 	/**
 	 * Start the system gallery activity to pick an image
@@ -119,6 +122,18 @@ public class ActivityUtils {
 	public static void closeSystemNotificationDrawer(Context context) {
 		if (context != null) {
 			context.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+		}
+	}
+
+	/**
+	 * 没网的时候，一般app都会给一个提示，然后用户点击这个提示，会跳到设置的网页设置
+	 * 界面，这里就是负责跳转的函数
+	 */
+	public static void startNetworkSetting(Context context) {
+		if (Build.VERSION.SDK_INT > 10) {
+			context.startActivity(new Intent(Settings.ACTION_SETTINGS));
+		} else {
+			context.startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
 		}
 	}
 }

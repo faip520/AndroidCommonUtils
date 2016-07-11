@@ -36,6 +36,13 @@ public class APILevelUtils {
 	public static boolean isLevel18AndAbove() {
 		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2;
 	}
+
+    /**
+     * Level 16 是Android 4.1
+     */
+    public static boolean isLevel16AndAbove() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+    }
 	
 	public static int currentApiLevel() {
 		return Build.VERSION.SDK_INT;

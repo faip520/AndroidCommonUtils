@@ -5,7 +5,7 @@ import java.io.File;
 import com.A1w0n.androidcommonutils.CMDUtils;
 import com.A1w0n.androidcommonutils.GlobalApplicationUtils.GlobalApplication;
 import com.A1w0n.androidcommonutils.PackageUtils.PackageUtils;
-import com.A1w0n.androidcommonutils.debugutils.Logger;
+import com.A1w0n.androidcommonutils.DebugUtils.Logger;
 
 public class InstallApkAsyncTask extends BaseAsyncTask<File, String, Boolean> {
 	

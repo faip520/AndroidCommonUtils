@@ -2,4 +2,4 @@
 // 一般是这样的内容 include 'core', 'web', 'mobile'
 // 这表示，我们有个产品A，包括以下几个组件core，web，mobile 每个子项目都是独立的，分别管理自己的构建。
 // 一般core组件对应A/core目录，web组件对应A/web目录，mobile组件对应A/mobile目录。接下来，我们就可以在每个组件内部，定义build.gradle负责管理当前组件的构建。
-
+include ':'

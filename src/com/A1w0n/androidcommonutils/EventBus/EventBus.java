@@ -39,7 +39,7 @@ import java.util.concurrent.Executors;
  */
 public class EventBus {
 
-    // Ïß³Ì³Ø
+    // çº¿ç¨‹æ± 
     static ExecutorService executorService = Executors.newCachedThreadPool();
 
     /** Log tag, apps may override it. */
@@ -54,7 +54,7 @@ public class EventBus {
     private final Map<Object, List<Class<?>>> typesBySubscriber;
     private final Map<Class<?>, Object> stickyEvents;
 
-    // ĞÂ½¨Ò»¸öÏß³Ì±¾µØ±äÁ¿
+    // æ–°å»ºä¸€ä¸ªçº¿ç¨‹æœ¬åœ°å˜é‡
     private final ThreadLocal<PostingThreadState> currentPostingThreadState = new ThreadLocal<PostingThreadState>() {
         @Override
         protected PostingThreadState initialValue() {
@@ -64,7 +64,7 @@ public class EventBus {
 
 
     private final HandlerPoster mainThreadPoster;
-    // Êµ¼ÊÉÏ¾ÍÊÇÒ»¸öRunnable
+    // å®é™…ä¸Šå°±æ˜¯ä¸€ä¸ªRunnable
     private final BackgroundPoster backgroundPoster;
     private final AsyncPoster asyncPoster;
     private final SubscriberMethodFinder subscriberMethodFinder;
@@ -189,13 +189,13 @@ public class EventBus {
     /**
      *
      *
-     * @param subscriber ÊÂ¼ş¶©ÔÄÕßµÄ¶ÔÏó
-     * @param methodName ÊÂ¼ş¶©ÔÄÕßÃÇÔ¼¶¨µÄÊÂ¼ş½ÓÊÜºÍ´¦Àíº¯ÊıµÄÇ°×º£¬Ä¬ÈÏÊÇonEvent£¬Ò²¿ÉÒÔÊÇÆäËûµÄ
-     * @param sticky ÊÇ·ñÊÇÕ³ÖÍĞÔÊÂ¼ş
-     * @param priority ÓÅÏÈ¼¶£¬Ä¬ÈÏÊÇ0
+     * @param subscriber äº‹ä»¶è®¢é˜…è€…çš„å¯¹è±¡
+     * @param methodName äº‹ä»¶è®¢é˜…è€…ä»¬çº¦å®šçš„äº‹ä»¶æ¥å—å’Œå¤„ç†å‡½æ•°çš„å‰ç¼€ï¼Œé»˜è®¤æ˜¯onEventï¼Œä¹Ÿå¯ä»¥æ˜¯å…¶ä»–çš„
+     * @param sticky æ˜¯å¦æ˜¯ç²˜æ»æ€§äº‹ä»¶
+     * @param priority ä¼˜å…ˆçº§ï¼Œé»˜è®¤æ˜¯0
      */
     private synchronized void register(Object subscriber, String methodName, boolean sticky, int priority) {
-        // ²éÕÒÄ³¸öÀà(ÊÂ¼ş¶©ÔÄÕß)µÄËùÓĞÊÂ¼ş½ÓÊÕº¯Êı
+        // æŸ¥æ‰¾æŸä¸ªç±»(äº‹ä»¶è®¢é˜…è€…)çš„æ‰€æœ‰äº‹ä»¶æ¥æ”¶å‡½æ•°
         List<SubscriberMethod> subscriberMethods = subscriberMethodFinder.findSubscriberMethods(subscriber.getClass(),
                 methodName);
         for (SubscriberMethod subscriberMethod : subscriberMethods) {
@@ -362,25 +362,25 @@ public class EventBus {
 
     /** Posts the given event to the event bus. */
     public void post(Object event) {
-        // »ñÈ¡µ±Ç°Ïß³ÌµÄThreadLocal±¾µØ±äÁ¿ÖĞ´æ´¢µÄPostingThreadState¶ÔÏó
+        // è·å–å½“å‰çº¿ç¨‹çš„ThreadLocalæœ¬åœ°å˜é‡ä¸­å­˜å‚¨çš„PostingThreadStateå¯¹è±¡
         PostingThreadState postingState = currentPostingThreadState.get();
-        // »ñÈ¡µ±Ç°Ïß³ÌµÄÊÂ¼ş¶ÓÁĞ
+        // è·å–å½“å‰çº¿ç¨‹çš„äº‹ä»¶é˜Ÿåˆ—
         List<Object> eventQueue = postingState.eventQueue;
-        // ÔÚÊÂ¼ş¶ÓÁĞArrayÀïÍ·Ìí¼Ó±¾´ÎµÄÊÂ¼ş
+        // åœ¨äº‹ä»¶é˜Ÿåˆ—Arrayé‡Œå¤´æ·»åŠ æœ¬æ¬¡çš„äº‹ä»¶
         eventQueue.add(event);
 
         if (postingState.isPosting) {
             return;
         } else {
-            // ÅĞ¶Ïµ±Ç°Ïß³ÌÊÇ·ñÊÇUIÏß³Ì£¬²¢ÇÒ±£´æ¸ÃÖµµ½ThreadLocalÖĞµÄPostingThreadState¶ÔÏóÀïÍ·
+            // åˆ¤æ–­å½“å‰çº¿ç¨‹æ˜¯å¦æ˜¯UIçº¿ç¨‹ï¼Œå¹¶ä¸”ä¿å­˜è¯¥å€¼åˆ°ThreadLocalä¸­çš„PostingThreadStateå¯¹è±¡é‡Œå¤´
             postingState.isMainThread = Looper.getMainLooper() == Looper.myLooper();
-            // ÉèÖÃ±êÖ¾Î»£¬±íÃ÷¸ÃÏß³ÌÕıÔÚ·¢ËÍÊÂ¼ş
+            // è®¾ç½®æ ‡å¿—ä½ï¼Œè¡¨æ˜è¯¥çº¿ç¨‹æ­£åœ¨å‘é€äº‹ä»¶
             postingState.isPosting = true;
             if (postingState.canceled) {
                 throw new EventBusException("Internal error. Abort state was not reset");
             }
             try {
-                // ·Ö·¢ÊÂ¼ş¶ÓÁĞÀïÍ·µÄËùÓĞÊÂ¼ş
+                // åˆ†å‘äº‹ä»¶é˜Ÿåˆ—é‡Œå¤´çš„æ‰€æœ‰äº‹ä»¶
                 while (!eventQueue.isEmpty()) {
                     postSingleEvent(eventQueue.remove(0), postingState);
                 }
@@ -476,33 +476,33 @@ public class EventBus {
     }
 
     /**
-     * ·Ö·¢ÊÂ¼ş¶ÓÁĞÖĞµÄµ¥¸öÊÂ¼ş
+     * åˆ†å‘äº‹ä»¶é˜Ÿåˆ—ä¸­çš„å•ä¸ªäº‹ä»¶
      *
-     * @param event        ĞèÒª·¢ËÍ³öÈ¥µÄÊÂ¼ş
+     * @param event        éœ€è¦å‘é€å‡ºå»çš„äº‹ä»¶
      * @param postingState
      * @throws Error
      */
     private void postSingleEvent(Object event, PostingThreadState postingState) throws Error {
-        // »ñÈ¡ÊÂ¼şµÄClassÀà¶ÔÏó
+        // è·å–äº‹ä»¶çš„Classç±»å¯¹è±¡
         Class<? extends Object> eventClass = event.getClass();
-        // µ÷ÓÃÍêÕâÒ»ĞĞ£¬eventTypesÀïÍ·¾Í°üº¬ÁË£¬event±¾ÉíµÄclass(º¬ÕâĞ©classµÄËùÓĞ¸¸Àà)£¬ºÍeventËùimplementsµÄËùÓĞÀà(ºÍÕâĞ©ÀàµÄËùÓĞ
-        // ¸¸Àà£¬ÒÔ¼°ÕâĞ©ÀàµÄËùÓĞ¸¸ÀàËùimplementsµÄÀà)
+        // è°ƒç”¨å®Œè¿™ä¸€è¡Œï¼ŒeventTypesé‡Œå¤´å°±åŒ…å«äº†ï¼Œeventæœ¬èº«çš„class(å«è¿™äº›classçš„æ‰€æœ‰çˆ¶ç±»)ï¼Œå’Œeventæ‰€implementsçš„æ‰€æœ‰ç±»(å’Œè¿™äº›ç±»çš„æ‰€æœ‰
+        // çˆ¶ç±»ï¼Œä»¥åŠè¿™äº›ç±»çš„æ‰€æœ‰çˆ¶ç±»æ‰€implementsçš„ç±»)
         List<Class<?>> eventTypes = findEventTypes(eventClass);
 
         boolean subscriptionFound = false;
 
-        // ±éÀúeventTypesÀïÍ·ËùÓĞµÄÀà
+        // éå†eventTypesé‡Œå¤´æ‰€æœ‰çš„ç±»
         int countTypes = eventTypes.size();
         for (int h = 0; h < countTypes; h++) {
             Class<?> clazz = eventTypes.get(h);
             CopyOnWriteArrayList<Subscription> subscriptions;
 
-            // ³¢ÊÔ´Ó»º´æÀïÍ·»ñÈ¡EventÀà¶ÔÓ¦µÄËùÓĞ¶©ÔÄÕß
+            // å°è¯•ä»ç¼“å­˜é‡Œå¤´è·å–Eventç±»å¯¹åº”çš„æ‰€æœ‰è®¢é˜…è€…
             synchronized (this) {
                 subscriptions = subscriptionsByEventType.get(clazz);
             }
 
-            // Èç¹û¶©ÔÄÕßÁĞ±í²»Îª¿Õ
+            // å¦‚æœè®¢é˜…è€…åˆ—è¡¨ä¸ä¸ºç©º
             if (subscriptions != null && !subscriptions.isEmpty()) {
                 for (Subscription subscription : subscriptions) {
                     postingState.event = event;
@@ -534,11 +534,11 @@ public class EventBus {
     }
 
     /**
-     * °ÑÏûÏ¢·¢²¼µ½Ä³Ò»¸öÏûÏ¢¶©ÔÄÕß
+     * æŠŠæ¶ˆæ¯å‘å¸ƒåˆ°æŸä¸€ä¸ªæ¶ˆæ¯è®¢é˜…è€…
      *
-     * @param subscription Ä³Ò»¸öÏûÏ¢¶©ÔÄÕß
-     * @param event ÏûÏ¢·¢²¼ÕßËù·¢²¼µÄÏûÏ¢
-     * @param isMainThread ÏûÏ¢·¢²¼Õß£¬ÊÇ²»ÊÇÔÚÖ÷Ïß³ÌÀïÍ··¢²¼µÄ
+     * @param subscription æŸä¸€ä¸ªæ¶ˆæ¯è®¢é˜…è€…
+     * @param event æ¶ˆæ¯å‘å¸ƒè€…æ‰€å‘å¸ƒçš„æ¶ˆæ¯
+     * @param isMainThread æ¶ˆæ¯å‘å¸ƒè€…ï¼Œæ˜¯ä¸æ˜¯åœ¨ä¸»çº¿ç¨‹é‡Œå¤´å‘å¸ƒçš„
      */
     private void postToSubscription(Subscription subscription, Object event, boolean isMainThread) {
         switch (subscription.subscriberMethod.threadMode) {
@@ -570,20 +570,20 @@ public class EventBus {
     /**
      * Finds all Class objects including super classes and interfaces.
      *
-     * @param eventClass EventBusÊÂ¼ş¶ÔÓ¦µÄÀàµÄclass¶ÔÏó
+     * @param eventClass EventBusäº‹ä»¶å¯¹åº”çš„ç±»çš„classå¯¹è±¡
      * @return
      */
     private List<Class<?>> findEventTypes(Class<?> eventClass) {
         synchronized (eventTypesCache) {
-            // ³¢ÊÔ´ÓcacheÖĞ»ñÈ¡
+            // å°è¯•ä»cacheä¸­è·å–
             List<Class<?>> eventTypes = eventTypesCache.get(eventClass);
-            // Èç¹ûcacheÖĞ»ñÈ¡²»µ½
+            // å¦‚æœcacheä¸­è·å–ä¸åˆ°
             if (eventTypes == null) {
                 eventTypes = new ArrayList<Class<?>>();
                 Class<?> clazz = eventClass;
                 while (clazz != null) {
                     eventTypes.add(clazz);
-                    // getInterfaces»á·µ»Øclazz¶ÔÏóÔ´ÂëÀïÍ·ÉùÃ÷µÄÊ±ºò£¬implementsÁËÄÄĞ©½Ó¿Ú
+                    // getInterfacesä¼šè¿”å›clazzå¯¹è±¡æºç é‡Œå¤´å£°æ˜çš„æ—¶å€™ï¼Œimplementsäº†å“ªäº›æ¥å£
                     addInterfaces(eventTypes, clazz.getInterfaces());
                     clazz = clazz.getSuperclass();
                 }
@@ -597,19 +597,19 @@ public class EventBus {
     /**
      * Recurses through super interfaces.
      *
-     * @param eventTypes °üº¬Event¶ÔÏóËù¶ÔÓ¦µÄÀàµÄclass¶ÔÏó£¬Í¬Ê±Ò²°üº¬£¬Event¶ÔÏóµÄËùÓĞ¸¸Àà
-     *                   µÄclass¶ÔÏó
-     * @param interfaces event¶ÔÏó¶ÔÓ¦µÄÀàµÄclassËùÏÖÊµµÄËùÓĞ½Ó¿Ú£¬»òÕßÊÇ£¬event¶ÔÏó¶ÔÓ¦µÄÀà
-     *                   µÄ¸¸ÀàËùÏÖÊµµÄËùÓĞ½Ó¿Ú
+     * @param eventTypes åŒ…å«Eventå¯¹è±¡æ‰€å¯¹åº”çš„ç±»çš„classå¯¹è±¡ï¼ŒåŒæ—¶ä¹ŸåŒ…å«ï¼ŒEventå¯¹è±¡çš„æ‰€æœ‰çˆ¶ç±»
+     *                   çš„classå¯¹è±¡
+     * @param interfaces eventå¯¹è±¡å¯¹åº”çš„ç±»çš„classæ‰€ç°å®çš„æ‰€æœ‰æ¥å£ï¼Œæˆ–è€…æ˜¯ï¼Œeventå¯¹è±¡å¯¹åº”çš„ç±»
+     *                   çš„çˆ¶ç±»æ‰€ç°å®çš„æ‰€æœ‰æ¥å£
      */
     static void addInterfaces(List<Class<?>> eventTypes, Class<?>[] interfaces) {
-        // ±éÀúÊµÏÖµÄËùÓĞ½Ó¿Ú(Ò²¾ÍÊÇÉùÃ÷class¶ÔÏóµÄÊ±ºò£¬implementsÁËÄÄĞ©½Ó¿Ú)
+        // éå†å®ç°çš„æ‰€æœ‰æ¥å£(ä¹Ÿå°±æ˜¯å£°æ˜classå¯¹è±¡çš„æ—¶å€™ï¼Œimplementsäº†å“ªäº›æ¥å£)
         for (Class<?> interfaceClass : interfaces) {
-            // Èç¹ûeventTypesÀïÍ·»¹Ã»ÓĞ°üº¬Õâ¸öÀà
+            // å¦‚æœeventTypesé‡Œå¤´è¿˜æ²¡æœ‰åŒ…å«è¿™ä¸ªç±»
             if (!eventTypes.contains(interfaceClass)) {
                 eventTypes.add(interfaceClass);
-                // getInterfaces»á·µ»Øclazz¶ÔÏóÔ´ÂëÀïÍ·ÉùÃ÷µÄÊ±ºò£¬implementsÁËÄÄĞ©½Ó¿Ú
-                // ÕâÀïÊÇµİ¹éµ÷ÓÃ
+                // getInterfacesä¼šè¿”å›clazzå¯¹è±¡æºç é‡Œå¤´å£°æ˜çš„æ—¶å€™ï¼Œimplementsäº†å“ªäº›æ¥å£
+                // è¿™é‡Œæ˜¯é€’å½’è°ƒç”¨
                 addInterfaces(eventTypes, interfaceClass.getInterfaces());
             }
         }
@@ -621,8 +621,8 @@ public class EventBus {
      * subscriber unregistered. This is particularly important for main thread delivery and registrations bound to the
      * live cycle of an Activity or Fragment.
      *
-     * ¿¼ÂÇÕâÑùÒ»ÖÖÇéĞÎ£ºÁ½¸öÏß³Ì£¬Ò»¸öÊÇÖ÷Ïß³ÌA£¬Ò»¸öÊÇºóÌ¨Ïß³ÌB£¬Ö÷Ïß³ÌÏë·´×¢²áÄ³Ò»¸öActivity C£¬Ïß³ÌBÒÑ¾­×¼±¸µ÷ÓÃActivity CµÄ
-     * ÊÂ¼ş½ÓÊÜº¯Êı£¬ÕâÑù×îºóÊÇÊ²Ã´Çé¿ö£¬È¡¾öÓÚÁ½¸öÏß³ÌµÄµ÷¶ÈË³Ğò
+     * è€ƒè™‘è¿™æ ·ä¸€ç§æƒ…å½¢ï¼šä¸¤ä¸ªçº¿ç¨‹ï¼Œä¸€ä¸ªæ˜¯ä¸»çº¿ç¨‹Aï¼Œä¸€ä¸ªæ˜¯åå°çº¿ç¨‹Bï¼Œä¸»çº¿ç¨‹æƒ³åæ³¨å†ŒæŸä¸€ä¸ªActivity Cï¼Œçº¿ç¨‹Bå·²ç»å‡†å¤‡è°ƒç”¨Activity Cçš„
+     * äº‹ä»¶æ¥å—å‡½æ•°ï¼Œè¿™æ ·æœ€åæ˜¯ä»€ä¹ˆæƒ…å†µï¼Œå–å†³äºä¸¤ä¸ªçº¿ç¨‹çš„è°ƒåº¦é¡ºåº
      */
     void invokeSubscriber(PendingPost pendingPost) {
         Object event = pendingPost.event;
@@ -635,15 +635,15 @@ public class EventBus {
     }
 
     /**
-     * µ÷ÓÃÄ³Ò»¸ö¶©ÔÄÕßµÄÊÂ¼ş½ÓÊÕº¯Êı£¬ÈÃÆä½ÓÊÕ²¢´¦Àí¸ÃÊÂ¼ş
+     * è°ƒç”¨æŸä¸€ä¸ªè®¢é˜…è€…çš„äº‹ä»¶æ¥æ”¶å‡½æ•°ï¼Œè®©å…¶æ¥æ”¶å¹¶å¤„ç†è¯¥äº‹ä»¶
      *
-     * @param subscription Ä³Ò»¸ö¶©ÔÄÕß
-     * @param event ÏûÏ¢·¢²¼Õß·¢³öÀ´µÄÏûÏ¢
+     * @param subscription æŸä¸€ä¸ªè®¢é˜…è€…
+     * @param event æ¶ˆæ¯å‘å¸ƒè€…å‘å‡ºæ¥çš„æ¶ˆæ¯
      * @throws Error
      */
     void invokeSubscriber(Subscription subscription, Object event) throws Error {
         try {
-            // µ÷ÓÃÏûÏ¢¶©ÔÄÕßµÄÏûÏ¢½ÓÊÕº¯Êı
+            // è°ƒç”¨æ¶ˆæ¯è®¢é˜…è€…çš„æ¶ˆæ¯æ¥æ”¶å‡½æ•°
             subscription.subscriberMethod.method.invoke(subscription.subscriber, event);
         } catch (InvocationTargetException e) {
             Throwable cause = e.getCause();
@@ -671,10 +671,10 @@ public class EventBus {
     /** For ThreadLocal, much faster to set (and get multiple values). */
     final static class PostingThreadState {
         List<Object> eventQueue = new ArrayList<Object>();
-        // ÊÇ·ñÕıÔÚ·¢ËÍÊÂ¼ş
+        // æ˜¯å¦æ­£åœ¨å‘é€äº‹ä»¶
         boolean isPosting;
         boolean isMainThread;
-        // ¶©ÔÄÕß£¿
+        // è®¢é˜…è€…ï¼Ÿ
         Subscription subscription;
         Object event;
         boolean canceled;

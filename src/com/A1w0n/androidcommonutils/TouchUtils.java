@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 public class TouchUtils {
@@ -57,8 +58,6 @@ public class TouchUtils {
      * @param view
      */
     public static void handlerOnClickInOnTouchListener(View view) {
-
-
         view.setOnTouchListener(new View.OnTouchListener() {
 
             private long mDeBounce = 0;
@@ -133,5 +132,28 @@ public class TouchUtils {
 
     }
 
+    /**
+     * 判断一个MotionEvent的坐标,是否在一个view上
+     * 比如点击事件是否点在了view身上
+     *
+     * @param ev
+     * @param view
+     * @return
+     */
+    public boolean isEventOnView(MotionEvent ev, View view) {
+        final int rawX = (int) ev.getRawX();
+        final int rawY = (int) ev.getRawY();
 
+        int[] mTempLoc = new int[2];
+        view.getLocationOnScreen(mTempLoc);
+
+        if (rawX > mTempLoc[0] && rawY > mTempLoc[1] &&
+                rawX < mTempLoc[0] + view.getWidth() &&
+                rawY < mTempLoc[1] + view.getHeight()) {
+
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -4,4 +4,5 @@
 -->
 <resources>
     <item type="id" name="example"/>
+    <item type="id" name="prevent_click_too_frequently"/>
 </resources>

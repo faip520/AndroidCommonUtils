@@ -18,7 +18,6 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
@@ -27,7 +26,7 @@ import com.A1w0n.androidcommonutils.BitmapUtils.BitmapUtils;
 import com.A1w0n.androidcommonutils.FileUtils.ProjectFileManager;
 import com.A1w0n.androidcommonutils.IOUtils.IOUtils;
 import com.A1w0n.androidcommonutils.JniUtils.Exec;
-import com.A1w0n.androidcommonutils.debugutils.Logger;
+import com.A1w0n.androidcommonutils.DebugUtils.Logger;
 
 public class PackageUtils {
 
@@ -375,5 +374,18 @@ public class PackageUtils {
 		
 		context.startActivity(context.getPackageManager().getLaunchIntentForPackage(packageName));
 	}
+
+    /**
+     * 给出包名，类名，启动apk
+     */
+    public static void startMainActivity(Context context, String packageName, String className) {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        ComponentName cn = new ComponentName(packageName, className);
+        intent.setComponent(cn);
+        context.startActivity(intent);
+    }
+
+
 	
 }

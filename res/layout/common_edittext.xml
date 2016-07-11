@@ -4,6 +4,8 @@
      设置一个padding是防止文字顶格了 
 		上下和左右设置不一样的padding会比较美观
 		用9.png的情况下就不用padding
+
+     textCursorDrawable是光标的颜色 如果值是@null则和文字颜色一样
 -->
 <EditText xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/common_edittext"
@@ -12,6 +14,7 @@
     android:background="@drawable/common_selector"
     android:gravity="center"
     android:hint="请输入"
+    android:textCursorDrawable="@null"
     android:imeOptions="flagNoExtractUi|actionSearch"
     android:maxEms="20"
     android:textSize="16sp"

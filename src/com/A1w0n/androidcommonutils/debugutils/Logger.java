@@ -1,9 +1,15 @@
-package com.A1w0n.androidcommonutils.debugutils;
+package com.A1w0n.androidcommonutils.DebugUtils;
+
+import com.A1w0n.androidcommonutils.FileUtils.ProjectFileManager;
+import com.crashlytics.android.Crashlytics;
+
+import java.io.File;
 
 /**
  * Wrapper API for sending log output.
  */
 public class Logger {
+
 	protected static final String TAG = "===A1w0n===";
 	
 	public static final boolean DEBUG = true;
@@ -69,25 +75,25 @@ public class Logger {
 			android.util.Log.i(TAG, buildMessage(msg));
 	}
 
-	/**
-	 * Send a INFO log message and log the exception.
-	 * 
-	 * @param msg
-	 *            The message you would like logged.
-	 * @param thr
-	 *            An exception to log
-	 */
-	public static void i(String msg, Throwable thr) {
-		if (DEBUG)
-			android.util.Log.i(TAG, buildMessage(msg), thr);
-	}
-
-	/**
-	 * E for exception Send an ERROR log message.
-	 * 
-	 * @param msg
-	 *            The message you would like logged.
-	 */
+    /**
+     * 可以用来做性能分析的
+     *
+     * 用法实例：
+     *      williamPerformance(“Activity onCreate start”)
+     *      williamPerformance(“Activity onCreate end”)
+     *      williamPerformance(“Download file thread start”)
+     *      williamPerformance(“Download file thread end”)
+     *
+     * 后面可以把机器的logcat日志内容dump出来(带上时间戳), 然后根据软件的流程日志，分析问题
+     *
+     * 也可以用来做日志系统，在软件的关键部位打印log，然后测试部门的同事提出问题的时候，
+     * 把他们机器上的logcat内容dump出来，然后分析问题
+     *
+     * 经测试：不少机器的logcat保存了超过12个小时的logcat日志，这个用来解决测试部同事提出的问题
+     * 已经足够
+     *
+     * @param msg
+     */
 	public static void e(String msg) {
 		if (DEBUG)
 			android.util.Log.e(TAG, buildMessage(msg));
@@ -104,42 +110,11 @@ public class Logger {
 			android.util.Log.w(TAG, buildMessage(msg));
 	}
 
-	/**
-	 * Send a WARN log message and log the exception.
-	 * 
-	 * @param msg
-	 *            The message you would like logged.
-	 * @param thr
-	 *            An exception to log
-	 */
-	public static void w(String msg, Throwable thr) {
-		if (DEBUG)
-			android.util.Log.w(TAG, buildMessage(msg), thr);
-	}
+    public static void logToFile(String msg) {
+        String result = buildMessage(msg);
 
-	/**
-	 * Send an empty WARN log message and log the exception.
-	 * 
-	 * @param thr
-	 *            An exception to log
-	 */
-	public static void w(Throwable thr) {
-		if (DEBUG)
-			android.util.Log.w(TAG, buildMessage(""), thr);
-	}
 
-	/**
-	 * E for exception Send an ERROR log message and log the exception.
-	 * 
-	 * @param msg
-	 *            The message you would like logged.
-	 * @param thr
-	 *            An exception to log
-	 */
-	public static void e(String msg, Throwable thr) {
-		if (DEBUG)
-			android.util.Log.e(TAG, buildMessage(msg), thr);
-	}
+    }
 
 	/**
 	 * Building Message
@@ -154,4 +129,9 @@ public class Logger {
 		return new StringBuilder().append("===A1W0n===").append(caller.getClassName()).append(".").append(caller.getMethodName()).append("(): ").append(msg)
 				.toString();
 	}
+
+    private void addMessageToLogFile() {
+        File log = ProjectFileManager.getLoggerFile();
+
+    }
 }

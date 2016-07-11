@@ -2,8 +2,11 @@ package com.A1w0n.androidcommonutils.MediaUtils;
 
 import java.io.IOException;
 
+import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+
+import com.A1w0n.androidcommonutils.GlobalApplicationUtils.GlobalApplication;
 
 /**
  * @author Aiwan
@@ -33,7 +36,13 @@ public class MediaPlayerManager {
 	
 	private static void initMediaPlayer() {
 		mMediaPlayer = new MediaPlayer();
+
+        // Play with speaker
 		mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+        // Play with earpiece
+        //mMediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+
 		mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 			@Override
 			public void onPrepared(MediaPlayer mp) {
@@ -169,6 +178,7 @@ public class MediaPlayerManager {
 			e.printStackTrace();
 			return;
 		}
+
 		try {
 			mMediaPlayer.prepareAsync();
 		} catch (IllegalStateException e) {
@@ -176,6 +186,39 @@ public class MediaPlayerManager {
 			return;
 		}
 	}
+
+
+    /**
+     * Play file from asset directory.
+     *
+     * @param path relative path to asset directory
+     */
+    private void playAssetMP3(String path) {
+        if (mMediaPlayer == null) return;
+
+        mMediaPlayer.reset();
+
+        try {
+            AssetFileDescriptor afd = GlobalApplication.getInstance().getAssets().openFd(path);
+            mMediaPlayer.setDataSource(
+                    afd.getFileDescriptor(),
+                    afd.getStartOffset(),
+                    afd.getLength());
+            afd.close();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            mMediaPlayer.prepareAsync();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
+    }
 	
 	public void resetBoth() {
 		if (mMediaPlayer != null) {
@@ -209,11 +252,10 @@ public class MediaPlayerManager {
 	public void playByAbsolutePathOrUrl(String pathOrUrl) {
 		playMP3(pathOrUrl);
 	}
-	
+
 	public void playBGMByAbsoluteOrUrl(String pathOrUrl) {
 		playBGMP3(pathOrUrl);
 	}
-	
 	// ======================================================
 	
 }

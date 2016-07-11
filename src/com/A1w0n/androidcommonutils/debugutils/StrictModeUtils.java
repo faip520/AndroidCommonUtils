@@ -1,4 +1,4 @@
-package com.A1w0n.androidcommonutils.debugutils;
+package com.A1w0n.androidcommonutils.DebugUtils;
 
 import android.annotation.TargetApi;
 import android.os.Build;
